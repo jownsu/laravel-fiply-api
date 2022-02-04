@@ -1,0 +1,18 @@
+INSERT INTO `location_regions` (`id`, `name`, `long_name`, `created_at`, `updated_at`) VALUES
+('ARMM', 'ARMM', 'Autonomous Region in Muslim Mindanao', NULL, NULL),
+('CAR', 'CAR', 'Cordillera Admininstrative Region', NULL, NULL),
+('I', 'Region I', 'Ilocos Region', NULL, NULL),
+('II', 'Region II', 'Cagayan Valley', NULL, NULL),
+('III', 'Region III', 'Central Luzon', NULL, NULL),
+('IV-A', 'Region IV-A', 'CALABARZON', NULL, NULL),
+('IV-B', 'Region IV-B', 'MIMAROPA', NULL, NULL),
+('IX', 'Region IX', 'Zamboange Peninsula', NULL, NULL),
+('NCR', 'NCR', 'National Capital Region', NULL, NULL),
+('V', 'Region V', 'Bicol Region', NULL, NULL),
+('VI', 'Region VI', 'Western Visayas', NULL, NULL),
+('VII', 'Region VII', 'Central Visayas', NULL, NULL),
+('VIII', 'Region VIII', 'Eastern Visayas', NULL, NULL),
+('X', 'Region X', 'Northen Mindanao', NULL, NULL),
+('XI', 'Region XI', 'Davao Region', NULL, NULL),
+('XII', 'Region XII', 'SOCCSKARGEN', NULL, NULL),
+('XIII', 'Region XIII', 'Caraga', NULL, NULL);
