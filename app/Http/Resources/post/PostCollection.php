@@ -20,9 +20,9 @@ class PostCollection extends JsonResource
             'posted_by' => $this->user->profile->fullname(),
             'avatar'    => $this->user->profile->avatar,
             'content'   => $this->content,
-            'image'     => $this->image,
+            'image'     => $this->image(),
             'date'      => $this->updated_at->diffForHumans(),
-            'comments'  => CommentCollection::collection($this->comments)
+            'comments'  => CommentCollection::collection($this->whenLoaded('comments'))
         ];
     }
 }

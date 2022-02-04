@@ -32,8 +32,10 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
        Route::apiResource('/', ProfileController::class)->only('index');
        Route::apiResource('/experiences', ExperienceController::class)->only('index');
        Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only('index');
-       Route::apiResource('/posts', PostController::class)->only(['index']);
+       Route::apiResource('/posts', PostController::class);
     });
+
+    //Route::apiResource('/posts');
 
 });
 

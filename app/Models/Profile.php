@@ -29,17 +29,17 @@ class Profile extends Model
 
     protected $dates = ['birthday'];
 
-    const AVATARS_IMG_PATH = 'img/avatar';
+    const IMG_PATH = 'avatar';
 
     public function setAvatarAttribute($value)
     {
-        $this->attributes['avatar'] = Str::remove(self::AVATARS_IMG_PATH, $value);
+        $this->attributes['avatar'] = Str::remove(self::IMG_PATH, $value);
     }
 
     public function getAvatarAttribute($value)
     {
-        return file_exists(public_path(self::AVATARS_IMG_PATH . '/' . $value)) && !empty($value)
-            ? url(self::AVATARS_IMG_PATH . '/' . $value)
+        return file_exists(public_path('img/' . self::IMG_PATH . '/' . $value)) && !empty($value)
+            ? url('img/' . self::IMG_PATH . '/' . $value)
             : url('img/avatar-placeholder1.png');
     }
 

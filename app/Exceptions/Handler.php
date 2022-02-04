@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -47,6 +48,11 @@ class Handler extends ExceptionHandler
                 //Throw custom error if the Http Request is incorrect
                 if($e instanceof MethodNotAllowedHttpException){
                     return response()->error('Http Request Incorrect');
+                }
+
+                //Throw custom error if the Http Request is incorrect
+                if($e instanceof AccessDeniedHttpException){
+                    return response()->error('The user do not own this object');
                 }
 
             }

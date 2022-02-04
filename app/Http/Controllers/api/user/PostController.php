@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\api\user;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreatePostRequest;
+use App\Http\Requests\post\PostRequest;
 use App\Http\Resources\post\PostCollection;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
+use App\Services\PostService;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -16,17 +19,11 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        $posts = Post::with([
-            'user.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
-            },
-            'comments.user.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
-            }])->where('user_id', auth()->id())->get();
-
-        return response()->success(PostCollection::collection($posts));
+        $posts = (new PostService())->getUserPost();
+        return response()->success($posts);
     }
 
     /**
@@ -35,9 +32,10 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        //
+        $post = (new PostService())->createPost($request);
+        return response()->success(new PostCollection($post));
     }
 
     /**
@@ -46,9 +44,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        $post = (new PostService())->getSinglePost($post);
+        return response()->success($post);
     }
 
     /**
@@ -58,9 +57,13 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, Post $post)
     {
-        //
+        $this->authorize('update', $post);
+
+        $post = (new PostService())->updatePost($request, $post);
+
+        return response()->success($post);
     }
 
     /**
@@ -69,8 +72,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $this->authorize('delete', $post);
+
+        $response = (new PostService())->deletePost($post);
+
+        return response()->success($response);
     }
 }
