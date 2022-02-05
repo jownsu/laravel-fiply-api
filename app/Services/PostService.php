@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Http\Requests\post\PostRequest;
 use App\Http\Resources\post\PostCollection;
 use App\Models\Post;
-use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class PostService{
@@ -33,15 +33,15 @@ class PostService{
 
     public function getPosts()
     {
+        $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
+
         $posts = Post::with([
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
-            },
-            'comments.user.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
-            }])->where('user_id', auth()->id())->get();
+            }])->paginate($per_page);
 
-        return PostCollection::collection($posts);
+
+        return PostCollection::collection($posts)->response()->getData(true);
     }
 
     public function createPost(PostRequest $request)

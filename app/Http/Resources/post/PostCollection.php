@@ -22,7 +22,7 @@ class PostCollection extends JsonResource
             'content'   => $this->content,
             'image'     => $this->image(),
             'date'      => $this->updated_at->diffForHumans(),
-            'comments'  => CommentCollection::collection($this->whenLoaded('comments'))
+            'comments'  => CommentCollection::collection($this->whenLoaded('comments')),
         ];
     }
 }

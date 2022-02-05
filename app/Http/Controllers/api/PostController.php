@@ -1,14 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\api\user;
+namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreatePostRequest;
-use App\Http\Requests\post\PostRequest;
-use App\Http\Resources\post\PostCollection;
-use App\Models\Comment;
 use App\Models\Post;
-use App\Models\User;
 use App\Services\PostService;
 use Illuminate\Http\Request;
 
@@ -19,11 +14,10 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
     public function index()
     {
-        $posts = (new PostService())->getUserPost();
-        return response()->success($posts);
+        $post = (new PostService())->getPosts();
+        return response()->success($post);
     }
 
     /**
@@ -32,10 +26,9 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request)
+    public function store(Request $request)
     {
-        $post = (new PostService())->createPost($request);
-        return response()->success(new PostCollection($post));
+        //
     }
 
     /**
@@ -44,11 +37,11 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-/*    public function show(Post $post)
+    public function show(Post $post)
     {
         $post = (new PostService())->getSinglePost($post);
         return response()->success($post);
-    }*/
+    }
 
     /**
      * Update the specified resource in storage.
@@ -57,13 +50,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, Post $post)
+    public function update(Request $request, $id)
     {
-        $this->authorize('update', $post);
-
-        $post = (new PostService())->updatePost($request, $post);
-
-        return response()->success($post);
+        //
     }
 
     /**
@@ -72,12 +61,8 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
-        $this->authorize('delete', $post);
-
-        $response = (new PostService())->deletePost($post);
-
-        return response()->success($response);
+        //
     }
 }

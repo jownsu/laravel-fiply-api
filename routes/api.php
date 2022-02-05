@@ -5,10 +5,11 @@ use App\Http\Controllers\DegreeController;
 use App\Http\Controllers\api\{EmploymentTypeController,
     JobTitleController,
     LocationController,
+    PostController,
     UniversityController,
     user\EducationalBackgroundController,
     user\ExperienceController,
-    user\PostController,
+    user\PostController as UserPostController,
     user\ProfileController};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,10 +33,10 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
        Route::apiResource('/', ProfileController::class)->only('index');
        Route::apiResource('/experiences', ExperienceController::class)->only('index');
        Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only('index');
-       Route::apiResource('/posts', PostController::class);
+       Route::apiResource('/posts', UserPostController::class)->except('show');
     });
 
-    //Route::apiResource('/posts');
+    Route::apiResource('/posts', PostController::class)->only(['index', 'show']);
 
 });
 
