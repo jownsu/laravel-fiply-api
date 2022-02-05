@@ -13,12 +13,18 @@ class PostService{
 
     public function getUserPost()
     {
+        $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
+
         $posts = Post::with([
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
-            }])->where('user_id', auth()->id())->get();
+            }])
+            ->where('user_id', auth()->id())
+            ->paginate($per_page);
 
-        return PostCollection::collection($posts);
+        $posts->withPath('/users/posts');
+
+        return PostCollection::collection($posts)->response()->getData(true);
     }
 
     public function getSinglePost(Post $post)
@@ -39,6 +45,8 @@ class PostService{
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
             }])->paginate($per_page);
+
+        $posts->withPath('/posts');
 
 
         return PostCollection::collection($posts)->response()->getData(true);

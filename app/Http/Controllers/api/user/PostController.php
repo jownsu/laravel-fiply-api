@@ -23,7 +23,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = (new PostService())->getUserPost();
-        return response()->success($posts);
+        return response()->successPaginated($posts);
     }
 
     /**
