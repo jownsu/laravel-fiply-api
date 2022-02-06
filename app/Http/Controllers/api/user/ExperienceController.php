@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\user;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\user\ExperienceCollection;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ExperienceController extends Controller
@@ -13,10 +14,10 @@ class ExperienceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        $user = auth()->user();
-        $user->load('experiences');
+        $userid = $id == 'me' ? auth()->id() : $id;
+        $user = User::findOrFail($userid)->load('experiences');
 
         return response()->success(ExperienceCollection::collection($user->experiences));
     }

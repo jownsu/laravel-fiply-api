@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\user;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\user\EducationalBackgroundCollection;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EducationalBackgroundController extends Controller
@@ -13,10 +14,10 @@ class EducationalBackgroundController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        $user = auth()->user();
-        $user->load('educationalBackgrounds');
+        $userid = $id == 'me' ? auth()->id() : $id;
+        $user = User::findOrFail($userid)->load('educationalBackgrounds');
 
         return response()->success(EducationalBackgroundCollection::collection($user->educationalBackgrounds));
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\user;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\user\ProfileResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -13,13 +14,17 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(User $user)
     {
-        $user = auth()->user();
+
+
+
+        return $user->load('profile');
+/*        $user = auth()->user();
 
         $user->load('profile');
 
-        return response()->success(new ProfileResource($user));
+        return response()->success(new ProfileResource($user));*/
     }
 
     /**
@@ -42,6 +47,10 @@ class ProfileController extends Controller
     public function show($id)
     {
         //
+
+        return $id;
+
+
     }
 
     /**

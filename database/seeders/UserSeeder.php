@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(25)
+        User::factory(30)
             ->has(Profile::factory()->count(1))
             ->has(Experience::factory()->count(2))
             ->has(EducationalBackground::factory()->count(1))

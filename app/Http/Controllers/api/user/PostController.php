@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\api\user;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\post\PostRequest;
 use App\Http\Resources\post\PostCollection;
 use App\Models\Comment;
@@ -20,9 +19,11 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index()
+    public function index($id)
     {
-        $posts = (new PostService())->getUserPost();
+        $userid = $id == 'me' ? auth()->id() : $id;
+
+        $posts = (new PostService())->getUserPost($userid);
         return response()->successPaginated($posts);
     }
 

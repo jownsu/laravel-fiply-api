@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 class PostService{
 
 
-    public function getUserPost()
+    public function getUserPost($userId)
     {
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
@@ -19,10 +19,10 @@ class PostService{
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
             }])
-            ->where('user_id', auth()->id())
+            ->where('user_id', $userId)
             ->paginate($per_page);
 
-        $posts->withPath('/users/posts');
+        $posts->withPath("$userId/posts");
 
         return PostCollection::collection($posts)->response()->getData(true);
     }

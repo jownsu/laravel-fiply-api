@@ -13,6 +13,9 @@ class ProfileFactory extends Factory
      *
      * @return array
      */
+
+    private static $img = 1;
+
     public function definition()
     {
         return [
@@ -29,6 +32,7 @@ class ProfileFactory extends Factory
             'status'       => $this->faker->randomElement(['Looking for a job', 'Employed']),
             'website'      => $this->faker->domainName(),
             'description'  => $this->faker->catchPhrase(),
+            'avatar'       => self::$img++ . '.jpeg'
         ];
     }
 }
