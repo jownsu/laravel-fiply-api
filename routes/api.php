@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\DegreeController;
-use App\Http\Controllers\api\{EmploymentTypeController,
+use App\Http\Controllers\api\{CommentController,
+    EmploymentTypeController,
     JobTitleController,
     LocationController,
     PostController,
@@ -30,6 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/token/logout', [AuthController::class, 'logout']);
 
     Route::apiResource('/posts', PostController::class)->only(['index', 'show']);
+    Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
 
     Route::group(['prefix' => '/{user}'], function() {
         Route::apiResource('/', UserController::class)->only('index');
