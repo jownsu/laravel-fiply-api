@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\comment\CommentRequest;
 use App\Http\Resources\post\CommentCollection;
+use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -25,9 +27,15 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCommentRequest $request, Post $post)
     {
-        //
+        $comment = $post->comments()->create([
+            'user_id' => auth()->id(),
+            'content' => $request->comment
+        ]);
+
+        return response()->success($comment);
+
     }
 
     /**
@@ -36,9 +44,8 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
     }
 
     /**
@@ -48,9 +55,15 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CommentRequest $request, Comment $comment)
     {
-        //
+        $this->authorize('update', $comment);
+
+        $comment->update([
+            'content' => $request->comment
+        ]);
+
+        return response()->success($comment);
     }
 
     /**
@@ -59,8 +72,12 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Comment $comment)
     {
+        $this->authorize('delete', $comment);
+        $comment->delete();
+
+        return response()->success('Comment Deleted');
         //
     }
 }

@@ -16,13 +16,13 @@ class Post extends Model
 
     public function setImageAttribute($value)
     {
-        $this->attributes['image'] = Str::remove(self::IMG_PATH, $value);
+        $this->attributes['image'] = Str::remove(self::IMG_PATH . '/',$value);
     }
 
     public function image()
     {
-        return file_exists(public_path('img/' . self::IMG_PATH . '/' . $this->image)) && !empty($this->image)
-            ? url('img/' . self::IMG_PATH . $this->image)
+        return file_exists(public_path('img'  . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->image)) && !empty($this->image)
+            ? url('img' . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->image)
             : null;
     }
 

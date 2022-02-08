@@ -30,8 +30,9 @@ Route::apiResource('/employmentTypes', EmploymentTypeController::class)->only(['
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/token/logout', [AuthController::class, 'logout']);
 
-    Route::apiResource('/posts', PostController::class)->only(['index', 'show']);
-    Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
+    Route::apiResource('/posts', PostController::class);
+    Route::apiResource('/posts/{post}/comments', CommentController::class)->only(['index', 'store']);
+    Route::apiResource('/comments', CommentController::class)->only(['update', 'destroy']);
 
     Route::group(['prefix' => '/{user}'], function() {
         Route::apiResource('/', UserController::class)->only('index');

@@ -33,10 +33,9 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request)
+    public function store()
     {
-        $post = (new PostService())->createPost($request);
-        return response()->success(new PostCollection($post));
+
     }
 
     /**
@@ -58,13 +57,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, Post $post)
+    public function update()
     {
-        $this->authorize('update', $post);
 
-        $post = (new PostService())->updatePost($request, $post);
-
-        return response()->success($post);
     }
 
     /**
@@ -75,10 +70,6 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $this->authorize('delete', $post);
 
-        $response = (new PostService())->deletePost($post);
-
-        return response()->success($response);
     }
 }

@@ -63,13 +63,14 @@ class PostService{
         auth()->user()->posts()->save($post);
 
         return new PostCollection($post);
+
     }
 
     public function updatePost(PostRequest $request, Post $post)
     {
         $input = $request->validated();
         if($request->hasFile('image')){
-            Storage::delete(Post::IMG_PATH . '/' . $post->image);
+            Storage::delete(Post::IMG_PATH . DIRECTORY_SEPARATOR . $post->image);
             $input['image'] = $request->image->store(Post::IMG_PATH);
         }
         $post->update($input);
@@ -79,7 +80,7 @@ class PostService{
 
     public function deletePost(Post $post)
     {
-        Storage::delete(Post::IMG_PATH . '/' . $post->image);
+        Storage::delete(Post::IMG_PATH . DIRECTORY_SEPARATOR . $post->image);
         return $post->delete() ? 'Post is deleted' : 'Error in deleting the post';
     }
 
