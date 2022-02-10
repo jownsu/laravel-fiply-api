@@ -11,6 +11,7 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = ['content', 'image'];
+    protected $attributes = ['content' => 'fucking default'];
 
     const IMG_PATH = 'posts';
 
@@ -21,8 +22,8 @@ class Post extends Model
 
     public function image()
     {
-        return file_exists(public_path('img'  . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->image)) && !empty($this->image)
-            ? url('img' . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->image)
+        return !empty($this->attributes['image']) && file_exists(public_path('img'  . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->attributes['image']))
+            ? url('img' . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->attributes['image'])
             : null;
     }
 

@@ -14,11 +14,15 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function index(Post $post)
     {
-        return response()->success(CommentCollection::collection($post->comments));
+        $post = $post->load('comments');
+
+        return response()->json([
+            'post_id' => $post->id,
+            'data' => CommentCollection::collection($post->comments)
+        ]);
     }
 
     /**
@@ -27,7 +31,7 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCommentRequest $request, Post $post)
+    public function store(CommentRequest $request, Post $post)
     {
         $comment = $post->comments()->create([
             'user_id' => auth()->id(),

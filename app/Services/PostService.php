@@ -44,7 +44,9 @@ class PostService{
         $posts = Post::with([
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
-            }])->paginate($per_page);
+            }])
+            ->latest()
+            ->paginate($per_page);
 
         $posts->withPath('/posts');
 
