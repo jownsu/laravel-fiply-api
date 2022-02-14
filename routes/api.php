@@ -12,7 +12,8 @@ use App\Http\Controllers\api\{CommentController,
     user\ExperienceController,
     user\PostController as UserPostController,
     user\ProfileController,
-    user\UserController};
+    user\UserController,
+    VoteController};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::apiResource('/posts', PostController::class);
     Route::apiResource('/posts/{post}/comments', CommentController::class)->only(['index', 'store']);
+    Route::apiResource('/posts/{post}/votes', VoteController::class)->only(['index', 'store']);
     Route::apiResource('/comments', CommentController::class)->only(['update', 'destroy']);
 
     Route::group(['prefix' => '/{user}'], function() {

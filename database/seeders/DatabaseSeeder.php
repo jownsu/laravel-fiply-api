@@ -28,5 +28,12 @@ class DatabaseSeeder extends Seeder
             DegreeSeeder::class,
             UserSeeder::class,
         ]);
+
+        foreach (Post::all() as $post){
+            $users = User::inRandomOrder()->take(rand(1,10))->get('id');
+            foreach($users as $user){
+                $post->userVotes()->attach($user);
+            }
+        }
     }
 }

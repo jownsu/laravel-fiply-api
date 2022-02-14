@@ -12,7 +12,7 @@ class Post extends Model
 
     protected $fillable = ['content', 'image'];
     protected $attributes = ['content' => 'fucking default'];
-
+    protected $hidden = ['pivot'];
     const IMG_PATH = 'posts';
 
     public function setImageAttribute($value)
@@ -35,5 +35,10 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function userUpVotes()
+    {
+        return $this->belongsToMany(User::class);
     }
 }

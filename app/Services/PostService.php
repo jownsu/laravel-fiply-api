@@ -32,7 +32,8 @@ class PostService{
         $post->load([
             'comments.user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
-            }]);
+            }])
+            ->loadCount('userUpVotes');
 
         return new PostCollection($post);
     }
@@ -45,13 +46,14 @@ class PostService{
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
             }])
+            ->with(['userUpVotes' => function($q){
+                $q->select(['id']);
+            }])
             ->latest()
             ->paginate($per_page);
 
         $posts->withPath('/posts');
-
-
-        return PostCollection::collection($posts)->response()->getData(true);
+        return PostCollection::collection($posts, "wew")->response()->getData(true);
     }
 
     public function createPost(PostRequest $request)
