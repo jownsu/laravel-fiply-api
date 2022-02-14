@@ -17,11 +17,15 @@ class CommentController extends Controller
      */
     public function index(Post $post)
     {
-        $post = $post->load('comments');
+        $post = $post->load(['comments'])->loadCount('userUpVotes');
 
         return response()->json([
-            'post_id' => $post->id,
-            'data' => CommentCollection::collection($post->comments)
+
+            'details' => [
+                            'post_id'         => $post->id,
+                            'upVotes_count'   => $post->user_up_votes_count,
+                        ],
+            'data'     => CommentCollection::collection($post->comments)
         ]);
     }
 
