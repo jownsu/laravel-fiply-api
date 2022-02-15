@@ -4,12 +4,10 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\vote\UserCollection;
-use App\Http\Resources\vote\VoteCollection;
-use App\Http\Resources\vote\VoteColletion;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
-class VoteController extends Controller
+class UpVoteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,14 +17,14 @@ class VoteController extends Controller
 
     public function index(Post $post)
     {
-        $votes = $post->load(['UserVotes.profile' => function($q){
+        $post->load(['UserUpVotes.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
             }]
         );
 
         return response()->json([
             'post_id' => $post->id,
-            'data' => UserCollection::collection($post->userVotes)
+            'data' => UserCollection::collection($post->userUpVotes)
         ]);
 
 
@@ -35,12 +33,15 @@ class VoteController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Post $post, Request $request)
     {
-        //
+        $result = $post->userUpVotes()->toggle(auth()->id());
+
+        return response()->json([
+            'data' => $result['attached'] ? true : false
+        ]);
+
     }
 
     /**

@@ -53,7 +53,7 @@ class PostService{
             ->paginate($per_page);
 
         $posts->withPath('/posts');
-        return PostCollection::collection($posts, "wew")->response()->getData(true);
+        return PostCollection::collection($posts)->response()->getData(true);
     }
 
     public function createPost(PostRequest $request)
