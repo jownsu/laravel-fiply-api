@@ -4,6 +4,7 @@ use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\DegreeController;
 use App\Http\Controllers\api\{CommentController,
     EmploymentTypeController,
+    JobController,
     JobTitleController,
     LocationController,
     PostController,
@@ -13,8 +14,7 @@ use App\Http\Controllers\api\{CommentController,
     user\ExperienceController,
     user\PostController as UserPostController,
     user\ProfileController,
-    user\UserController,
-    };
+    user\UserController};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::apiResource('/posts/{post}/comments', CommentController::class)->only(['index', 'store']);
     Route::apiResource('/posts/{post}/upVotes', UpVoteController::class)->only(['index', 'store']);
     Route::apiResource('/comments', CommentController::class)->only(['update', 'destroy']);
+    Route::apiResource('/jobs', JobController::class)->only(['index', 'show']);
 
     Route::group(['prefix' => '/{user}'], function() {
         Route::apiResource('/', UserController::class)->only('index');

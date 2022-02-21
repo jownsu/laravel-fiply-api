@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Comment;
 use App\Models\EducationalBackground;
 use App\Models\Experience;
+use App\Models\Job;
 use App\Models\Post;
 use App\Models\Profile;
 use App\Models\User;
@@ -25,6 +26,7 @@ class UserSeeder extends Seeder
             ->has(EducationalBackground::factory()->count(1))
             ->has(Post::factory()->count(3))
             ->has(Comment::factory()->count(5))
+            ->has(Job::factory()->count(5))
             ->create();
 
 
