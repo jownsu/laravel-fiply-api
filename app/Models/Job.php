@@ -17,9 +17,9 @@ class Job extends Model
         'company',
         'location',
         'position_level',
-        'years_of_experience',
         'specialization',
-        'description'
+        'job_responsibilities',
+        'qualifications'
     ];
 
     public function user()

@@ -24,9 +24,9 @@ class CreateJobsTable extends Migration
             $table->string('company');
             $table->string('location');
             $table->string('position_level');
-            $table->string('years_of_experience');
             $table->string('specialization');
-            $table->text('description');
+            $table->text('job_responsibilities');
+            $table->text('qualifications');
             $table->timestamps();
         });
     }

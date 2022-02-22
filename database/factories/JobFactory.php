@@ -50,9 +50,9 @@ class JobFactory extends Factory
             'company'               => $this->faker->company(),
             'location'              => $this->faker->address(),
             'position_level'        => PositionLevel::inRandomOrder()->take(1)->first('name')->name,
-            'years_of_experience'   => $this->faker->randomElement(['1', '2', '3', '4', '5']),
             'specialization'        => JobCategory::inRandomOrder()->take(1)->first('name')->name,
-            'description'           => $this->faker->realText(500, 3)
+            'job_responsibilities'  => $this->faker->realText(500, 3),
+            'qualifications'        => $this->faker->realText(500, 3),
         ];
     }
 }

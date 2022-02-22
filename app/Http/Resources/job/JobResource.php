@@ -28,7 +28,8 @@ class JobResource extends JsonResource
             'position_level'        => $this->position_level,
             'years_of_experience'   => $this->years_of_experience,
             'specialization'        => $this->specialization,
-            'description'           => $this->description,
+            'job_responsibilities'  => $this->job_responsibilities,
+            'qualifications'        => $this->qualifications,
             'posted_at'             => $this->created_at->diffForHumans()
         ];
     }
