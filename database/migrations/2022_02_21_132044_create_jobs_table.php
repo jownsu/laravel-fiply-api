@@ -20,11 +20,11 @@ class CreateJobsTable extends Migration
                 ->onUpdate('cascade');
             $table->string('title');
             $table->string('employment_type');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('company');
             $table->string('location');
             $table->string('position_level');
-            $table->string('specialization');
+            $table->string('specialization')->nullable();
             $table->text('job_responsibilities');
             $table->text('qualifications');
             $table->timestamps();

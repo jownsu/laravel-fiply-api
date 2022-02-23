@@ -26,7 +26,6 @@ class JobResource extends JsonResource
             'company'               => $this->company,
             'location'              => $this->location,
             'position_level'        => $this->position_level,
-            'years_of_experience'   => $this->years_of_experience,
             'specialization'        => $this->specialization,
             'job_responsibilities'  => $this->job_responsibilities,
             'qualifications'        => $this->qualifications,

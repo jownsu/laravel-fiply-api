@@ -36,7 +36,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::apiResource('/posts/{post}/comments', CommentController::class)->only(['index', 'store']);
     Route::apiResource('/posts/{post}/upVotes', UpVoteController::class)->only(['index', 'store']);
     Route::apiResource('/comments', CommentController::class)->only(['update', 'destroy']);
-    Route::apiResource('/jobs', JobController::class)->only(['index', 'show']);
+    Route::apiResource('/jobs', JobController::class);
 
     Route::group(['prefix' => '/{user}'], function() {
         Route::apiResource('/', UserController::class)->only('index');

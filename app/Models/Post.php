@@ -11,7 +11,7 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = ['content', 'image'];
-    protected $attributes = ['content' => 'fucking default'];
+    //protected $attributes = ['content' => 'fucking default'];
     protected $hidden = ['pivot'];
     const IMG_PATH = 'posts';
 

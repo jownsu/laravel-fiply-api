@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\job\JobRequest;
 use App\Models\Job;
 use App\Services\JobService;
 use Illuminate\Http\Request;
@@ -26,9 +27,10 @@ class JobController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(JobRequest $request)
     {
-        //
+        $job = (new JobService())->createJob($request);
+        return response()->success($job);
     }
 
     /**
@@ -50,9 +52,13 @@ class JobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(JobRequest $request, Job $job)
     {
-        //
+        $this->authorize('update', $job);
+
+        $post = (new JobService())->updateJob($request, $job);
+
+        return response()->success($post);
     }
 
     /**
@@ -61,8 +67,11 @@ class JobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Job $job)
     {
-        //
+        $this->authorize('delete', $job);
+        $response = (new JobService())->deleteJob($job);
+
+        return response()->success($response);
     }
 }

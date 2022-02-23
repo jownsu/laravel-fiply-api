@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Job extends Model
 {
@@ -22,9 +23,10 @@ class Job extends Model
         'qualifications'
     ];
 
-    public function user()
+
+    public function setImageAttribute($value)
     {
-        return $this->belongsTo(User::class);
+        $this->attributes['image'] = Str::remove(self::IMG_PATH . '/',$value);
     }
 
     public function image()
@@ -33,4 +35,11 @@ class Job extends Model
             ? url('img' . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->attributes['image'])
             : null;
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
 }
