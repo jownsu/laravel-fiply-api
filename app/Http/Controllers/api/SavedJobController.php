@@ -4,39 +4,35 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\vote\UserCollection;
-use App\Models\Post;
+use App\Models\Job;
 use Illuminate\Http\Request;
 
-class UpVoteController extends Controller
+class SavedJobController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      */
-
-
-    public function index(Post $post)
+    public function index(Job $job)
     {
-        $post->load(['UserUpVotes.profile' => function($q){
+        $job->load(['UserSavedJobs.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
             }]
         );
 
         return response()->json([
-            'post_id' => $post->id,
-            'data' => UserCollection::collection($post->userUpVotes)
+            'job_id' => $job->id,
+            'data' => UserCollection::collection($job->userSavedJobs)
         ]);
-
-
     }
 
     /**
      * Store a newly created resource in storage.
      *
      */
-    public function store(Post $post)
+    public function store(Job $job)
     {
-        $result = $post->userUpVotes()->toggle(auth()->id());
+        $result = $job->userSavedJobs()->toggle(auth()->id());
 
         return response()->json([
             'data' => $result['attached'] ? true : false

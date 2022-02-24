@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\job;
+namespace App\Http\Resources\user;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,7 +14,6 @@ class JobCollection extends JsonResource
      */
     public function toArray($request)
     {
-
         return [
             'id'                => $this->id,
             'title'             => $this->title,
@@ -23,8 +22,6 @@ class JobCollection extends JsonResource
             'company'           => $this->company,
             'location'          => $this->location,
             'posted_at'         => $this->created_at->diffForHumans(),
-            'is_applied'        => $this->userAppliedJobs->first() ? true : false,
-            'is_saved'          => $this->userSavedJobs->first() ? true : false,
         ];
     }
 }

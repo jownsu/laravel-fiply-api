@@ -4,9 +4,12 @@ namespace App\Services;
 
 use App\Http\Requests\job\JobRequest;
 use App\Http\Resources\job\JobCollection;
+use App\Http\Resources\user\JobCollection as UserJobCollection;
 use App\Http\Resources\job\JobResource;
 use App\Models\Job;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use phpDocumentor\Reflection\Types\True_;
 
 class JobService{
 
@@ -14,7 +17,15 @@ class JobService{
     {
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
-        $jobs = Job::select(['id', 'title', 'employment_type', 'image',  'company', 'location', 'created_at'])
+        $jobs = Job::with([
+            'userAppliedJobs' => function($q){
+                return $q->where('user_id', auth()->id())->select('user_id');
+            },
+            'userSavedJobs' => function($q){
+                return $q->where('user_id', auth()->id())->select('user_id');
+            }
+        ])
+                ->select(['id', 'title', 'employment_type', 'image',  'company', 'location', 'created_at'])
                 ->latest()
                 ->paginate($per_page);
 
@@ -28,9 +39,33 @@ class JobService{
         $job->load([
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+            },
+            'userAppliedJobs' => function($q){
+                return $q->where('user_id', auth()->id())->select('user_id')->count();
+            },
+            'userSavedJobs' => function($q){
+                return $q->where('user_id', auth()->id())->select('user_id')->count();
             }]);
 
         return new JobResource($job);
+    }
+
+    public function getUserJob($type = 'applied')
+    {
+        $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
+
+        $user = auth()->user();
+
+        if($type == 'saved'){
+            $jobs = $user->jobsSaved()->paginate($per_page);
+            $jobs->withPath("me/savedJobs");
+        }else{
+            $jobs = $user->jobsApplied()->paginate($per_page);
+            $jobs->withPath("me/appliedJobs");
+        }
+
+
+        return UserJobCollection::collection($jobs)->response()->getData(true);
     }
 
     public function createJob(JobRequest $request)

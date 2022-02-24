@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Comment;
+use App\Models\Job;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -36,5 +37,20 @@ class DatabaseSeeder extends Seeder
                 $post->userUpVotes()->attach($user);
             }
         }
+
+        foreach (Job::all() as $job){
+            $users = User::inRandomOrder()->take(rand(1,10))->get('id');
+            foreach($users as $user){
+                $job->userAppliedJobs()->attach($user);
+            }
+        }
+        foreach (Job::all() as $job){
+            $users = User::inRandomOrder()->take(rand(1,10))->get('id');
+            foreach($users as $user){
+                $job->userSavedJobs()->attach($user);
+            }
+        }
+
+
     }
 }

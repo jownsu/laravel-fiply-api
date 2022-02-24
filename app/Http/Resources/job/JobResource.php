@@ -29,7 +29,9 @@ class JobResource extends JsonResource
             'specialization'        => $this->specialization,
             'job_responsibilities'  => $this->job_responsibilities,
             'qualifications'        => $this->qualifications,
-            'posted_at'             => $this->created_at->diffForHumans()
+            'posted_at'             => $this->created_at->diffForHumans(),
+            'is_applied'            => $this->userAppliedJobs->first() ? true : false,
+            'is_saved'              => $this->userSavedJobs->first() ? true : false
         ];
     }
 }

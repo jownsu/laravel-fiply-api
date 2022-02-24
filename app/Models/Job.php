@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 class Job extends Model
 {
     use HasFactory;
-    const IMG_PATH = 'logo';
 
     protected $fillable = [
         'title',
@@ -22,6 +21,10 @@ class Job extends Model
         'job_responsibilities',
         'qualifications'
     ];
+
+    protected $hidden = ['pivot'];
+    
+    const IMG_PATH = 'logo';
 
 
     public function setImageAttribute($value)
@@ -39,6 +42,16 @@ class Job extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function userAppliedJobs()
+    {
+        return $this->belongsToMany(User::class, 'applied_jobs');
+    }
+
+    public function userSavedJobs()
+    {
+        return $this->belongsToMany(User::class, 'saved_jobs');
     }
 
 

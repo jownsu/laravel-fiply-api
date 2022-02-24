@@ -45,8 +45,7 @@ class PostService{
         $posts = Post::with([
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
-            }])
-            ->with(['userUpVotes' => function($q){
+            }, 'userUpVotes' => function($q){
                 $q->select(['id']);
             }])
             ->latest()

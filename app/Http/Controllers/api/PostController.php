@@ -42,6 +42,11 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+
+        $post->load(['userUpVotes' => function($q){
+            return $q->where('id', auth()->id());
+        }]);
+
         $post = (new PostService())->getSinglePost($post);
         return response()->success($post);
     }
