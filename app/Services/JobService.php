@@ -57,10 +57,10 @@ class JobService{
         $user = auth()->user();
 
         if($type == 'saved'){
-            $jobs = $user->jobsSaved()->paginate($per_page);
+            $jobs = $user->jobsSaved()->latest()->paginate($per_page);
             $jobs->withPath("me/savedJobs");
         }else{
-            $jobs = $user->jobsApplied()->paginate($per_page);
+            $jobs = $user->jobsApplied()->latest()->paginate($per_page);
             $jobs->withPath("me/appliedJobs");
         }
 

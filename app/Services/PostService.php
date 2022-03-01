@@ -20,6 +20,7 @@ class PostService{
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
             }])
             ->where('user_id', $userId)
+            ->latest()
             ->paginate($per_page);
 
         $posts->withPath("$userId/posts");
