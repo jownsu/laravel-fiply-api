@@ -42,11 +42,24 @@ class AuthController extends ApiController
     public function sendVerification(VerificationRequest $request, Verify $action)
     {
         $input = $request->validated();
+
+        if(!$this->isOnline()){
+            return response()->error("Check your internet connection.");
+        }
         $verify = $action->handle($input);
 
         if(!$verify) return response()->error('Email is already registered');
 
         return response()->success('Verification sent to your email');
+    }
+
+    private function isOnline($site = 'https://google.com/')
+    {
+        if(@fopen($site, "r")){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function logout(Request $request){

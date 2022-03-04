@@ -15,16 +15,17 @@ class Verify{
         if($user) return false;
 
         $code = random_int(100000, 999999);
+        $img = asset('img/maill.png');
 
         $mail_data = [
             'recipient' => $input['email'],
             'fromEmail' => 'carjatech.fiply@gmail.com',
             'fromName' => 'Fiply',
             'subject' => 'Please Verify Your Email',
-            'body'  => 'Your Verification code is ' . $code
+            //'body'  => 'Your Verification code is ' . $code
         ];
 
-        Mail::send('email-template', $mail_data, function($message) use ($mail_data){
+        Mail::send('email', ['code' => $code, 'img' => $img], function($message) use ($mail_data){
             $message->to($mail_data['recipient'])
                 ->from($mail_data['fromEmail'], $mail_data['fromName'])
                 ->subject($mail_data['subject']);
