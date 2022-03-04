@@ -46,7 +46,7 @@ class AuthController extends ApiController
 
         if(!$verify) return response()->error('Email is already registered');
 
-        return response('Verification sent to your email');
+        return response()->success('Verification sent to your email');
     }
 
     public function logout(Request $request){

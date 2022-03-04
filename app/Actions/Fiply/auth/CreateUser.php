@@ -3,6 +3,7 @@
 namespace App\Actions\Fiply\Auth;
 use App\Models\User;
 use App\Models\UserVerify;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
 class CreateUser{
@@ -16,8 +17,10 @@ class CreateUser{
         }
 
         $user = User::create([
-            'email'    => $input['email'],
-            'password' => bcrypt($input['password']),
+            'email'             => $input['email'],
+            'password'          => bcrypt($input['password']),
+            'email_verified_at' => Carbon::now()
+
         ]);
 
         $user->profile()->create([

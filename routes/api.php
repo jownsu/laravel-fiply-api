@@ -29,8 +29,6 @@ Route::post('/token/login', [ AuthController::class,'login']);
 Route::post('/token/register', [ AuthController::class, 'register']);
 Route::post('/verify', [AuthController::class, 'sendVerification']);
 
-//Route::post('/mailtest', [\App\Http\Controllers\MailTestController::class, 'send']);
-
 Route::apiResource('/locations', LocationController::class)->only(['index']);
 Route::apiResource('/universities', UniversityController::class)->only(['index']);
 Route::apiResource('/degrees', DegreeController::class)->only(['index']);

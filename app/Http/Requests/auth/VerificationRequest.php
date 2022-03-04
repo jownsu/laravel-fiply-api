@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\auth;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class VerificationRequest extends FormRequest
 {
@@ -24,7 +26,10 @@ class VerificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required'
+            'email'           => ['email', 'required', 'max:255', 'string',  Rule::unique(User::class)],
+            'password'        => ['required', 'confirmed', 'string', 'max:255'],
+            'firstname'       => ['required', 'string', 'max:255'],
+            'lastname'        => ['required', 'string', 'max:255'],
         ];
     }
 }

@@ -19,7 +19,7 @@ class Verify{
         $mail_data = [
             'recipient' => $input['email'],
             'fromEmail' => 'carjatech.fiply@gmail.com',
-            'fromName' => 'Verify Email',
+            'fromName' => 'Fiply',
             'subject' => 'Please Verify Your Email',
             'body'  => 'Your Verification code is ' . $code
         ];
