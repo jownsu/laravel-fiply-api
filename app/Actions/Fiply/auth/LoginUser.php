@@ -14,6 +14,7 @@ class LoginUser{
         if(!$user || !Hash::check($input['password'] ,$user->password)){
             return false;
         }
+
         $token = $user->createToken('FiplyToken')->plainTextToken;
         $data = [
             'id'            =>  $user->id,
