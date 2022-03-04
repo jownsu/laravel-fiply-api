@@ -28,7 +28,7 @@ class RegisterRequest extends FormRequest
 /*        'email|required|string|unique:users,email'*/
         return [
             'email'           => ['email', 'required', 'max:255', 'string',  Rule::unique(User::class)],
-            'password'        => ['required', 'confirmed', 'string', 'max:255'],
+            'password'        => ['required', 'confirmed', 'string', 'min:8', 'max:255'],
             'firstname'       => ['required', 'string', 'max:255'],
             'lastname'        => ['required', 'string', 'max:255'],
             'code'            => ['required', 'min:6', 'max:6']
