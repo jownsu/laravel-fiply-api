@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\EmploymentTypeCollection;
-use App\Models\EmploymentType;
+use App\Http\Resources\PositionLevelCollection;
+use App\Models\PositionLevel;
 use Illuminate\Http\Request;
 
-class EmploymentTypeController extends Controller
+class PositionLevelController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +16,9 @@ class EmploymentTypeController extends Controller
      */
     public function index()
     {
-        $employmentTypes = EmploymentType::query()->searchLimit();
+        $positionLevels = PositionLevel::query()->searchLimit();
 
-        return response()->success(EmploymentTypeCollection::collection($employmentTypes->get()));
+        return response()->success(PositionLevelCollection::collection($positionLevels->get()));
     }
 
     /**

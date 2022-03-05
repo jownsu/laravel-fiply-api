@@ -14,7 +14,7 @@ class JobTitleController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         $jobTitles = JobTitle::query()->searchLimit();
 

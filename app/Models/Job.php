@@ -23,7 +23,7 @@ class Job extends Model
     ];
 
     protected $hidden = ['pivot'];
-    
+
     const IMG_PATH = 'logo';
 
 
@@ -36,7 +36,7 @@ class Job extends Model
     {
         return !empty($this->attributes['image']) && file_exists(public_path('img'  . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->attributes['image']))
             ? url('img' . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->attributes['image'])
-            : null;
+            : url('img'. DIRECTORY_SEPARATOR . 'logo.png');
     }
 
     public function user()

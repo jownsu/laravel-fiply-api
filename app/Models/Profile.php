@@ -38,9 +38,9 @@ class Profile extends Model
 
     public function getAvatarAttribute($value)
     {
-        return file_exists(public_path('img/' . self::IMG_PATH . '/' . $value)) && !empty($value)
-            ? url('img/' . self::IMG_PATH . '/' . $value)
-            : url('img/avatar-placeholder1.png');
+        return file_exists(public_path('img' . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $value)) && !empty($value)
+            ? url('img' . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $value)
+            : url('img'. DIRECTORY_SEPARATOR . 'avatar-placeholder1.png');
     }
 
     public function getBirthdayAttribute($value)

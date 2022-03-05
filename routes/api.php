@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\DegreeController;
-use App\Http\Controllers\api\{
-    AppliedJobController,
+use App\Http\Controllers\api\{AppliedJobController,
     CommentController,
     EmploymentTypeController,
     JobController,
     JobTitleController,
     LocationController,
+    PositionLevelController,
     PostController,
     SavedJobController,
     UniversityController,
@@ -34,6 +34,7 @@ Route::apiResource('/universities', UniversityController::class)->only(['index']
 Route::apiResource('/degrees', DegreeController::class)->only(['index']);
 Route::apiResource('/jobTitles', JobTitleController::class)->only(['index']);
 Route::apiResource('/employmentTypes', EmploymentTypeController::class)->only(['index']);
+Route::apiResource('/positionLevels', PositionLevelController::class)->only(['index']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/token/logout', [AuthController::class, 'logout']);
