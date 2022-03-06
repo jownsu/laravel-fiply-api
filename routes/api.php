@@ -15,6 +15,7 @@ use App\Http\Controllers\api\{AppliedJobController,
     UpVoteController,
     user\EducationalBackgroundController,
     user\ExperienceController,
+    user\FollowController,
     user\PostController as UserPostController,
     user\AppliedJobController as UserAppliedJobController,
     user\SavedJobController as UserSavedJobController,
@@ -55,6 +56,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/posts', UserPostController::class)->except('show');
         Route::apiResource('/appliedJobs', UserAppliedJobController::class)->only('index');
         Route::apiResource('/savedJobs', UserSavedJobController::class)->only('index');
+        Route::post('/follow', [FollowController::class, 'follow']);
+        Route::get('/follows', [FollowController::class, 'follows']);
+        Route::get('/followers', [FollowController::class, 'followers']);
     });
 
 

@@ -44,10 +44,18 @@ class DatabaseSeeder extends Seeder
                 $job->userAppliedJobs()->attach($user);
             }
         }
+
         foreach (Job::all() as $job){
             $users = User::inRandomOrder()->take(rand(1,10))->get('id');
             foreach($users as $user){
                 $job->userSavedJobs()->attach($user);
+            }
+        }
+
+        foreach (User::all() as $user1){
+            $users = User::inRandomOrder()->take(20)->get('id');
+            foreach($users as $user){
+                $user1->follows()->attach($user);
             }
         }
 
