@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\api\user;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\user\EducationalBackroundRequest;
 use App\Http\Resources\user\EducationalBackgroundCollection;
+use App\Models\EducationalBackground;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -28,9 +30,11 @@ class EducationalBackgroundController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EducationalBackroundRequest $request)
     {
-        //
+        $educationalBackground = auth()->user()->educationalBackgrounds()->create($request->validated());
+
+        return response()->success( new EducationalBackgroundCollection($educationalBackground));
     }
 
     /**
@@ -51,9 +55,13 @@ class EducationalBackgroundController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EducationalBackroundRequest $request, EducationalBackground $educationalBackground)
     {
-        //
+        $this->authorize('update', $educationalBackground);
+
+        $educationalBackground->update($request->validated());
+
+        return response()->success(new EducationalBackgroundCollection($educationalBackground));
     }
 
     /**
@@ -62,8 +70,13 @@ class EducationalBackgroundController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(EducationalBackground $educationalBackground)
     {
-        //
+        $this->authorize('delete', $educationalBackground);
+
+        $educationalBackground->delete();
+
+        return response()->success('Deleted');
+
     }
 }

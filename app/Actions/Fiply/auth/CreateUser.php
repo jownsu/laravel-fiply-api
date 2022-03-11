@@ -28,6 +28,14 @@ class CreateUser{
             'lastname'  => $input['lastname']
         ]);
 
+        if(array_key_exists("job_preference", $input)){
+            $user->jobPreference()->create([
+                'job_title'         => $input['job_preference']['job_title'],
+                'location'          => $input['job_preference']['location'],
+                'employment_type'   => $input['job_preference']['employment_type']
+            ]);
+        }
+
         $userVerify->delete();
 
         $token = $user->createToken('FiplyToken')->plainTextToken;
@@ -40,12 +48,6 @@ class CreateUser{
             'avatar'        =>  $user->profile->avatar,
             'token'         =>  $token,
         ];
-
-/*        $user->jobPreferences()->create([
-            'job_title'       => $input['job_title'],
-            'location'        => $input['location'],
-            'employment_type' => $input['employment_type']
-        ]);*/
 
         return $data;
     }

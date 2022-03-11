@@ -27,14 +27,17 @@ class RegisterRequest extends FormRequest
     {
 /*        'email|required|string|unique:users,email'*/
         return [
-            'email'           => ['email', 'required', 'max:255', 'string',  Rule::unique(User::class)],
-            'password'        => ['required', 'confirmed', 'string', 'min:8', 'max:255'],
-            'firstname'       => ['required', 'string', 'max:255'],
-            'lastname'        => ['required', 'string', 'max:255'],
-            'code'            => ['required', 'min:6', 'max:6']
-/*            'job_title'       => ['required', 'string', 'max:255'],
-            'location'        => ['required', 'string', 'max:255'],
-            'employment_type' => ['required', 'string', 'max:255']*/
+            'email'             => ['email', 'required', 'max:255', 'string',  Rule::unique(User::class)],
+            'password'          => ['required', 'confirmed', 'string', 'min:8', 'max:255'],
+            'firstname'         => ['required', 'string', 'max:255'],
+            'lastname'          => ['required', 'string', 'max:255'],
+            'code'              => ['required', 'min:6', 'max:6'],
+
+            'job_preference'                   => ['nullable', 'array'],
+            'job_preference.job_title'         => ['required_with:job_preference', 'string', 'min:5', 'max:255'],
+            'job_preference.location'          => ['required_with:job_preference', 'string', 'min:5', 'max:255'],
+            'job_preference.employment_type'   => ['required_with:job_preference', 'string', 'min:5', 'max:255']
+
         ];
     }
 }

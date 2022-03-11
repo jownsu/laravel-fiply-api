@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Degree;
 use App\Models\job\JobCategory;
 use App\Models\University;
 use App\Models\User;
@@ -18,9 +19,9 @@ class EducationalBackgroundFactory extends Factory
     {
         return [
             'user_id'           => User::factory(),
-            'school'            => University::all()->random()->name,
-            'degree'            => "Bachelor of " . ucfirst($this->faker->word()) .  " in " . ucfirst($this->faker->word()),
-            'field_of_study'    => JobCategory::all()->random()->name,
+            'school'            => University::inRandomOrder()->first()->name,
+            'degree'            => Degree::inRandomOrder()->first()->name,
+            'field_of_study'    => JobCategory::inRandomOrder()->first()->name,
             'starting_date'     => $this->faker->date(),
             'completion_date'   => $this->faker->date(),
         ];

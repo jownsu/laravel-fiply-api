@@ -60,9 +60,9 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
-    public function jobPreferences()
+    public function jobPreference()
     {
-        return $this->hasMany(JobPreference::class);
+        return $this->hasOne(JobPreference::class);
     }
 
     public function educationalBackgrounds()

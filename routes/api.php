@@ -16,6 +16,7 @@ use App\Http\Controllers\api\{AppliedJobController,
     user\EducationalBackgroundController,
     user\ExperienceController,
     user\FollowController,
+    user\JobPreferenceController,
     user\PostController as UserPostController,
     user\AppliedJobController as UserAppliedJobController,
     user\SavedJobController as UserSavedJobController,
@@ -49,10 +50,14 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::apiResource('/jobs/{job}/saves', SavedJobController::class)->only('store');
     Route::apiResource('/jobs/{job}/applies', AppliedJobController::class)->only('store');
 
+    Route::apiResource('/experiences', ExperienceController::class)->only(['store', 'update', 'destroy']);
+    Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only(['store', 'update', 'destroy']);
+
     Route::group(['prefix' => '/{user}'], function() {
         Route::apiResource('/', UserController::class)->only('index');
         Route::apiResource('/experiences', ExperienceController::class)->only('index');
         Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only('index');
+        Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['index', 'store']);
         Route::apiResource('/posts', UserPostController::class)->except('show');
         Route::apiResource('/appliedJobs', UserAppliedJobController::class)->only('index');
         Route::apiResource('/savedJobs', UserSavedJobController::class)->only('index');

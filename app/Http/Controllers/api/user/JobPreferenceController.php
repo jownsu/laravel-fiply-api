@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\api\user;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\user\ExperienceRequest;
-use App\Http\Resources\user\ExperienceCollection;
-use App\Models\Experience;
+use App\Http\Requests\user\JobPreferenceRequest;
+use App\Http\Resources\user\JobPreferenceCollection;
+use App\Models\JobPreference;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class ExperienceController extends Controller
+class JobPreferenceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,9 +19,8 @@ class ExperienceController extends Controller
     public function index($id)
     {
         $userid = $id == 'me' ? auth()->id() : $id;
-        $user = User::findOrFail($userid)->load('experiences');
-
-        return response()->success(ExperienceCollection::collection($user->experiences));
+        $user = User::findOrFail($userid)->load('jobPreference');
+        return response()->success($user->jobPreference);
     }
 
     /**
@@ -30,11 +29,25 @@ class ExperienceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ExperienceRequest $request)
+    public function store(JobPreferenceRequest $request)
     {
-        $experience = auth()->user()->experiences()->create($request->validated());
 
-        return response()->success(new ExperienceCollection($experience));
+        $jobPreference = auth()->user()->jobPreference;
+
+        if(is_null($jobPreference)){
+            $jobPreference = auth()->user()->jobPreference()->create($request->validated());
+        }else{
+            $jobPreference->fill($request->validated());
+        }
+
+        $jobPreference->save();
+
+
+        return response()->success($jobPreference);
+
+        //
+
+        //return response()->success($jobPreference);
     }
 
     /**
@@ -55,13 +68,9 @@ class ExperienceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ExperienceRequest $request, Experience $experience)
+    public function update(JobPreferenceRequest $request, $id)
     {
-        $this->authorize('update', $experience);
-
-        $experience->update($request->validated());
-
-        return response()->success(new ExperienceCollection($experience));
+        //
     }
 
     /**
@@ -70,12 +79,8 @@ class ExperienceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Experience $experience)
+    public function destroy($id)
     {
-        $this->authorize('delete', $experience);
-
-        $experience->delete();
-
-        return response()->success('Deleted');
+        //
     }
 }

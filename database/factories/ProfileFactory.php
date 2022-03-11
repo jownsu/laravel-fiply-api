@@ -18,6 +18,9 @@ class ProfileFactory extends Factory
 
     public function definition()
     {
+        $city = City::with('province.region')->inRandomOrder()->first();
+        $location = $city->name . ', ' . $city->province->name . ', ' . $city->province->region->name;
+
         return [
             'user_id'      => User::factory(),
             'gender'       => $this->faker->randomElement(['Male', 'Female']),
@@ -25,7 +28,7 @@ class ProfileFactory extends Factory
             'firstname'    => $this->faker->firstName(),
             'middlename'   => $this->faker->randomElement([$this->faker->lastName(), '']),
             'lastname'     => $this->faker->lastName(),
-            'location'     => $this->faker->address(),
+            'location'     => $location,
             'mobile_no'    => $this->faker->e164PhoneNumber(),
             'telephone_no' => $this->faker->phoneNumber(),
             'language'     => $this->faker->randomElement(['English', 'Filipino']),

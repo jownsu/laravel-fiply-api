@@ -44,13 +44,13 @@ class JobFactory extends Factory
 
         return [
             'user_id'               => User::factory(),
-            'title'                 => JobTitle::inRandomOrder()->take(1)->first('name')->name,
-            'employment_type'       => EmploymentType::inRandomOrder()->take(1)->first('name')->name,
+            'title'                 => JobTitle::inRandomOrder()->first()->name,
+            'employment_type'       => EmploymentType::inRandomOrder()->first()->name,
             'image'                 => $this->faker->randomElement($imgList),
             'company'               => $this->faker->company(),
             'location'              => $this->faker->address(),
-            'position_level'        => PositionLevel::inRandomOrder()->take(1)->first('name')->name,
-            'specialization'        => JobCategory::inRandomOrder()->take(1)->first('name')->name,
+            'position_level'        => PositionLevel::inRandomOrder()->first()->name,
+            'specialization'        => JobCategory::inRandomOrder()->first()->name,
             'job_responsibilities'  => $this->faker->realText(500, 3),
             'qualifications'        => $this->faker->realText(500, 3),
         ];
