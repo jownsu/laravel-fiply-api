@@ -16,12 +16,23 @@ class LoginUser{
         }
 
         $token = $user->createToken('FiplyToken')->plainTextToken;
+
+        $account_level = '';
+        $preview = 'Not Verified';
+
+        if($user->jobPreference()->exists()){
+            $account_level = 'Basic User';
+            $preview = $user->jobPreference->job_title;
+        }
+
         $data = [
             'id'            =>  $user->id,
             'fullname'      =>  $user->profile->fullname(),
-            'status'        =>  $user->profile->status ?? 'Not Verified',
+            'status'        =>  $user->profile->status,
             'description'   =>  $user->profile->description,
             'avatar'        =>  $user->profile->avatar,
+            'preview'       =>  $preview,
+            'account_level' =>  $account_level,
             'token'         =>  $token,
         ];
         return $data;

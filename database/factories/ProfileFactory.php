@@ -32,7 +32,7 @@ class ProfileFactory extends Factory
             'mobile_no'    => $this->faker->e164PhoneNumber(),
             'telephone_no' => $this->faker->phoneNumber(),
             'language'     => $this->faker->randomElement(['English', 'Filipino']),
-            'status'       => $this->faker->randomElement(['Looking for a job', 'Employed']),
+            'status'       => $this->faker->randomElement(['Looking for a job', 'Looking for an applicants']),
             'website'      => $this->faker->domainName(),
             'description'  => $this->faker->catchPhrase(),
             'avatar'       => self::$img++ . '.jpeg'

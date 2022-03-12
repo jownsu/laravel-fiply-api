@@ -32,7 +32,8 @@ class CreateUser{
             $user->jobPreference()->create([
                 'job_title'         => $input['job_preference']['job_title'],
                 'location'          => $input['job_preference']['location'],
-                'employment_type'   => $input['job_preference']['employment_type']
+                'employment_type'   => $input['job_preference']['employment_type'],
+                'status'            => 'Looking for a job'
             ]);
         }
 

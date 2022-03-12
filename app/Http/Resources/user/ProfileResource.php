@@ -15,21 +15,32 @@ class ProfileResource extends JsonResource
      */
     public function toArray($request)
     {
+        $account_level = 'Not Verified';
+        $preview = '';
+
+        if($this->jobPreference()->exists()){
+            $account_level = 'Basic User';
+            $preview = $this->jobPreference->job_title;
+        }
+
         return [
-            'id'           => $this->id,
-            'email'        => $this->email,
-            'gender'       => $this->profile->gender,
-            'birthday'     => $this->profile->birthday,
-            'fullname'     => $this->profile->fullname(),
-            'age'          => $this->profile->age(),
-            'location'     => $this->profile->location,
-            'mobile_no'    => $this->profile->mobile_no,
-            'telephone_no' => $this->profile->telephone_no,
-            'language'     => $this->profile->language,
-            'status'       => $this->profile->status,
-            'website'      => $this->profile->website,
-            'description'  => $this->profile->description,
-            'avatar'       => $this->profile->avatar
+            'id'            => $this->id,
+            'email'         => $this->email,
+            'gender'        => $this->profile->gender,
+            'birthday'      => $this->profile->birthday,
+            'fullname'      => $this->profile->fullname(),
+            'age'           => $this->profile->age(),
+            'location'      => $this->profile->location,
+            'mobile_no'     => $this->profile->mobile_no,
+            'telephone_no'  => $this->profile->telephone_no,
+            'language'      => $this->profile->language,
+            'status'        => $this->profile->status,
+            'preview'       => $preview,
+            'account_level' => $account_level,
+            'website'       => $this->profile->website,
+            'description'   => $this->profile->description,
+            'avatar'        => $this->profile->avatar,
+            'is_me'         => $this->is_me
         ];
     }
 }

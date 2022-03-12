@@ -20,6 +20,8 @@ class UserController extends Controller
     {
         $userid = $id == 'me' ? auth()->id() : $id;
         $user = User::findOrFail($userid)->load('profile');
+
+        $user->is_me = ($id == 'me') ? true : false;
         return response()->success(new ProfileResource($user));
     }
 
