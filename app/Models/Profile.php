@@ -24,23 +24,37 @@ class Profile extends Model
         'status',
         'website',
         'description',
-        'avatar'
+        'avatar',
+        'cover'
     ];
 
     protected $dates = ['birthday'];
 
     const IMG_PATH = 'avatar';
+    const COVER_PATH = 'cover';
+
 
     public function setAvatarAttribute($value)
     {
-        $this->attributes['avatar'] = Str::remove(self::IMG_PATH, $value);
+        $this->attributes['avatar'] = Str::remove(self::IMG_PATH . '/' , $value);
     }
 
-    public function getAvatarAttribute($value)
+    public function setCoverAttribute($value)
     {
-        return file_exists(public_path('img' . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $value)) && !empty($value)
-            ? url('img' . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $value)
+        $this->attributes['cover'] = Str::remove(self::COVER_PATH . '/' , $value);
+    }
+    public function avatar()
+    {
+        return !empty($this->attributes['avatar']) && file_exists(public_path('img'  . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->attributes['avatar']))
+            ? url('img' . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->attributes['avatar'])
             : url('img'. DIRECTORY_SEPARATOR . 'avatar-placeholder1.png');
+    }
+
+    public function cover()
+    {
+        return !empty($this->attributes['cover']) && file_exists(public_path('img'  . DIRECTORY_SEPARATOR . self::COVER_PATH . DIRECTORY_SEPARATOR . $this->attributes['cover']))
+            ? url('img' . DIRECTORY_SEPARATOR . self::COVER_PATH . DIRECTORY_SEPARATOR . $this->attributes['cover'])
+            : url('img'. DIRECTORY_SEPARATOR . 'cover-placeholder.png');
     }
 
     public function getBirthdayAttribute($value)

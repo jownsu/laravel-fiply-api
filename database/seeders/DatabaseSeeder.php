@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
         foreach (User::all() as $user1){
             $users = User::inRandomOrder()->take(20)->get('id');
             foreach($users as $user){
-                $user1->follows()->attach($user);
+                $user1->follows()->attach($user, ['accepted' => rand(0,1)]);
             }
         }
 

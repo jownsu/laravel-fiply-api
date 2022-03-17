@@ -30,7 +30,7 @@ class LoginUser{
             'fullname'      =>  $user->profile->fullname(),
             'status'        =>  $user->profile->status,
             'description'   =>  $user->profile->description,
-            'avatar'        =>  $user->profile->avatar,
+            'avatar'        =>  $user->profile->avatar(),
             'preview'       =>  $preview,
             'account_level' =>  $account_level,
             'token'         =>  $token,

@@ -15,6 +15,7 @@ class ProfileFactory extends Factory
      */
 
     private static $img = 1;
+    private static $cover = 1;
 
     public function definition()
     {
@@ -35,7 +36,8 @@ class ProfileFactory extends Factory
             'status'       => $this->faker->randomElement(['Looking for a job', 'Looking for an applicants']),
             'website'      => $this->faker->domainName(),
             'description'  => $this->faker->catchPhrase(),
-            'avatar'       => self::$img++ . '.jpeg'
+            'avatar'       => self::$img++ . '.jpeg',
+            'cover'        => self::$cover++ . '.jpg',
         ];
     }
 }

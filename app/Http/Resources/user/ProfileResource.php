@@ -24,23 +24,26 @@ class ProfileResource extends JsonResource
         }
 
         return [
-            'id'            => $this->id,
-            'email'         => $this->email,
-            'gender'        => $this->profile->gender,
-            'birthday'      => $this->profile->birthday,
-            'fullname'      => $this->profile->fullname(),
-            'age'           => $this->profile->age(),
-            'location'      => $this->profile->location,
-            'mobile_no'     => $this->profile->mobile_no,
-            'telephone_no'  => $this->profile->telephone_no,
-            'language'      => $this->profile->language,
-            'status'        => $this->profile->status,
-            'preview'       => $preview,
-            'account_level' => $account_level,
-            'website'       => $this->profile->website,
-            'description'   => $this->profile->description,
-            'avatar'        => $this->profile->avatar,
-            'is_me'         => $this->is_me
+            'id'              => $this->id,
+            'email'           => $this->email,
+            'gender'          => $this->profile->gender,
+            'birthday'        => $this->profile->birthday,
+            'fullname'        => $this->profile->fullname(),
+            'age'             => $this->profile->age(),
+            'location'        => $this->profile->location,
+            'mobile_no'       => $this->profile->mobile_no,
+            'telephone_no'    => $this->profile->telephone_no,
+            'language'        => $this->profile->language,
+            'status'          => $this->profile->status,
+            'preview'         => $preview,
+            'account_level'   => $account_level,
+            'website'         => $this->profile->website,
+            'description'     => $this->profile->description,
+            'avatar'          => $this->profile->avatar(),
+            'cover'           => $this->profile->cover(),
+            'follows_count'   => $this->follows_count,
+            'followers_count' => $this->followers_count,
+            'is_me'           => $this->is_me
         ];
     }
 }

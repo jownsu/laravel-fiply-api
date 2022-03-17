@@ -32,6 +32,7 @@ class CreateProfilesTable extends Migration
             $table->string('website')->nullable();
             $table->string('description')->nullable();
             $table->string('avatar')->nullable();
+            $table->string('cover')->nullable();
             $table->timestamps();
         });
     }

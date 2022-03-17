@@ -55,6 +55,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::group(['prefix' => '/{user}'], function() {
         Route::apiResource('/', UserController::class)->only('index');
+        Route::put('/uploadAvatar', [UserController::class, 'uploadAvatar']);
+        Route::put('/uploadCover', [UserController::class, 'uploadCover']);
         Route::apiResource('/experiences', ExperienceController::class)->only('index');
         Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only('index');
         Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['index', 'store']);

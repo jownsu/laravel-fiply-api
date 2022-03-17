@@ -18,7 +18,7 @@ class CommentCollection extends JsonResource
             'id'            => $this->id,
             'user_id'       => $this->user_id,
             'commented_by'  => $this->user->profile->fullname(),
-            'avatar'        => $this->user->profile->avatar,
+            'avatar'        => $this->user->profile->avatar(),
             'content'       => $this->content,
             'date'          => $this->updated_at->diffForHumans(),
         ];
