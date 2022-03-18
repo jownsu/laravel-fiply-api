@@ -45,6 +45,8 @@ class FollowService {
         $paginated = $user->followers()
             ->with(['profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+            }, 'jobPreference' => function($q){
+                $q->select(['user_id', 'job_title']);
             }])
             ->latest()
             ->paginate($per_page);

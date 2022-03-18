@@ -3,9 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class FollowCollection extends JsonResource
+class UserCollection extends JsonResource
 {
     /**
      * Transform the resource collection into an array.
@@ -15,6 +14,7 @@ class FollowCollection extends JsonResource
      */
     public function toArray($request)
     {
+
         $preview = '';
 
         if($this->jobPreference()->exists()){
@@ -22,10 +22,11 @@ class FollowCollection extends JsonResource
         }
 
         return [
-            'id'        => $this->id,
-            'fullname'  => $this->profile->fullname(),
-            'preview'   => $preview,
-            'avatar'    => $this->profile->avatar(),
+            'id'            => $this->id,
+            'fullname'      => $this->profile->fullname(),
+            'avatar'        => $this->profile->avatar(),
+            'preview'       => $preview
+
         ];
     }
 }

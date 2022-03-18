@@ -4,6 +4,7 @@ use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\DegreeController;
 use App\Http\Controllers\api\{AppliedJobController,
     CommentController,
+    CommunityController,
     EmploymentTypeController,
     JobController,
     JobTitleController,
@@ -52,6 +53,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::apiResource('/experiences', ExperienceController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only(['store', 'update', 'destroy']);
+
+    //Community
+    Route::apiResource('/users', CommunityController::class)->only(['index']);
 
     Route::group(['prefix' => '/{user}'], function() {
         Route::apiResource('/', UserController::class)->only('index');
