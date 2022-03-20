@@ -25,7 +25,8 @@ class CreateUser{
 
         $user->profile()->create([
             'firstname' => $input['firstname'],
-            'lastname'  => $input['lastname']
+            'lastname'  => $input['lastname'],
+            'birthday'  => $input['birthday']
         ]);
 
         if(array_key_exists("job_preference", $input)){
@@ -46,7 +47,7 @@ class CreateUser{
             'fullname'      =>  $user->profile->fullname(),
             'status'        =>  $user->profile->status ?? 'Not Verified',
             'description'   =>  $user->profile->description,
-            'avatar'        =>  $user->profile->avatar,
+            'avatar'        =>  $user->profile->avatar(),
             'token'         =>  $token,
         ];
 

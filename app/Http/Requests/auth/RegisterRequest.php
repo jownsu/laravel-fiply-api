@@ -31,6 +31,7 @@ class RegisterRequest extends FormRequest
             'password'          => ['required', 'confirmed', 'string', 'min:8', 'max:255'],
             'firstname'         => ['required', 'string', 'max:255'],
             'lastname'          => ['required', 'string', 'max:255'],
+            'birthday'          => ['required'],
             'code'              => ['required', 'min:6', 'max:6'],
 
             'job_preference'                   => ['nullable', 'array'],
