@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\api\datasets;
+
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UniversityCollection;
-use App\Models\University;
+use App\Http\Resources\PositionLevelCollection;
+use App\Models\PositionLevel;
 use Illuminate\Http\Request;
 
-class UniversityController extends ApiController
+class PositionLevelController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +17,9 @@ class UniversityController extends ApiController
      */
     public function index()
     {
-        $universities = University::query()->searchLimit();
+        $positionLevels = PositionLevel::query()->searchLimit();
 
-        return response()->success(UniversityCollection::collection($universities->get()));
+        return response()->success(PositionLevelCollection::collection($positionLevels->get()));
     }
 
     /**

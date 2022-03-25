@@ -4,7 +4,7 @@ namespace App\Http\Requests\user;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EducationalBackroundRequest extends FormRequest
+class UploadValidIdRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,9 @@ class EducationalBackroundRequest extends FormRequest
     public function rules()
     {
         return [
-            'university'        => ['required', 'min:2', 'max:255', 'string'],
-            'degree'            => ['nullable', 'min:2', 'max:255', 'string'],
-            'field_of_study'    => ['nullable', 'min:2', 'max:255', 'string'],
-            'starting_date'     => ['nullable', 'date'],
-            'completion_date'   => ['nullable', 'date']
+            'valid_id'             => ['required', 'string'],
+            'valid_id_image_front' => ['required', 'image'],
+            'valid_id_image_back'  => ['required', 'image']
         ];
     }
 }

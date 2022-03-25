@@ -16,11 +16,11 @@ class EducationalBackgroundCollection extends JsonResource
     {
         return [
             'id'                => $this->id,
-            'school'            => $this->school,
+            'university'        => $this->university,
             'degree'            => $this->degree,
             'field_of_study'    => $this->field_of_study,
-            'starting_date'     => $this->starting_date->format('F d, Y'),
-            'completion_date'   => $this->completion_date->format('F d, Y')
+            'starting_date'     => $this->starting_date ? $this->starting_date->format('F d, Y') : null,
+            'completion_date'   => $this->completion_date ? $this->completion_date->format('F d, Y') : null
         ];
     }
 }

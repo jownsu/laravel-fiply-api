@@ -1,28 +1,31 @@
 <?php
 
 use App\Http\Controllers\api\AuthController;
-use App\Http\Controllers\DegreeController;
 use App\Http\Controllers\api\{AppliedJobController,
     CommentController,
     CommunityController,
-    EmploymentTypeController,
+    datasets\JobCategoryController,
+    DocumentController,
     JobController,
-    JobTitleController,
-    LocationController,
-    PositionLevelController,
     PostController,
     SavedJobController,
-    UniversityController,
     UpVoteController,
+    datasets\DegreeController,
+    datasets\UniversityController,
+    datasets\ValidIdController,
+    datasets\EmploymentTypeController,
+    datasets\JobTitleController,
+    datasets\LocationController,
+    datasets\PositionLevelController,
     user\EducationalBackgroundController,
     user\ExperienceController,
     user\FollowController,
     user\JobPreferenceController,
+    user\UserController,
     user\PostController as UserPostController,
     user\AppliedJobController as UserAppliedJobController,
     user\SavedJobController as UserSavedJobController,
-    user\ProfileController,
-    user\UserController};
+    user\ProfileController};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,8 +39,10 @@ Route::apiResource('/locations', LocationController::class)->only(['index']);
 Route::apiResource('/universities', UniversityController::class)->only(['index']);
 Route::apiResource('/degrees', DegreeController::class)->only(['index']);
 Route::apiResource('/jobTitles', JobTitleController::class)->only(['index']);
+Route::apiResource('/jobCategories', JobCategoryController::class)->only(['index']);
 Route::apiResource('/employmentTypes', EmploymentTypeController::class)->only(['index']);
 Route::apiResource('/positionLevels', PositionLevelController::class)->only(['index']);
+Route::apiResource('/validIds', ValidIdController::class)->only(['index']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/token/logout', [AuthController::class, 'logout']);
@@ -54,13 +59,16 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::apiResource('/experiences', ExperienceController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only(['store', 'update', 'destroy']);
 
+    Route::put('/uploadAvatar', [UserController::class, 'uploadAvatar']);
+    Route::put('/uploadCover', [UserController::class, 'uploadCover']);
+    Route::put('/uploadResume', [UserController::class, 'uploadResume']);
+    Route::put('/uploadValidId', [UserController::class, 'uploadValidId']);
+
     //Community
     Route::apiResource('/users', CommunityController::class)->only(['index']);
 
     Route::group(['prefix' => '/{user}'], function() {
         Route::apiResource('/', UserController::class)->only('index');
-        Route::put('/uploadAvatar', [UserController::class, 'uploadAvatar']);
-        Route::put('/uploadCover', [UserController::class, 'uploadCover']);
         Route::apiResource('/experiences', ExperienceController::class)->only('index');
         Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only('index');
         Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['index', 'store']);

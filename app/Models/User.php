@@ -60,6 +60,11 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
+    public function document()
+    {
+        return $this->hasOne(Document::class);
+    }
+
     public function jobPreference()
     {
         return $this->hasOne(JobPreference::class);

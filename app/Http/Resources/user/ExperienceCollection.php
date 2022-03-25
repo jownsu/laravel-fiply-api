@@ -20,8 +20,8 @@ class ExperienceCollection extends JsonResource
             'employment_type' => $this->employment_type,
             'company'         => $this->company,
             'location'        => $this->location,
-            'starting_date'   => $this->starting_date->format('F d, Y'),
-            'completion_date' => $this->completion_date->format('F d, Y'),
+            'starting_date'   => $this->starting_date ? $this->starting_date->format('F d, Y') : null,
+            'completion_date' => $this->completion_date ? $this->completion_date->format('F d, Y') : null,
             'is_current_job'  => $this->is_current_job
         ];
     }

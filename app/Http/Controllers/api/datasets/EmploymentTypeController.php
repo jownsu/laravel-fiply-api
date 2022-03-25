@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\api\datasets;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PositionLevelCollection;
-use App\Models\PositionLevel;
+use App\Http\Resources\EmploymentTypeCollection;
+use App\Models\EmploymentType;
 use Illuminate\Http\Request;
 
-class PositionLevelController extends Controller
+class EmploymentTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +16,9 @@ class PositionLevelController extends Controller
      */
     public function index()
     {
-        $positionLevels = PositionLevel::query()->searchLimit();
+        $employmentTypes = EmploymentType::query()->searchLimit();
 
-        return response()->success(PositionLevelCollection::collection($positionLevels->get()));
+        return response()->success(EmploymentTypeCollection::collection($employmentTypes->get()));
     }
 
     /**

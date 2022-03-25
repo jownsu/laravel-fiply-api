@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\api\datasets;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\JobTitleCollection;
-use App\Models\job\JobTitle;
+use App\Models\dataset\ValidId;
 use Illuminate\Http\Request;
 
-class JobTitleController extends ApiController
+class ValidIdController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +15,7 @@ class JobTitleController extends ApiController
      */
     public function index()
     {
-        $jobTitles = JobTitle::query()->searchLimit();
-
-        return response()->success(JobTitleCollection::collection($jobTitles->get()));
+        return response()->success(ValidId::all());
     }
 
     /**

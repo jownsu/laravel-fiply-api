@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\api\datasets;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\LocationCollection;
-use App\Models\location\City;
-use App\Models\location\Province;
-use App\Models\location\Region;
+
+use App\Http\Controllers\api\ApiController;
+use App\Http\Resources\UniversityCollection;
+use App\Models\University;
 use Illuminate\Http\Request;
 
-class LocationController extends ApiController
+class UniversityController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -18,11 +17,9 @@ class LocationController extends ApiController
      */
     public function index()
     {
-        $location = City::with('province.region');
+        $universities = University::query()->searchLimit();
 
-        $location->searchLimit();
-
-        return response()->success(LocationCollection::collection($location->get()));
+        return response()->success(UniversityCollection::collection($universities->get()));
     }
 
     /**

@@ -18,11 +18,11 @@ class CreateEducationalBackgroundsTable extends Migration
             $table->foreignId("user_id")->constrained("users")
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->string("school");
+            $table->string("university");
             $table->string("degree")->nullable();
             $table->string("field_of_study")->nullable();
-            $table->date("starting_date");
-            $table->date("completion_date");
+            $table->date("starting_date")->nullable();
+            $table->date("completion_date")->nullable();
             $table->timestamps();
         });
     }

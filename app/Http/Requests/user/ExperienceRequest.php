@@ -28,8 +28,8 @@ class ExperienceRequest extends FormRequest
             'employment_type'   => ['required', 'min:5', 'max:255', 'string'],
             'location'          => ['nullable', 'min:5', 'max:255', 'string'],
             'company'           => ['nullable', 'min:5', 'max:255', 'string'],
-            'starting_date'     => ['required', 'date'],
-            'completion_date'   => ['required', 'date']
+            'starting_date'     => ['nullable', 'date'],
+            'completion_date'   => ['nullable', 'date']
         ];
     }
 }

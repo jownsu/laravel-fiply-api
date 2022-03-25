@@ -10,7 +10,7 @@ class EducationalBackground extends Model
     use HasFactory;
 
     protected $fillable = [
-        'school',
+        'university',
         'degree',
         'field_of_study',
         'starting_date',

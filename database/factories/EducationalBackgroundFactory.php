@@ -19,7 +19,7 @@ class EducationalBackgroundFactory extends Factory
     {
         return [
             'user_id'           => User::factory(),
-            'school'            => University::inRandomOrder()->first()->name,
+            'university'        => University::inRandomOrder()->first()->name,
             'degree'            => Degree::inRandomOrder()->first()->name,
             'field_of_study'    => JobCategory::inRandomOrder()->first()->name,
             'starting_date'     => $this->faker->date(),

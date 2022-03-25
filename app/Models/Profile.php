@@ -43,6 +43,7 @@ class Profile extends Model
     {
         $this->attributes['cover'] = Str::remove(self::COVER_PATH . '/' , $value);
     }
+
     public function avatar()
     {
         return !empty($this->attributes['avatar']) && file_exists(public_path('img'  . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->attributes['avatar']))

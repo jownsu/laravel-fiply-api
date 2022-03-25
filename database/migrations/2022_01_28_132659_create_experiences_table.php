@@ -22,8 +22,8 @@ class CreateExperiencesTable extends Migration
             $table->string("employment_type");
             $table->string("company")->nullable();
             $table->string("location")->nullable();
-            $table->date("starting_date");
-            $table->date("completion_date");
+            $table->date("starting_date")->nullable();
+            $table->date("completion_date")->nullable();
             $table->boolean('is_current_job')->default(false);
             $table->timestamps();
         });

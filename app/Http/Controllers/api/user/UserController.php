@@ -5,7 +5,10 @@ namespace App\Http\Controllers\api\user;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\user\UploadAvatarRequest;
 use App\Http\Requests\user\UploadCoverRequest;
+use App\Http\Requests\user\UploadResumeRequest;
+use App\Http\Requests\user\UploadValidIdRequest;
 use App\Http\Resources\user\ProfileResource;
+use App\Models\Document;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -81,6 +84,57 @@ class UserController extends Controller
 
         return response()->success($user->profile->cover());
     }
+
+    public function uploadResume(UploadResumeRequest $request)
+    {
+        $input = $request->validated();
+
+        $user = auth()->user();
+
+        $doc = $user->document;
+
+        if(!$doc){
+            $doc = new Document();
+        }else{
+            Storage::disk('files')->delete(Document::RESUME_PATH . DIRECTORY_SEPARATOR . $doc->resume);
+        }
+
+        $doc->resume = $input['resume']->store(Document::RESUME_PATH, 'files');
+
+        $user->document()->save($doc);
+
+        return response()->success($doc->resume());
+    }
+
+    public function uploadValidId(UploadValidIdRequest $request)
+    {
+        $input = $request->validated();
+
+        $user = auth()->user();
+
+        $doc = $user->document;
+
+        if(!$doc){
+            $doc = new Document();
+        }else{
+            Storage::disk('files')->delete(Document::VALID_ID_PATH . DIRECTORY_SEPARATOR . $doc->valid_id_image_front);
+            Storage::disk('files')->delete(Document::VALID_ID_PATH . DIRECTORY_SEPARATOR . $doc->valid_id_image_back);
+        }
+
+        $doc->valid_id             = $input['valid_id'];
+        $doc->valid_id_image_front = $input['valid_id_image_front']->store(Document::VALID_ID_PATH, 'files');
+        $doc->valid_id_image_back  = $input['valid_id_image_back']->store(Document::VALID_ID_PATH, 'files');
+
+        $user->document()->save($doc);
+
+        return response()->success([
+            'valid_id'              => $doc->valid_id,
+            'valid_id_image_front'  => $doc->valid_id_image_front(),
+            'valid_id_image_back'   => $doc->valid_id_image_back(),
+        ]);
+
+    }
+
 
     /**
      * Display the specified resource.

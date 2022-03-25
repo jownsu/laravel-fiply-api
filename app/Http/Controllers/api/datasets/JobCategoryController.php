@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api\datasets;
 
-use App\Http\Resources\DegreeCollection;
-use App\Models\Degree;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\JobCategoryCollection;
+use App\Models\job\JobCategory;
 use Illuminate\Http\Request;
 
-class DegreeController extends Controller
+class JobCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +16,9 @@ class DegreeController extends Controller
      */
     public function index()
     {
-        $degrees = Degree::query()->searchLimit();
+        $jobCategories = JobCategory::query()->searchLimit();
 
-        return response()->success(DegreeCollection::collection($degrees->get()));
+        return response()->success(JobCategoryCollection::collection($jobCategories->get()));
     }
 
     /**
