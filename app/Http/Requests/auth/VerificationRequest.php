@@ -5,6 +5,7 @@ namespace App\Http\Requests\auth;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class VerificationRequest extends FormRequest
 {
@@ -27,7 +28,17 @@ class VerificationRequest extends FormRequest
     {
         return [
             'email'           => ['email', 'required', 'max:255', 'string',  Rule::unique(User::class)],
-            'password'        => ['required', 'confirmed', 'string', 'max:255'],
+            'password'        => [
+                                    'required',
+                                    'confirmed',
+                                    'string',
+                                    'max:255',
+                                    Password::min(8)
+                                        ->letters()
+                                        ->mixedCase()
+                                        ->numbers()
+                                        ->symbols()
+                                ],
             'firstname'       => ['required', 'string', 'max:255'],
             'lastname'        => ['required', 'string', 'max:255'],
         ];

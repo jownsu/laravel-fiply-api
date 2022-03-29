@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Experience;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class ExperiencePolicy
 {
@@ -53,7 +54,9 @@ class ExperiencePolicy
      */
     public function update(User $user, Experience $experience)
     {
-        return $user->id === $experience->user_id;
+        return $user->id === $experience->user_id
+            ? Response::allow()
+            : Response::deny('The user do not own this Experience');
     }
 
     /**
@@ -65,7 +68,9 @@ class ExperiencePolicy
      */
     public function delete(User $user, Experience $experience)
     {
-        return $user->id === $experience->user_id;
+        return $user->id === $experience->user_id
+            ? Response::allow()
+            : Response::deny('The user do not own this Experience');
     }
 
     /**

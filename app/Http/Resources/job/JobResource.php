@@ -18,7 +18,7 @@ class JobResource extends JsonResource
             'id'                    => $this->id,
             'user_id'               => $this->user->id,
             'email'                 => $this->user->email,
-            'avatar'                => $this->user->profile->avatar,
+            'avatar'                => $this->user->profile->avatar(),
             'fullname'              => $this->user->profile->fullname(),
             'title'                 => $this->title,
             'employment_type'       => $this->employment_type,

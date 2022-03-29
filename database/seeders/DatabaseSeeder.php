@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             DegreeSeeder::class,
             PositionLevelSeeder::class,
             UserSeeder::class,
+            ValidIdsSeeder::class
         ]);
 
         foreach (Post::all() as $post){

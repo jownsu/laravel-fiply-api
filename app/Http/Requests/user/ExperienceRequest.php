@@ -24,10 +24,10 @@ class ExperienceRequest extends FormRequest
     public function rules()
     {
         return [
-            'job_title'         => ['required', 'min:5', 'max:255', 'string'],
-            'employment_type'   => ['required', 'min:5', 'max:255', 'string'],
-            'location'          => ['nullable', 'min:5', 'max:255', 'string'],
-            'company'           => ['nullable', 'min:5', 'max:255', 'string'],
+            'job_title'         => ['required', 'min:2', 'max:255', 'string'],
+            'employment_type'   => ['required', 'min:2', 'max:255', 'string'],
+            'location'          => ['nullable', 'min:2', 'max:255', 'string'],
+            'company'           => ['nullable', 'min:2', 'max:255', 'string'],
             'starting_date'     => ['nullable', 'date'],
             'completion_date'   => ['nullable', 'date']
         ];

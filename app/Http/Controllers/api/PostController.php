@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\post\PostRequest;
 use App\Http\Resources\post\PostCollection;
+use App\Models\Job;
 use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Http\Request;
@@ -30,6 +31,8 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
+        $this->authorize('create', Post::class);
+
         $post = (new PostService())->createPost($request);
         return response()->success(new PostCollection($post));
     }

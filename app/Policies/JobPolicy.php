@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class JobPolicy
 {
@@ -41,7 +42,10 @@ class JobPolicy
      */
     public function create(User $user)
     {
-        //
+
+        return ( $user->account_level() == User::VERIFIED )
+            ? Response::allow()
+            : Response::deny('Account must be verified');
     }
 
     /**
@@ -53,7 +57,9 @@ class JobPolicy
      */
     public function update(User $user, Job $job)
     {
-        return $user->id === $job->user_id;
+        return $user->id === $job->user_id
+            ? Response::allow()
+            : Response::deny('The user do not own this Job Post');
     }
 
     /**
@@ -65,7 +71,9 @@ class JobPolicy
      */
     public function delete(User $user, Job $job)
     {
-        return $user->id === $job->user_id;
+        return $user->id === $job->user_id
+            ? Response::allow()
+            : Response::deny('The user do not own this Job Post');
     }
 
     /**

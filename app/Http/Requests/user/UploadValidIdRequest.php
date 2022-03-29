@@ -25,8 +25,8 @@ class UploadValidIdRequest extends FormRequest
     {
         return [
             'valid_id'             => ['required', 'string'],
-            'valid_id_image_front' => ['required', 'image'],
-            'valid_id_image_back'  => ['required', 'image']
+            'valid_id_image_front' => ['required', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp,pdf,docx', 'max:2048'],
+            'valid_id_image_back'  => ['required', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp,pdf,docx', 'max:2048']
         ];
     }
 }

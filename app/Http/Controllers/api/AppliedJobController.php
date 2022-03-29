@@ -32,6 +32,8 @@ class AppliedJobController extends Controller
      */
     public function store(Job $job)
     {
+        $this->authorize('create', $job);
+
         $result = $job->userAppliedJobs()->toggle(auth()->id());
 
         return response()->json([

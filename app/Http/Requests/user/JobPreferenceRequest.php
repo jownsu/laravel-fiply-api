@@ -24,9 +24,9 @@ class JobPreferenceRequest extends FormRequest
     public function rules()
     {
         return [
-            'job_title'         => ['required', 'string', 'min:5', 'max:255'],
-            'location'          => ['required', 'string', 'min:5', 'max:255'],
-            'employment_type'   => ['required', 'string', 'min:5', 'max:255']
+            'job_title'         => ['required', 'string', 'min:2', 'max:255'],
+            'location'          => ['required', 'string', 'min:2', 'max:255'],
+            'employment_type'   => ['required', 'string', 'min:2', 'max:255']
         ];
     }
 }

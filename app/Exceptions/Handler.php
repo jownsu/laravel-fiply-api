@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
 
                 //Throw custom error if the Http Request is incorrect
                 if($e instanceof AccessDeniedHttpException){
-                    return response()->error('The user do not own this object');
+                    return response()->error($e->getMessage());
                 }
 
             }

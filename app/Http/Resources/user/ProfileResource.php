@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\user;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,12 +16,21 @@ class ProfileResource extends JsonResource
      */
     public function toArray($request)
     {
-        $account_level = 'Not Verified';
         $preview = '';
-
         if($this->jobPreference()->exists()){
-            $account_level = 'Basic User';
             $preview = $this->jobPreference->job_title;
+        }
+
+        switch ($this->account_level())
+        {
+            case User::SEMI_VERIFIED:
+                $account_level = 'Semi-Verified';
+                break;
+            case User::VERIFIED:
+                $account_level = 'Verified';
+                break;
+            default:
+                $account_level = 'Basic User';
         }
 
         return [

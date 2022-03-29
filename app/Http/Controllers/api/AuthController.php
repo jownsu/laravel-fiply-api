@@ -66,4 +66,17 @@ class AuthController extends ApiController
         $request->user()->currentAccessToken()->delete();
         return response()->success(['message' => 'Logged Out']);
     }
+
+    public function checkEmail(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email']
+        ]);
+
+        $email = User::where('email', $validated['email'])->count();
+
+        return response()->success($email == 1 ? true : false);
+
+
+    }
 }

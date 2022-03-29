@@ -24,19 +24,19 @@ class ProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'gender'        => ['nullable', 'min:3', 'max:255', 'string'],
+            'gender'        => ['nullable', 'min:2', 'max:255', 'string'],
             'birthday'      => ['nullable', 'date'],
-            'firstname'     => ['required', 'min:2', 'max:255'],
-            'middlename'    => ['nullable', 'min:3', 'max:255', 'string'],
-            'lastname'      => ['required', 'min:2', 'max:255'],
-            'location'      => ['nullable', 'min:3', 'max:255', 'string'],
-            'mobile_no'     => ['nullable', 'min:3', 'max:255', 'string'],
-            'telephone_no'  => ['nullable', 'min:3', 'max:255', 'string'],
-            'language'      => ['nullable', 'min:3', 'max:255', 'string'],
-            'status'        => ['nullable', 'min:3', 'max:255', 'string'],
-            'website'       => ['nullable', 'min:3', 'max:255', 'string'],
-            'description'   => ['nullable', 'min:3', 'max:255', 'string'],
-            'avatar'        => ['nullable', 'min:3', 'max:255', 'string'],
+            'firstname'     => ['required', 'min:2', 'max:255', 'string'],
+            'middlename'    => ['nullable', 'min:2', 'max:255', 'string'],
+            'lastname'      => ['required', 'min:2', 'max:255', 'string'],
+            'location'      => ['nullable', 'min:2', 'max:255', 'string'],
+            'mobile_no'     => ['nullable', 'min:2', 'max:255', 'string'],
+            'telephone_no'  => ['nullable', 'min:2', 'max:255', 'string'],
+            'language'      => ['nullable', 'min:2', 'max:255', 'string'],
+            'status'        => ['nullable', 'min:2', 'max:255', 'string'],
+            'website'       => ['nullable', 'min:2', 'max:255', 'string'],
+            'description'   => ['nullable', 'min:2', 'max:255', 'string'],
+            //'avatar'        => ['nullable', 'min:2', 'max:255', 'string'],
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class PostPolicy
 {
@@ -41,7 +42,11 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        //
+        $level = $user->account_level();
+
+        return ( $level == User::SEMI_VERIFIED || $level == User::VERIFIED)
+            ? Response::allow()
+            : Response::deny('Account must be semi-verified');
     }
 
     /**
@@ -53,7 +58,9 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $user->id === $post->user_id;
+        return $user->id === $post->user_id
+            ? Response::allow()
+            : Response::deny('The user do not own this Post');
     }
 
     /**
@@ -65,7 +72,9 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        return $user->id === $post->user_id;
+        return $user->id === $post->user_id
+            ? Response::allow()
+            : Response::deny('The user do not own this Post');
     }
 
     /**

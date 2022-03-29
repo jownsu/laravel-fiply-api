@@ -23,7 +23,7 @@ class CreateDocumentsTable extends Migration
             $table->string('valid_id_image_front')->nullable();
             $table->string('valid_id_image_back')->nullable();
             $table->string('resume')->nullable();
-            $table->string('face')->nullable();
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

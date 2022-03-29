@@ -44,6 +44,8 @@ Route::apiResource('/employmentTypes', EmploymentTypeController::class)->only(['
 Route::apiResource('/positionLevels', PositionLevelController::class)->only(['index']);
 Route::apiResource('/validIds', ValidIdController::class)->only(['index']);
 
+Route::post('/checkEmail', [AuthController::class, 'checkEmail']);
+
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/token/logout', [AuthController::class, 'logout']);
 
@@ -53,8 +55,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::apiResource('/comments', CommentController::class)->only(['update', 'destroy']);
 
     Route::apiResource('/jobs', JobController::class);
-    Route::apiResource('/jobs/{job}/saves', SavedJobController::class)->only('store');
-    Route::apiResource('/jobs/{job}/applies', AppliedJobController::class)->only('store');
+    Route::apiResource('/jobs/{job}/saves', SavedJobController::class)->only(['store', 'index']);
+    Route::apiResource('/jobs/{job}/applies', AppliedJobController::class)->only(['store', 'index']);
 
     Route::apiResource('/experiences', ExperienceController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only(['store', 'update', 'destroy']);

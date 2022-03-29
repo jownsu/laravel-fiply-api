@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\EducationalBackground;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class EducationalBackgroundPolicy
 {
@@ -53,7 +54,9 @@ class EducationalBackgroundPolicy
      */
     public function update(User $user, EducationalBackground $educationalBackground)
     {
-        return $user->id === $educationalBackground->user_id;
+        return $user->id === $educationalBackground->user_id
+                ? Response::allow()
+                : Response::deny('The user do not own this Educational Background');
     }
 
     /**
@@ -65,7 +68,9 @@ class EducationalBackgroundPolicy
      */
     public function delete(User $user, EducationalBackground $educationalBackground)
     {
-        return $user->id === $educationalBackground->user_id;
+        return $user->id === $educationalBackground->user_id
+            ? Response::allow()
+            : Response::deny('The user do not own this Educational Background');
     }
 
     /**

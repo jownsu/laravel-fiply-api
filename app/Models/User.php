@@ -37,6 +37,9 @@ class User extends Authenticatable
         'pivot'
     ];
 
+    const SEMI_VERIFIED = 1;
+    const VERIFIED = 2;
+
     /**
      * The attributes that should be cast.
      *
@@ -53,6 +56,28 @@ class User extends Authenticatable
         self::creating(function ($user) {
             $user->id = IdGenerator::generate(['table' => 'users', 'length' => 11, 'prefix' => date('Yis')]);
         });
+    }
+
+    public function account_level()
+    {
+
+        $account_lvl = 0;
+
+        if(( $this->educationalBackgrounds()->exists() || $this->experiences()->exists() )&& !is_null($this->document->resume)){
+            $account_lvl++;
+            if(
+                $this->document()->exists() &&
+                $this->document->status &&
+                !is_null($this->document->valid_id_image_front) &&
+                !is_null($this->document->valid_id_image_back)
+            ){
+                $account_lvl++;
+            }
+        }
+
+
+
+        return $account_lvl;
     }
 
     public function profile()

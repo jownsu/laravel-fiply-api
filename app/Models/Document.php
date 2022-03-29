@@ -17,7 +17,7 @@ class Document extends Model
             'valid_id_image_front',
             'valid_id_image_back',
             'resume',
-            'face'
+            'status'
         ];
 
     const RESUME_PATH = 'resume';
