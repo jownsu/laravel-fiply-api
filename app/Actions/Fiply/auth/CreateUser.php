@@ -42,13 +42,15 @@ class CreateUser{
 
         $token = $user->createToken('FiplyToken')->plainTextToken;
 
+        $account_level = $user->account_level();
+
         $data = [
-            'id'            =>  $user->id,
-            'fullname'      =>  $user->profile->fullname(),
-            'status'        =>  $user->profile->status ?? 'Not Verified',
-            'description'   =>  $user->profile->description,
-            'avatar'        =>  $user->profile->avatar(),
-            'token'         =>  $token,
+            'id'                =>  $user->id,
+            'fullname'          =>  $user->profile->fullname(),
+            'avatar'            =>  $user->profile->avatar(),
+            'account_level'     =>  $account_level['account_level'],
+            'account_level_str' =>  $account_level['account_level_str'],
+            'token'             =>  $token,
         ];
 
         return $data;

@@ -21,39 +21,31 @@ class ProfileResource extends JsonResource
             $preview = $this->jobPreference->job_title;
         }
 
-        switch ($this->account_level())
-        {
-            case User::SEMI_VERIFIED:
-                $account_level = 'Semi-Verified';
-                break;
-            case User::VERIFIED:
-                $account_level = 'Verified';
-                break;
-            default:
-                $account_level = 'Basic User';
-        }
+        $account_level = $this->account_level();
+
 
         return [
-            'id'              => $this->id,
-            'email'           => $this->email,
-            'gender'          => $this->profile->gender,
-            'birthday'        => $this->profile->birthday,
-            'fullname'        => $this->profile->fullname(),
-            'age'             => $this->profile->age(),
-            'location'        => $this->profile->location,
-            'mobile_no'       => $this->profile->mobile_no,
-            'telephone_no'    => $this->profile->telephone_no,
-            'language'        => $this->profile->language,
-            'status'          => $this->profile->status,
-            'preview'         => $preview,
-            'account_level'   => $account_level,
-            'website'         => $this->profile->website,
-            'description'     => $this->profile->description,
-            'avatar'          => $this->profile->avatar(),
-            'cover'           => $this->profile->cover(),
-            'follows_count'   => $this->follows_count,
-            'followers_count' => $this->followers_count,
-            'is_me'           => $this->is_me
+            'id'                    => $this->id,
+            'email'                 => $this->email,
+            'gender'                => $this->profile->gender,
+            'birthday'              => $this->profile->birthday,
+            'fullname'              => $this->profile->fullname(),
+            'age'                   => $this->profile->age(),
+            'location'              => $this->profile->location,
+            'mobile_no'             => $this->profile->mobile_no,
+            'telephone_no'          => $this->profile->telephone_no,
+            'language'              => $this->profile->language,
+            'status'                => $this->profile->status,
+            'preview'               => $preview,
+            'account_level'         => $account_level['account_level'],
+            'account_level_str'     => $account_level['account_level_str'],
+            'website'               => $this->profile->website,
+            'description'           => $this->profile->description,
+            'avatar'                => $this->profile->avatar(),
+            'cover'                 => $this->profile->cover(),
+            'follows_count'         => $this->follows_count,
+            'followers_count'       => $this->followers_count,
+            'is_me'                 => $this->is_me
         ];
     }
 }

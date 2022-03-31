@@ -33,13 +33,45 @@ class FollowController extends Controller
         return response()->successPaginated($followers);
     }
 
-    public function follow(User $user)
+    public function follow(Request $request)
     {
-        $result = $user->followers()->toggle(auth()->id());
-
-        return response()->json([
-            'data' => $result['attached'] ? true : false
+        $validated = $request->validate([
+            'user_id' => 'required'
         ]);
+
+        $response = (new FollowService())->follow($validated['user_id']);
+
+        return response()->success($response);
+    }
+
+    public function followerRequests()
+    {
+
+        $followers = (new FollowService())->getFollowerRequests();
+
+        return response()->successPaginated($followers);
+    }
+
+    public function followPendings()
+    {
+
+        $followers = (new FollowService())->getFollowPendings();
+
+        return response()->successPaginated($followers);
+    }
+
+    public function acceptFollowRequest(Request $request)
+    {
+        $validated = $request->validate(['user_id' => 'required']);
+
+        $response = (new FollowService())->acceptFollowRequest($validated['user_id']);
+
+        if($response['status']){
+            return response()->success($response['message']);
+        }
+
+        return response()->error($response['message']);
+
     }
 
     /**

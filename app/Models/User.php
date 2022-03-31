@@ -63,7 +63,7 @@ class User extends Authenticatable
 
         $account_lvl = 0;
 
-        if(( $this->educationalBackgrounds()->exists() || $this->experiences()->exists() )&& !is_null($this->document->resume)){
+        if(( $this->educationalBackgrounds()->exists() || $this->experiences()->exists() ) && ($this->document()->exists() && !is_null($this->document->resume))){
             $account_lvl++;
             if(
                 $this->document()->exists() &&
@@ -75,9 +75,22 @@ class User extends Authenticatable
             }
         }
 
+        switch ($account_lvl)
+        {
+            case self::SEMI_VERIFIED:
+                $account_level_str = 'Semi-Verified';
+                break;
+            case self::VERIFIED:
+                $account_level_str = 'Verified';
+                break;
+            default:
+                $account_level_str = 'Basic User';
+        }
 
-
-        return $account_lvl;
+        return [
+                "account_level"     => $account_lvl,
+                "account_level_str" => $account_level_str
+            ];
     }
 
     public function profile()
@@ -137,13 +150,21 @@ class User extends Authenticatable
 
     public function follows()
     {
-        return $this->belongsToMany(User::class, 'follows', 'user_id', 'follow_id')
-            ->withPivot('accepted');
+        return $this->belongsToMany(User::class, 'follows', 'user_id', 'follow_id');
     }
 
     public function followers()
     {
-        return $this->belongsToMany(User::class, 'follows', 'follow_id', 'user_id')
-            ->withPivot('accepted');
+        return $this->belongsToMany(User::class, 'follows', 'follow_id', 'user_id');
+    }
+
+    public function followPendings()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'user_id', 'follow_id');
+    }
+
+    public function followerRequests()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follow_id', 'user_id');
     }
 }

@@ -77,9 +77,14 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/posts', UserPostController::class)->except('show');
         Route::apiResource('/appliedJobs', UserAppliedJobController::class)->only('index');
         Route::apiResource('/savedJobs', UserSavedJobController::class)->only('index');
+
+
         Route::post('/follow', [FollowController::class, 'follow']);
         Route::get('/follows', [FollowController::class, 'follows']);
         Route::get('/followers', [FollowController::class, 'followers']);
+        Route::get('/followerRequests', [FollowController::class, 'followerRequests']);
+        Route::get('/followPendings', [FollowController::class, 'followPendings']);
+        Route::post('/acceptFollowRequest', [FollowController::class, 'acceptFollowRequest']);
     });
 
 

@@ -45,7 +45,7 @@ class JobPolicy
 
         return ( $user->account_level() == User::VERIFIED )
             ? Response::allow()
-            : Response::deny('Account must be verified');
+            : Response::deny('Account must be fully verified');
     }
 
     /**
