@@ -22,8 +22,8 @@ class PostCollection extends JsonResource
             'content'            => $this->content,
             'image'              => $this->image(),
             'date'               => $this->updated_at->diffForHumans(),
-            'upVotes_count'      => $this->userUpVotes->count(),
-            'is_upVoted'         => $this->userUpVotes->contains(auth()->id()) ? true : false,
+            'upVotes_count'      => $this->total_upVotes,
+            'is_upVoted'         => $this->is_upVoted ? true : false,
             'comments'           => CommentCollection::collection($this->whenLoaded('comments')),
         ];
     }

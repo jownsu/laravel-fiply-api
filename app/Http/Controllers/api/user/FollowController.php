@@ -19,9 +19,9 @@ class FollowController extends Controller
     {
         $userId = $id == 'me' ? auth()->id() : $id;
 
-        $follows = (new FollowService())->getFollowing($userId);
+        $following = (new FollowService())->getFollowing($userId);
 
-        return response()->successPaginated($follows);
+        return response()->successPaginated($following);
     }
     public function followers($id)
     {

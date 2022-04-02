@@ -29,7 +29,7 @@ class UserController extends Controller
         $user = User::findOrFail($userid)
                     ->load('profile')
                     ->loadCount([
-                        'follows' => function($q){
+                        'following' => function($q){
                             $q->where('accepted', 1);
                         }, 'followers' => function($q){
                             $q->where('accepted', 1);

@@ -43,7 +43,7 @@ class ProfileResource extends JsonResource
             'description'           => $this->profile->description,
             'avatar'                => $this->profile->avatar(),
             'cover'                 => $this->profile->cover(),
-            'follows_count'         => $this->follows_count,
+            'following_count'       => $this->following_count,
             'followers_count'       => $this->followers_count,
             'is_me'                 => $this->is_me
         ];

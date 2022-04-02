@@ -46,4 +46,16 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class, 'saved_posts');
     }
+
+    //scopes
+
+    public function scopeOrderByUpVoted($query)
+    {
+        return $query->when(\request('q') == 'mostUpVoted', function ($q){
+                    $q->orderBy('total_upVotes', 'DESC');
+                })
+                    ->when(\request('q') == 'leastUpVoted', function ($q){
+                        $q->orderBy('total_upVotes', 'ASC');
+                });
+    }
 }

@@ -153,7 +153,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Job::class, 'saved_jobs');
     }
 
-    public function follows()
+    public function following()
     {
         return $this->belongsToMany(User::class, 'follows', 'user_id', 'follow_id');
     }

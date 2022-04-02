@@ -87,15 +87,17 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only('index');
         Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['index', 'store']);
         Route::apiResource('/posts', UserPostController::class)->except('show');
-        Route::apiResource('/appliedJobs', UserAppliedJobController::class)->only('index');
-        Route::apiResource('/savedJobs', UserSavedJobController::class)->only('index');
-        Route::apiResource('/savedPosts', UserSavedPostController::class)->only('index');
-
         Route::get('/following', [FollowController::class, 'following']);
         Route::get('/followers', [FollowController::class, 'followers']);
+
+    });
+
+    Route::group(['prefix' => '/me'], function() {
+        Route::apiResource('/savedPosts', UserSavedPostController::class)->only('index');
+        Route::apiResource('/appliedJobs', UserAppliedJobController::class)->only('index');
+        Route::apiResource('/savedJobs', UserSavedJobController::class)->only('index');
         Route::get('/followerRequests', [FollowController::class, 'followerRequests']);
         Route::get('/followPendings', [FollowController::class, 'followPendings']);
-
     });
 
 

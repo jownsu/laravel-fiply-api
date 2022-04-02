@@ -7,6 +7,7 @@ use App\Http\Requests\comment\CommentRequest;
 use App\Http\Resources\post\CommentCollection;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Services\CommentService;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -17,16 +18,8 @@ class CommentController extends Controller
      */
     public function index(Post $post)
     {
-        $post = $post->load(['comments'])->loadCount('userUpVotes');
-
-        return response()->json([
-
-            'details' => [
-                            'post_id'         => $post->id,
-                            'upVotes_count'   => $post->user_up_votes_count,
-                        ],
-            'data'     => CommentCollection::collection($post->comments)
-        ]);
+        $comments = (new CommentService())->getPostComments($post);
+        return response()->successPaginated($comments);
     }
 
     /**
@@ -37,13 +30,8 @@ class CommentController extends Controller
      */
     public function store(CommentRequest $request, Post $post)
     {
-        $comment = $post->comments()->create([
-            'user_id' => auth()->id(),
-            'content' => $request->comment
-        ]);
-
-        return response()->success($comment);
-
+        $response = (new CommentService())->createComment($request, $post);
+        return response()->success($response);
     }
 
     /**
@@ -83,7 +71,7 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         $this->authorize('delete', $comment);
-        $comment->delete();
-        return response()->success('Comment Deleted');
+        $response = (new CommentService())->deleteComment($comment);
+        return response()->success($response);
     }
 }

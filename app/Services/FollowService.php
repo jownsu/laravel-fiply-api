@@ -14,7 +14,7 @@ class FollowService {
 
         $user = User::findOrFail($userId);
 
-        $paginated = $user->follows()
+        $paginated = $user->following()
             ->with(['profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
             }])
@@ -22,7 +22,7 @@ class FollowService {
             ->latest()
             ->paginate($per_page);
 
-        $paginated->withPath("/$userId/follows");
+        $paginated->withPath("/$userId/following");
 
         return FollowCollection::collection($paginated)->response()->getData(true);
 
@@ -84,7 +84,7 @@ class FollowService {
             ->latest()
             ->paginate($per_page);
 
-        $paginated->withPath("/follows");
+        $paginated->withPath("/following");
 
         return FollowCollection::collection($paginated)->response()->getData(true);
 

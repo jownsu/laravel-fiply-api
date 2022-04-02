@@ -18,12 +18,42 @@ class PostService{
         $posts = Post::with([
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
-            }])
+            }
+            ])
+            ->withCount([
+                'userUpVotes AS total_upVotes',
+                'userUpVotes AS is_upVoted' => function($q) use($userId) {
+                    $q->where('user_id', $userId);
+                }
+            ])
+            ->orderByUpVoted()
             ->where('user_id', $userId)
             ->latest()
             ->paginate($per_page);
 
         $posts->withPath("$userId/posts");
+
+        return PostCollection::collection($posts)->response()->getData(true);
+    }
+
+    public function getSavedPosts()
+    {
+        $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
+
+        $user = auth()->user();
+
+        $posts = $user->savedPosts()
+            ->with('user.profile')
+            ->withCount([
+                'userUpVotes AS total_upVotes',
+                'userUpVotes AS is_upVoted' => function($q) use($user) {
+                    $q->where('user_id', $user->id);
+                }
+            ])
+            ->orderByUpVoted()
+            ->latest()
+            ->paginate($per_page);
+        $posts->withPath("me/savedPosts");
 
         return PostCollection::collection($posts)->response()->getData(true);
     }
@@ -42,13 +72,18 @@ class PostService{
     public function getPosts()
     {
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
+        $userId = auth()->id();
 
         $posts = Post::with([
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
-            }, 'userUpVotes' => function($q){
-                $q->select(['id']);
             }])
+            ->withCount([
+                'userUpVotes AS total_upVotes',
+                'userUpVotes AS is_upVoted' => function($q) use($userId) {
+                    $q->where('user_id', $userId);
+                }
+            ])
             ->latest()
             ->paginate($per_page);
 
@@ -86,18 +121,6 @@ class PostService{
     {
         Storage::delete(Post::IMG_PATH . DIRECTORY_SEPARATOR . $post->image);
         return $post->delete() ? 'Post is deleted' : 'Error in deleting the post';
-    }
-
-    public function getSavedPosts()
-    {
-        $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
-
-        $user = auth()->user();
-
-            $posts = $user->savedPosts()->latest()->paginate($per_page);
-            $posts->withPath("me/savedPosts");
-
-        return PostCollection::collection($posts)->response()->getData(true);
     }
 
     public function savePost($postId)

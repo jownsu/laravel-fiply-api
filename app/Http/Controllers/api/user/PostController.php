@@ -19,11 +19,12 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index($id)
+    public function index(Request $request, $id)
     {
         $userid = $id == 'me' ? auth()->id() : $id;
 
         $posts = (new PostService())->getUserPost($userid);
+
         return response()->successPaginated($posts);
     }
 
