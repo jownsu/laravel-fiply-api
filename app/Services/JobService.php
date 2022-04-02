@@ -100,4 +100,32 @@ class JobService{
         return $job->delete() ? 'Job is deleted' : 'Error in deleting the job';
     }
 
+    public function saveJob($jobId)
+    {
+        $job = Job::findOrFail($jobId);
+        $result = $job->userSavedJobs()->syncWithoutDetaching(auth()->id());
+        return $result['attached'] ? true : false;
+    }
+
+    public function unSaveJob($jobId)
+    {
+        $job = Job::findOrFail($jobId);
+        $result = $job->userSavedJobs()->detach(auth()->id());
+        return $result ? true : false;
+    }
+
+    public function applyJob($jobId)
+    {
+        $job = Job::findOrFail($jobId);
+        $result = $job->userAppliedJobs()->syncWithoutDetaching(auth()->id());
+        return $result['attached'] ? true : false;
+    }
+
+    public function unApplyJob($jobId)
+    {
+        $job = Job::findOrFail($jobId);
+        $result = $job->userAppliedJobs()->detach(auth()->id());
+        return $result ? true : false;
+    }
+
 }

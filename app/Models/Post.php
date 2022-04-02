@@ -41,4 +41,9 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function userSavedPosts()
+    {
+        return $this->belongsToMany(User::class, 'saved_posts');
+    }
 }

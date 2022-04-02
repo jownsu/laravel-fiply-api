@@ -43,7 +43,9 @@ class JobPolicy
     public function create(User $user)
     {
 
-        return ( $user->account_level() == User::VERIFIED )
+        $account_level = $user->account_level();
+
+        return ( $account_level['account_level'] == User::VERIFIED )
             ? Response::allow()
             : Response::deny('Account must be fully verified');
     }

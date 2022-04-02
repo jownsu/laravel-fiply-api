@@ -32,7 +32,6 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         $this->authorize('create', Post::class);
-
         $post = (new PostService())->createPost($request);
         return response()->success(new PostCollection($post));
     }
@@ -45,11 +44,6 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-
-        $post->load(['userUpVotes' => function($q){
-            return $q->where('id', auth()->id());
-        }]);
-
         $post = (new PostService())->getSinglePost($post);
         return response()->success($post);
     }
@@ -64,9 +58,7 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post)
     {
         $this->authorize('update', $post);
-
         $post = (new PostService())->updatePost($request, $post);
-
         return response()->success($post);
     }
 
@@ -79,9 +71,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $this->authorize('delete', $post);
-
         $response = (new PostService())->deletePost($post);
-
         return response()->success($response);
     }
 }

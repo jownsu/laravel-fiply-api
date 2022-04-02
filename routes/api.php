@@ -25,6 +25,7 @@ use App\Http\Controllers\api\{AppliedJobController,
     user\PostController as UserPostController,
     user\AppliedJobController as UserAppliedJobController,
     user\SavedJobController as UserSavedJobController,
+    user\SavedPostController as UserSavedPostController,
     user\ProfileController};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -51,12 +52,18 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::apiResource('/posts', PostController::class);
     Route::apiResource('/posts/{post}/comments', CommentController::class)->only(['index', 'store']);
-    Route::apiResource('/posts/{post}/upVotes', UpVoteController::class)->only(['index', 'store']);
+    Route::get('/posts/{post}/upVotes', [UpVoteController::class, 'index']);
+    Route::post('/posts/upVote', [UpVoteController::class, 'upVote']);
+    Route::post('/posts/save', [UserSavedPostController::class, 'savePost']);
     Route::apiResource('/comments', CommentController::class)->only(['update', 'destroy']);
 
     Route::apiResource('/jobs', JobController::class);
-    Route::apiResource('/jobs/{job}/saves', SavedJobController::class)->only(['store', 'index']);
-    Route::apiResource('/jobs/{job}/applies', AppliedJobController::class)->only(['store', 'index']);
+    Route::get('/jobs/{job}/saves', [SavedJobController::class, 'index']);
+    Route::get('/jobs/{job}/applies', [AppliedJobController::class, 'index']);
+    Route::post('/jobs/save', [SavedJobController::class, 'saveJob']);
+    Route::post('/jobs/unSave', [SavedJobController::class, 'unSaveJob']);
+    Route::post('/jobs/apply', [AppliedJobController::class, 'applyJob']);
+    Route::post('/jobs/unApply', [AppliedJobController::class, 'unApplyJob']);
 
     Route::apiResource('/experiences', ExperienceController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only(['store', 'update', 'destroy']);
@@ -66,10 +73,15 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::put('/uploadResume', [UserController::class, 'uploadResume']);
     Route::put('/uploadValidId', [UserController::class, 'uploadValidId']);
 
+    Route::post('/follow', [FollowController::class, 'follow']);
+    Route::post('/unFollow', [FollowController::class, 'unFollow']);
+    Route::post('/acceptFollowRequest', [FollowController::class, 'acceptFollowRequest']);
+
     //Community
     Route::apiResource('/users', CommunityController::class)->only(['index']);
 
     Route::group(['prefix' => '/{user}'], function() {
+
         Route::apiResource('/', UserController::class)->only('index');
         Route::apiResource('/experiences', ExperienceController::class)->only('index');
         Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only('index');
@@ -77,14 +89,13 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/posts', UserPostController::class)->except('show');
         Route::apiResource('/appliedJobs', UserAppliedJobController::class)->only('index');
         Route::apiResource('/savedJobs', UserSavedJobController::class)->only('index');
+        Route::apiResource('/savedPosts', UserSavedPostController::class)->only('index');
 
-
-        Route::post('/follow', [FollowController::class, 'follow']);
-        Route::get('/follows', [FollowController::class, 'follows']);
+        Route::get('/following', [FollowController::class, 'following']);
         Route::get('/followers', [FollowController::class, 'followers']);
         Route::get('/followerRequests', [FollowController::class, 'followerRequests']);
         Route::get('/followPendings', [FollowController::class, 'followPendings']);
-        Route::post('/acceptFollowRequest', [FollowController::class, 'acceptFollowRequest']);
+
     });
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\vote\UserCollection;
 use App\Models\Job;
+use App\Services\JobService;
 use Illuminate\Http\Request;
 
 class AppliedJobController extends Controller
@@ -30,15 +31,20 @@ class AppliedJobController extends Controller
      * Store a newly created resource in storage.
      *
      */
-    public function store(Job $job)
+    public function applyJob(Request $request)
     {
-        $this->authorize('create', $job);
+        $this->authorize('create', Job::class);
+        $validated = $request->validate(['job_id' => 'required']);
+        $response = (new JobService())->applyJob($validated['job_id']);
+        return response()->success($response);
+    }
 
-        $result = $job->userAppliedJobs()->toggle(auth()->id());
-
-        return response()->json([
-            'data' => $result['attached'] ? true : false
-        ]);
+    public function unApplyJob(Request $request)
+    {
+        $this->authorize('create', Job::class);
+        $validated = $request->validate(['job_id' => 'required']);
+        $response = (new JobService())->unApplyJob($validated['job_id']);
+        return response()->success($response);
     }
 
     /**

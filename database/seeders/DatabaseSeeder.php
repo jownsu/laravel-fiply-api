@@ -39,7 +39,14 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        foreach (Job::all() as $job){
+        foreach (Post::all() as $post){
+            $users = User::inRandomOrder()->take(rand(1,10))->get('id');
+            foreach($users as $user){
+                $post->userSavedPosts()->attach($user);
+            }
+        }
+
+ /*       foreach (Job::all() as $job){
             $users = User::inRandomOrder()->take(rand(1,10))->get('id');
             foreach($users as $user){
                 $job->userAppliedJobs()->attach($user);
@@ -51,7 +58,7 @@ class DatabaseSeeder extends Seeder
             foreach($users as $user){
                 $job->userSavedJobs()->attach($user);
             }
-        }
+        }*/
 
         foreach (User::all() as $user1){
             $users = User::inRandomOrder()->take(20)->get('id');

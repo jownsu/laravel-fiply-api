@@ -1,46 +1,39 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\api\user;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\vote\UserCollection;
 use App\Models\Post;
-use App\Services\JobService;
 use App\Services\PostService;
 use Illuminate\Http\Request;
 
-class UpVoteController extends Controller
+class SavedPostController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @return \Illuminate\Http\Response
      */
-
-
-    public function index(Post $post)
+    public function index()
     {
-        $post->load(['UserUpVotes.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
-            }]
-        );
+        $posts = (new PostService())->getSavedPosts();
+        return response()->successPaginated($posts);
+    }
 
-        return response()->json([
-            'post_id' => $post->id,
-            'data' => UserCollection::collection($post->userUpVotes)
-        ]);
-
-
+    public function savePost(Request $request)
+    {
+        $validated = $request->validate(['post_id' => 'required']);
+        $response = (new PostService())->savePost($validated['post_id']);
+        return response()->success($response);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      */
-    public function upVote(Request $request)
+    public function store(Post $post)
     {
-        $validated = $request->validate(['post_id' => 'required']);
-        $response = (new PostService())->upVote($validated['post_id']);
-        return response()->success($response);
+
     }
 
     /**

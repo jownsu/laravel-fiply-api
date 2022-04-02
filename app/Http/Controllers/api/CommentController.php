@@ -84,8 +84,6 @@ class CommentController extends Controller
     {
         $this->authorize('delete', $comment);
         $comment->delete();
-
         return response()->success('Comment Deleted');
-        //
     }
 }

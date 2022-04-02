@@ -31,9 +31,9 @@ class UserController extends Controller
                     ->loadCount([
                         'follows' => function($q){
                             $q->where('accepted', 1);
-                       }, 'followers' => function($q){
+                        }, 'followers' => function($q){
                             $q->where('accepted', 1);
-                        }]);
+                    }]);
 
         $user->is_me = ($id == 'me') ? true : false;
 

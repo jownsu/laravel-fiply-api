@@ -8,7 +8,7 @@ use App\Models\User;
 
 class FollowService {
 
-    public function getFollows($userId)
+    public function getFollowing($userId)
     {
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
@@ -116,12 +116,15 @@ class FollowService {
 
     public function follow($userId)
     {
-
         $user = User::findOrFail($userId);
-
-        $result = $user->followers()->toggle(auth()->id());
-
+        $result = $user->followers()->syncWithoutDetaching(auth()->id());
         return $result['attached'] ? true : false;
+    }
+    public function unFollow($userId)
+    {
+        $user = User::findOrFail($userId);
+        $result = $user->followers()->detach(auth()->id());
+        return $result ? true : false;
     }
 
 
