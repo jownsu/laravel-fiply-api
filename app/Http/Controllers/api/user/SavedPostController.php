@@ -27,6 +27,13 @@ class SavedPostController extends Controller
         return response()->success($response);
     }
 
+    public function unSavePost(Request $request)
+    {
+        $validated = $request->validate(['post_id' => 'required']);
+        $response = (new PostService())->unSavePost($validated['post_id']);
+        return response()->success($response);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

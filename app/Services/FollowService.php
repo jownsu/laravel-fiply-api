@@ -18,6 +18,7 @@ class FollowService {
             ->with(['profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
             }])
+            ->withSearch()
             ->wherePivot('accepted', true)
             ->latest()
             ->paginate($per_page);
@@ -40,11 +41,16 @@ class FollowService {
             }, 'jobPreference' => function($q){
                 $q->select(['user_id', 'job_title']);
             }])
+            ->withSearch()
             ->wherePivot('accepted', true)
             ->latest()
             ->paginate($per_page);
 
         $paginated->withPath("/$userId/followers");
+
+        if(\request('search')){
+            $paginated->appends(['search' => \request('search')]);
+        }
 
         return FollowCollection::collection($paginated)->response()->getData(true);
     }
@@ -66,6 +72,10 @@ class FollowService {
             ->paginate($per_page);
 
         $paginated->withPath("/followerRequests");
+
+        if(\request('search')){
+            $paginated->appends(['search' => \request('search')]);
+        }
 
         return FollowCollection::collection($paginated)->response()->getData(true);
     }

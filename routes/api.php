@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/posts/{post}/upVotes', [UpVoteController::class, 'index']);
     Route::post('/posts/upVote', [UpVoteController::class, 'upVote']);
     Route::post('/posts/save', [UserSavedPostController::class, 'savePost']);
+    Route::post('/posts/unSave', [UserSavedPostController::class, 'unSavePost']);
     Route::apiResource('/comments', CommentController::class)->only(['update', 'destroy']);
 
     Route::apiResource('/jobs', JobController::class);

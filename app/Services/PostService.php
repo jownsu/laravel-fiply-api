@@ -33,6 +33,10 @@ class PostService{
 
         $posts->withPath("$userId/posts");
 
+        if(\request('q')){
+            $posts->appends(['q' => \request('q')]);
+        }
+
         return PostCollection::collection($posts)->response()->getData(true);
     }
 
@@ -54,6 +58,10 @@ class PostService{
             ->latest()
             ->paginate($per_page);
         $posts->withPath("me/savedPosts");
+
+        if(\request('q')){
+            $posts->append(['q' => \request('q')]);
+        }
 
         return PostCollection::collection($posts)->response()->getData(true);
     }
@@ -126,8 +134,15 @@ class PostService{
     public function savePost($postId)
     {
         $post = Post::findOrFail($postId);
-        $result = $post->userSavedPosts()->toggle(auth()->id());
+        $result = $post->userSavedPosts()->syncWithoutDetaching(auth()->id());
         return $result['attached'] ? true : false;
+    }
+
+    public function unSavePost($postId)
+    {
+        $post = Post::findOrFail($postId);
+        $result = $post->userSavedPosts()->detach(auth()->id());
+        return $result ? true : false;
     }
 
     public function upVote($postId)
