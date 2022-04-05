@@ -69,7 +69,7 @@ class AuthController extends Controller
         $userVerify = UserVerify::where('email', $input['email'])->first();
 
         if(!$userVerify || !Hash::check($input['code'] ,$userVerify->code)){
-            return false;
+            return response()->error('Verification Code not match');
         }
 
         $user = User::create([
@@ -108,6 +108,7 @@ class AuthController extends Controller
             'account_level_str' =>  $account_level['account_level_str'],
             'email'             =>  $user->email
         ];
+
 
         return response()->json($data, 200);
 
