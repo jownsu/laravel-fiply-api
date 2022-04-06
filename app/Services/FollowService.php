@@ -71,7 +71,7 @@ class FollowService {
             ->latest()
             ->paginate($per_page);
 
-        $paginated->withPath("/followerRequests");
+        $paginated->withPath("/me/followerRequests");
 
         if(\request('search')){
             $paginated->appends(['search' => \request('search')]);
@@ -94,7 +94,7 @@ class FollowService {
             ->latest()
             ->paginate($per_page);
 
-        $paginated->withPath("/following");
+        $paginated->withPath("/me/followPendings");
 
         return FollowCollection::collection($paginated)->response()->getData(true);
 
@@ -119,7 +119,7 @@ class FollowService {
         }
 
         return [
-            'status' => false,
+            'status' => true,
             'message' => 'Already Accepted'
         ];
     }
@@ -128,13 +128,30 @@ class FollowService {
     {
         $user = User::findOrFail($userId);
         $result = $user->followers()->syncWithoutDetaching(auth()->id());
-        return $result['attached'] ? true : false;
+        return $result['attached']
+        ? [
+            'status' => true,
+            'message' => 'Follow request sent'
+        ]
+        : [
+            'status' => false,
+            'message' => 'Follow request already sent'
+        ];
     }
     public function unFollow($userId)
     {
         $user = User::findOrFail($userId);
+
         $result = $user->followers()->detach(auth()->id());
-        return $result ? true : false;
+        return $result
+        ? [
+            'status' => true,
+            'message' => 'Unfollowed'
+        ]
+        : [
+            'status' => false,
+            'message' => 'Unfollowed already'
+        ];
     }
 
 

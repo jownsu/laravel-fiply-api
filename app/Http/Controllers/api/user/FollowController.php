@@ -34,14 +34,32 @@ class FollowController extends Controller
     {
         $validated = $request->validate(['user_id' => 'required']);
         $response = (new FollowService())->follow($validated['user_id']);
-        return response()->success($response);
+        if($response['status']){
+            return response()->json([
+                'data' => $response['status'],
+                'message' => $response['message']
+            ]);
+        }
+        return response()->json([
+            'data' => $response['status'],
+            'message' => $response['message']
+        ]);
     }
 
     public function unFollow(Request $request)
     {
         $validated = $request->validate(['user_id' => 'required']);
         $response = (new FollowService())->unFollow($validated['user_id']);
-        return response()->success($response);
+        if($response['status']){
+            return response()->json([
+                'data' => $response['status'],
+                'message' => $response['message']
+            ]);
+        }
+        return response()->json([
+            'data' => $response['status'],
+            'message' => $response['message']
+        ]);
     }
 
     public function followerRequests()
@@ -61,7 +79,10 @@ class FollowController extends Controller
         $validated = $request->validate(['user_id' => 'required']);
         $response = (new FollowService())->acceptFollowRequest($validated['user_id']);
         if($response['status']){
-            return response()->success($response['message']);
+            return response()->json([
+                'data' => $response['status'],
+                'message' => $response['message']
+            ]);
         }
         return response()->error($response['message']);
     }
