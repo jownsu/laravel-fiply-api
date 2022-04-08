@@ -8,7 +8,7 @@ use App\Models\User;
 
 class CommunityService {
 
-    public function getNotFollowedUsers()
+    public function getUsers()
     {
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
@@ -17,9 +17,8 @@ class CommunityService {
         }, 'jobPreference' => function($q){
                 $q->select('user_id', 'job_title');
             }])
-            ->whereDoesntHave('followers', function($q){
-                $q->where('user_id', auth()->id());
-            })
+            ->withFilterQueries()
+            ->withFollowInfo()
             ->withSearch()
             ->paginate($per_page);
 
@@ -27,6 +26,10 @@ class CommunityService {
 
         if(\request('search')){
             $users->appends(['search' => \request('search')]);
+        }
+
+        if(\request('q')){
+            $users->appends(['q' => \request('q')]);
         }
 
         return FollowCollection::collection($users)->response()->getData(true);

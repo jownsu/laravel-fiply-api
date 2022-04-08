@@ -3,9 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class FollowCollection extends JsonResource
+class FollowRequestCollection extends JsonResource
 {
     /**
      * Transform the resource collection into an array.
@@ -26,11 +25,7 @@ class FollowCollection extends JsonResource
             'fullname'               => $this->profile->fullname(),
             'email'                  => $this->email,
             'preview'                => $preview,
-            'avatar'                 => $this->profile->avatar(),
-            'is_follower'            => $this->is_follower ? true : false,
-            'is_follower_pending'    => $this->is_follower_pending ? true : false,
-            'is_following'           => $this->is_following ? true : false,
-            'is_following_pending'   => $this->is_following_pending ? true : false
+            'avatar'                 => $this->profile->avatar()
         ];
     }
 }

@@ -18,7 +18,7 @@ class CommunityController extends Controller
      */
     public function index()
     {
-        $users = (new CommunityService())->getNotFollowedUsers();
+        $users = (new CommunityService())->getUsers();
 
         return response()->successPaginated($users);
 

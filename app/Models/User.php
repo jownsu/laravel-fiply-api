@@ -184,7 +184,41 @@ class User extends Authenticatable
                         ->orWhere('lastname',  'LIKE','%' . \request('search') . '%');
             });
         }
+        return $query;
+    }
+
+    public function scopeWithFollowInfo($query){
+        $myId = auth()->id();
+
+        $query->withCount([
+            'following AS is_follower' => function($q) use($myId) {
+                $q->where('follow_id', $myId)->where('accepted', true);
+            },
+            'following AS is_follower_pending' => function($q) use($myId) {
+                $q->where('follow_id', $myId)->where('accepted', false);
+            },
+            'followers AS is_following' => function($q) use($myId) {
+                $q->where('user_id', $myId)->where('accepted', true);
+            },
+            'followers AS is_following_pending' => function($q) use($myId) {
+                $q->where('user_id', $myId)->where('accepted', false);
+            }
+        ]);
 
         return $query;
+    }
+
+    public function scopeWithFilterQueries($query)
+    {
+        return $query->when(request('q') == 'notFollowing', function ($q) {
+            $q->whereDoesntHave('followers', function($q){
+                $q->where('user_id', auth()->id());
+            });
+        });
+
+
+        /*            ->whereDoesntHave('followers', function($q){
+                $q->where('user_id', auth()->id());
+            })*/
     }
 }

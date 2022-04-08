@@ -62,6 +62,22 @@ class FollowController extends Controller
         ]);
     }
 
+    public function removeFollower(Request $request)
+    {
+        $validated = $request->validate(['user_id' => 'required']);
+        $response = (new FollowService())->removeFollower($validated['user_id']);
+        if($response['status']){
+            return response()->json([
+                'data' => $response['status'],
+                'message' => $response['message']
+            ]);
+        }
+        return response()->json([
+            'data' => $response['status'],
+            'message' => $response['message']
+        ]);
+    }
+
     public function followerRequests()
     {
         $followers = (new FollowService())->getFollowerRequests();

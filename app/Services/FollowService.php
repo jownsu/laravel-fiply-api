@@ -4,6 +4,7 @@ namespace App\Services;
 
 
 use App\Http\Resources\FollowCollection;
+use App\Http\Resources\FollowRequestCollection;
 use App\Models\User;
 
 class FollowService {
@@ -18,6 +19,7 @@ class FollowService {
             ->with(['profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
             }])
+            ->withFollowInfo()
             ->withSearch()
             ->wherePivot('accepted', true)
             ->latest()
@@ -41,6 +43,7 @@ class FollowService {
             }, 'jobPreference' => function($q){
                 $q->select(['user_id', 'job_title']);
             }])
+            ->withFollowInfo()
             ->withSearch()
             ->wherePivot('accepted', true)
             ->latest()
@@ -77,7 +80,7 @@ class FollowService {
             $paginated->appends(['search' => \request('search')]);
         }
 
-        return FollowCollection::collection($paginated)->response()->getData(true);
+        return FollowRequestCollection::collection($paginated)->response()->getData(true);
     }
 
     public function getFollowPendings()
@@ -96,7 +99,7 @@ class FollowService {
 
         $paginated->withPath("/me/followPendings");
 
-        return FollowCollection::collection($paginated)->response()->getData(true);
+        return FollowRequestCollection::collection($paginated)->response()->getData(true);
 
     }
 
@@ -152,6 +155,22 @@ class FollowService {
             'status' => false,
             'message' => 'Unfollowed already'
         ];
+    }
+
+    public function removeFollower($userId)
+    {
+        $user = User::findOrFail($userId);
+
+        $result = $user->following()->detach(auth()->id());
+        return $result
+            ? [
+                'status' => true,
+                'message' => 'Removed as follower'
+            ]
+            : [
+                'status' => false,
+                'message' => 'Removed Already'
+            ];
     }
 
 

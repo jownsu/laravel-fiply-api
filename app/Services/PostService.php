@@ -15,6 +15,8 @@ class PostService{
     {
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
+        $myId = auth()->id();
+
         $posts = Post::with([
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
@@ -22,8 +24,8 @@ class PostService{
             ])
             ->withCount([
                 'userUpVotes AS total_upVotes',
-                'userUpVotes AS is_upVoted' => function($q) use($userId) {
-                    $q->where('user_id', $userId);
+                'userUpVotes AS is_upVoted' => function($q) use($myId) {
+                    $q->where('user_id', $myId);
                 }
             ])
             ->orderByUpVoted()
@@ -60,7 +62,7 @@ class PostService{
         $posts->withPath("me/savedPosts");
 
         if(\request('q')){
-            $posts->append(['q' => \request('q')]);
+            $posts->appends(['q' => \request('q')]);
         }
 
         return PostCollection::collection($posts)->response()->getData(true);

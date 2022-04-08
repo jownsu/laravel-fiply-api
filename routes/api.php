@@ -76,6 +76,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::post('/follow', [FollowController::class, 'follow']);
     Route::post('/unFollow', [FollowController::class, 'unFollow']);
+    Route::post('/removeFollower', [FollowController::class, 'removeFollower']);
     Route::post('/acceptFollowRequest', [FollowController::class, 'acceptFollowRequest']);
 
     //Community
