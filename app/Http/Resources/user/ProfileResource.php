@@ -45,6 +45,8 @@ class ProfileResource extends JsonResource
             'cover'                 => $this->profile->cover(),
             'following_count'       => $this->following_count,
             'followers_count'       => $this->followers_count,
+            'is_following'          => $this->is_following ? true : false,
+            'is_following_pending'  => $this->is_following_pending ? true : false,
             'is_me'                 => $this->is_me
         ];
     }

@@ -19,7 +19,8 @@ class FollowService {
             ->with(['profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
             }])
-            ->withFollowInfo()
+            ->withFollowingInfo()
+            ->withFollowerInfo()
             ->withSearch()
             ->wherePivot('accepted', true)
             ->latest()
@@ -43,7 +44,8 @@ class FollowService {
             }, 'jobPreference' => function($q){
                 $q->select(['user_id', 'job_title']);
             }])
-            ->withFollowInfo()
+            ->withFollowingInfo()
+            ->withFollowerInfo()
             ->withSearch()
             ->wherePivot('accepted', true)
             ->latest()

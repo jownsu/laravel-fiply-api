@@ -26,6 +26,8 @@ class UserController extends Controller
     public function index($id)
     {
         $userid = $id == 'me' ? auth()->id() : $id;
+        $myId = auth()->id();
+
         $user = User::findOrFail($userid)
                     ->load('profile')
                     ->loadCount([
@@ -33,7 +35,14 @@ class UserController extends Controller
                             $q->where('accepted', 1);
                         }, 'followers' => function($q){
                             $q->where('accepted', 1);
-                    }]);
+                        },
+                        'followers AS is_following' => function($q) use($myId) {
+                            $q->where('user_id', $myId)->where('accepted', true);
+                        },
+                        'followers AS is_following_pending' => function($q) use($myId) {
+                            $q->where('user_id', $myId)->where('accepted', false);
+                        }
+                    ]);
 
         $user->is_me = ($id == 'me') ? true : false;
 

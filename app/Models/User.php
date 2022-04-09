@@ -187,7 +187,7 @@ class User extends Authenticatable
         return $query;
     }
 
-    public function scopeWithFollowInfo($query){
+    public function scopeWithFollowingInfo($query){
         $myId = auth()->id();
 
         $query->withCount([
@@ -196,7 +196,16 @@ class User extends Authenticatable
             },
             'following AS is_follower_pending' => function($q) use($myId) {
                 $q->where('follow_id', $myId)->where('accepted', false);
-            },
+            }
+        ]);
+
+        return $query;
+    }
+
+    public function scopeWithFollowerInfo($query){
+        $myId = auth()->id();
+
+        $query->withCount([
             'followers AS is_following' => function($q) use($myId) {
                 $q->where('user_id', $myId)->where('accepted', true);
             },
@@ -207,6 +216,8 @@ class User extends Authenticatable
 
         return $query;
     }
+
+
 
     public function scopeWithFilterQueries($query)
     {

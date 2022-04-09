@@ -18,7 +18,8 @@ class CommunityService {
                 $q->select('user_id', 'job_title');
             }])
             ->withFilterQueries()
-            ->withFollowInfo()
+            ->withFollowingInfo()
+            ->withFollowerInfo()
             ->withSearch()
             ->paginate($per_page);
 
