@@ -17,7 +17,7 @@ class CreatePostUserTable extends Migration
             $table->foreignId('user_id',)->references('id')->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreignId('post_id')->references('id')->on('posts')
+            $table->foreignId('post_id')->references('id')->on('post')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->timestamps();

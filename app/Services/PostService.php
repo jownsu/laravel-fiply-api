@@ -33,7 +33,7 @@ class PostService{
             ->latest()
             ->paginate($per_page);
 
-        $posts->withPath("$userId/posts");
+        $posts->withPath("$userId/post");
 
         if(\request('q')){
             $posts->appends(['q' => \request('q')]);
@@ -97,7 +97,7 @@ class PostService{
             ->latest()
             ->paginate($per_page);
 
-        $posts->withPath('/posts');
+        $posts->withPath('/post');
         return PostCollection::collection($posts)->response()->getData(true);
     }
 
@@ -106,7 +106,7 @@ class PostService{
         $post = new Post($request->validated());
 
         if($request->hasFile('image')){
-            $post->image= $request->image->store(Post::IMG_PATH);
+            $post->image= $request->image->store('', 'post');
         }
 
         auth()->user()->posts()->save($post);
@@ -119,8 +119,8 @@ class PostService{
     {
         $input = $request->validated();
         if($request->hasFile('image')){
-            Storage::delete(Post::IMG_PATH . DIRECTORY_SEPARATOR . $post->image);
-            $input['image'] = $request->image->store(Post::IMG_PATH);
+            Storage::disk('post')->delete($post->image);
+            $input['image'] = $request->image->store('', 'post');
         }
         $post->update($input);
 
@@ -129,7 +129,7 @@ class PostService{
 
     public function deletePost(Post $post)
     {
-        Storage::delete(Post::IMG_PATH . DIRECTORY_SEPARATOR . $post->image);
+        Storage::disk('post')->delete($post->image);
         return $post->delete() ? 'Post is deleted' : 'Error in deleting the post';
     }
 

@@ -29,15 +29,52 @@ return [
     */
 
     'disks' => [
-        'images' => [
+        'avatar' => [
             'driver' => 'local',
-            'root' => public_path('img'),
-            'visibility' => 'public'
+            'root' => storage_path('app/public/img/avatar'),
+            'visibility' => 'public',
+            'url' => url('/avatar'),
+        ],
+        'cover' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/img/cover'),
+            'visibility' => 'public',
+            'url' => url('/cover') ,
+        ],
+        'logo' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/img/logo'),
+            'visibility' => 'public',
+            'url' => url('/logo'),
+        ],
+        'post' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/post'),
+            'visibility' => 'public',
+            'url' => url('/post'),
+        ],
+        'id' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/files/id'),
+            'visibility' => 'public',
+            'url' => url('/id'),
+        ],
+        'resume' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/files/resume'),
+            'visibility' => 'public',
+            'url' => url('/resume'),
+        ],
+        'placeholder' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/img/placeholder'),
+            'visibility' => 'public',
+            'url' => url('/placeholder'),
         ],
         'files' => [
             'driver' => 'local',
-            'root' => public_path('files'),
-            'visibility' => 'public'
+            'root' => storage_path('app/public/files'),
+            'visibility' => 'public',
         ],
         'local' => [
             'driver' => 'local',
@@ -76,7 +113,14 @@ return [
     */
 
     'links' => [
-        public_path('storage') => storage_path('app/public'),
+        //public_path('storage') => storage_path('app/public'),
+        public_path('avatar') => storage_path('app/public/img/avatar'),
+        public_path('cover') => storage_path('app/public/img/cover'),
+        public_path('logo') => storage_path('app/public/img/logo'),
+        public_path('placeholder') => storage_path('app/public/img/placeholder'),
+        public_path('id') => storage_path('app/public/files/id'),
+        public_path('resume') => storage_path('app/public/files/resume'),
+        public_path('post') => storage_path('app/public/post'),
     ],
 
 ];

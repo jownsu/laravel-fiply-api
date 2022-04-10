@@ -16,7 +16,7 @@ class CommentService {
                         ->latest()
                         ->paginate($per_page);
 
-        $comments->withPath("/posts/{$post->id}/comments");
+        $comments->withPath("/post/{$post->id}/comments");
 
         return CommentCollection::collection($comments)->response()->getData(true);
     }

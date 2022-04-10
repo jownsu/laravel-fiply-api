@@ -20,7 +20,7 @@ class CreateCommentsTable extends Migration
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
             $table->foreignId('post_id')
-                  ->constrained('posts')
+                  ->constrained('post')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
             $table->text('content');

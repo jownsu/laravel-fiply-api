@@ -68,9 +68,8 @@ class UserController extends Controller
 
         $userProfile = $user->profile;
 
-        //Storage::delete($user->profile->avatar);
-        Storage::delete(Profile::IMG_PATH . DIRECTORY_SEPARATOR . $user->profile->avatar);
-        $userProfile->avatar = $input['avatar']->store(Profile::IMG_PATH);
+        Storage::disk('avatar')->delete($user->profile->avatar);
+        $userProfile->avatar = $input['avatar']->store('', 'avatar');
         $userProfile->save();
 
 
@@ -86,10 +85,9 @@ class UserController extends Controller
         $userProfile = $user->profile;
 
         //Storage::delete($user->profile->avatar);
-        Storage::delete(Profile::COVER_PATH . DIRECTORY_SEPARATOR . $user->profile->cover);
-        $userProfile->cover = $input['cover']->store(Profile::COVER_PATH);
+        Storage::disk('cover')->delete($user->profile->cover);
+        $userProfile->cover = $input['cover']->store('', 'cover');
         $userProfile->save();
-
 
         return response()->success($user->profile->cover());
     }
@@ -105,10 +103,10 @@ class UserController extends Controller
         if(!$doc){
             $doc = new Document();
         }else{
-            Storage::disk('files')->delete(Document::RESUME_PATH . DIRECTORY_SEPARATOR . $doc->resume);
+            Storage::disk('resume')->delete($doc->resume);
         }
 
-        $doc->resume = $input['resume']->store(Document::RESUME_PATH, 'files');
+        $doc->resume = $input['resume']->store('', 'resume');
 
         $user->document()->save($doc);
 
@@ -126,13 +124,13 @@ class UserController extends Controller
         if(!$doc){
             $doc = new Document();
         }else{
-            Storage::disk('files')->delete(Document::VALID_ID_PATH . DIRECTORY_SEPARATOR . $doc->valid_id_image_front);
-            Storage::disk('files')->delete(Document::VALID_ID_PATH . DIRECTORY_SEPARATOR . $doc->valid_id_image_back);
+            Storage::disk('id')->delete($doc->valid_id_image_front);
+            Storage::disk('id')->delete($doc->valid_id_image_back);
         }
 
         $doc->valid_id             = $input['valid_id'];
-        $doc->valid_id_image_front = $input['valid_id_image_front']->store(Document::VALID_ID_PATH, 'files');
-        $doc->valid_id_image_back  = $input['valid_id_image_back']->store(Document::VALID_ID_PATH, 'files');
+        $doc->valid_id_image_front = $input['valid_id_image_front']->store('', 'id');
+        $doc->valid_id_image_back  = $input['valid_id_image_back']->store('', 'id');
 
         $user->document()->save($doc);
 

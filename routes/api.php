@@ -106,17 +106,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 });
 
 
-
-
-
-
-
-
-
-
 //if route does not exists
 Route::fallback(function(){
     return response()->json([
         'message' => 'Page Not Found. If error persists, contact fiply@gmail.com'], 404);
 });
-
