@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\user;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\user\ProfileRequest;
 use App\Http\Requests\user\UploadAvatarRequest;
 use App\Http\Requests\user\UploadCoverRequest;
 use App\Http\Requests\user\UploadResumeRequest;
@@ -161,9 +162,20 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProfileRequest $request)
     {
-        //
+        $input = $request->validated();
+        $time = strtotime($input['birthday']);
+        $input['birthday'] = date('Y-m-d',$time);
+
+        $user = auth()->user();
+
+        $user->profile()->update($input);
+
+        $user->is_me = true;
+
+        return response()->success(new ProfileResource($user));
+
     }
 
     /**

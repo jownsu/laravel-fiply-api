@@ -68,9 +68,13 @@ class JobPreferenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(JobPreferenceRequest $request, $id)
+    public function update(JobPreferenceRequest $request, JobPreference $jobPreference)
     {
-        //
+        $this->authorize('update', $jobPreference);
+
+        $jobPreference->update($request->validated());
+
+        return response()->success($jobPreference);
     }
 
     /**
@@ -79,8 +83,10 @@ class JobPreferenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(JobPreference $jobPreference)
     {
-        //
+        $this->authorize('delete', $jobPreference);
+
+        return response()->success($jobPreference->delete());
     }
 }

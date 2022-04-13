@@ -45,11 +45,6 @@ class Profile extends Model
             : Storage::disk('placeholder')->url('cover.png');
     }
 
-    public function getBirthdayAttribute($value)
-    {
-        return $value ? (new Carbon($value))->format('F d, Y') : null;
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -33,7 +33,7 @@ class PostService{
             ->latest()
             ->paginate($per_page);
 
-        $posts->withPath("$userId/post");
+        $posts->withPath("$userId/posts");
 
         if(\request('q')){
             $posts->appends(['q' => \request('q')]);
@@ -97,7 +97,7 @@ class PostService{
             ->latest()
             ->paginate($per_page);
 
-        $posts->withPath('/post');
+        $posts->withPath('/posts');
         return PostCollection::collection($posts)->response()->getData(true);
     }
 

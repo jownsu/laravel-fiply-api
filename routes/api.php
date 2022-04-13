@@ -68,6 +68,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::apiResource('/experiences', ExperienceController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only(['store', 'update', 'destroy']);
+    Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['store', 'update']);
 
     Route::put('/uploadAvatar', [UserController::class, 'uploadAvatar']);
     Route::put('/uploadCover', [UserController::class, 'uploadCover']);
@@ -84,10 +85,10 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::group(['prefix' => '/{user}'], function() {
 
-        Route::apiResource('/', UserController::class)->only('index');
+        Route::get('/', [UserController::class, 'index']);
         Route::apiResource('/experiences', ExperienceController::class)->only('index');
         Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only('index');
-        Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['index', 'store']);
+        Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['index']);
         Route::apiResource('/posts', UserPostController::class)->except('show');
         Route::get('/following', [FollowController::class, 'following']);
         Route::get('/followers', [FollowController::class, 'followers']);
@@ -95,13 +96,13 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     });
 
     Route::group(['prefix' => '/me'], function() {
+        Route::put('/', [UserController::class, 'update']);
         Route::apiResource('/savedPosts', UserSavedPostController::class)->only('index');
         Route::apiResource('/appliedJobs', UserAppliedJobController::class)->only('index');
         Route::apiResource('/savedJobs', UserSavedJobController::class)->only('index');
         Route::get('/followerRequests', [FollowController::class, 'followerRequests']);
         Route::get('/followPendings', [FollowController::class, 'followPendings']);
     });
-
 
 });
 
