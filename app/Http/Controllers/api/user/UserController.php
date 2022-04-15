@@ -29,25 +29,20 @@ class UserController extends Controller
         $userid = $id == 'me' ? auth()->id() : $id;
         $myId = auth()->id();
 
-        $user = User::findOrFail($userid)
-                    ->load('profile')
-                    ->loadCount([
-                        'following' => function($q){
-                            $q->where('accepted', 1);
-                        }, 'followers' => function($q){
-                            $q->where('accepted', 1);
-                        },
-                        'followers AS is_following' => function($q) use($myId) {
-                            $q->where('user_id', $myId)->where('accepted', true);
-                        },
-                        'followers AS is_following_pending' => function($q) use($myId) {
-                            $q->where('user_id', $myId)->where('accepted', false);
-                        }
-                    ]);
+        $user = User::where('id', $userid)
+            ->withFollowingInfo()
+            ->withFollowerInfo()
+            ->withFollowCount()
+            ->with(['profile'])
+            ->first();
+
+        if (!$user){
+            return response()->error('User Not Found');
+        }
 
         $user->is_me = ($id == 'me') ? true : false;
 
-        return response()->success(new ProfileResource($user));
+        return response()->success((new ProfileResource($user)));
     }
 
     /**

@@ -21,6 +21,7 @@ class CreatePostsTable extends Migration
                   ->onDelete('cascade');
             $table->text('content');
             $table->string('image')->nullable();
+            $table->boolean('is_public')->default(true);
             $table->timestamps();
         });
     }

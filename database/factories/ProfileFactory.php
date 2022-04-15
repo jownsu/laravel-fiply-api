@@ -34,7 +34,7 @@ class ProfileFactory extends Factory
             'telephone_no' => $this->faker->phoneNumber(),
             'language'     => $this->faker->randomElement(['English', 'Filipino']),
             'status'       => $this->faker->randomElement(['Looking for a job', 'Looking for an applicants']),
-            'website'      => $this->faker->domainName(),
+            'website'      => "https://" . $this->faker->domainName(),
             'description'  => $this->faker->catchPhrase(),
             'avatar'       => self::$img++ . '.jpeg',
             'cover'        => self::$cover++ . '.jpg',

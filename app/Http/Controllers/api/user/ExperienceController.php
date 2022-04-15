@@ -19,7 +19,13 @@ class ExperienceController extends Controller
     public function index($id)
     {
         $userid = $id == 'me' ? auth()->id() : $id;
-        $user = User::findOrFail($userid)->load('experiences');
+
+        $user = User::where('id', $userid)->with('experiences')->IsFollowing()->first();
+        if (!$user){
+            return response()->error('User Not Found');
+        }
+
+        $this->authorize('view', $user);
 
         return response()->success(ExperienceCollection::collection($user->experiences));
     }

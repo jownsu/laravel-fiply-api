@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Requests\post\PostRequest;
 use App\Http\Resources\post\PostCollection;
+use App\Http\Resources\post\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -124,7 +125,7 @@ class PostService{
         }
         $post->update($input);
 
-        return new PostCollection($post);
+        return new PostResource($post);
     }
 
     public function deletePost(Post $post)

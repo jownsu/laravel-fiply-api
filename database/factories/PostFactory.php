@@ -40,7 +40,8 @@ class PostFactory extends Factory
         return [
             'user_id'   => User::factory(),
             'content'   => $this->faker->realText(200),
-            'image'     => $this->faker->randomElement($imgList)
+            'image'     => $this->faker->randomElement($imgList),
+            'is_public' => $this->faker->randomElement([true, false])
         ];
     }
 }

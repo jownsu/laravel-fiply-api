@@ -15,14 +15,36 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $input = $request->validate(
+        $request->validate(
             [
                 'email'    => 'required|string',
                 'password' => 'required|string',
             ]
         );
 
-        $user = User::where('email', $input['email'])->first();
+        if (Auth::guard()->attempt($request->only('email', 'password'))) {
+            $request->session()->regenerate();
+            $user = Auth::user();
+            $account_level = $user->account_level();
+
+            $data = [
+                'id'                =>  $user->id,
+                'fullname'          =>  $user->profile->fullname(),
+                'avatar'            =>  $user->profile->avatar(),
+                'cover'             =>  $user->profile->cover(),
+                'account_level'     =>  $account_level['account_level'],
+                'account_level_str' =>  $account_level['account_level_str'],
+                'email'             =>  $user->email
+
+            ];
+            return response()->json($data, 200);
+        }
+
+        return response()->json(['error' => 'Invalid credentials']);
+
+
+
+/*        $user = User::where('email', $input['email'])->first();
 
         if(!$user || !Hash::check($input['password'] ,$user->password)){
             return response()->json(['error' => 'Invalid credentials'], 400);
@@ -43,7 +65,7 @@ class AuthController extends Controller
 
         ];
 
-        return response()->json($data, 200);
+        return response()->json($data, 200);*/
 
 /*        if (Auth::guard()->attempt($request->only('email', 'password'))) {
 
@@ -96,21 +118,25 @@ class AuthController extends Controller
 
         $userVerify->delete();
 
-        $account_level = $user->account_level();
-        $request->session()->regenerate();
+        if (Auth::guard()->attempt($request->only('email', 'password'))) {
+            $request->session()->regenerate();
+            $user = Auth::user();
+            $account_level = $user->account_level();
 
-        $data = [
-            'id'                =>  $user->id,
-            'fullname'          =>  $user->profile->fullname(),
-            'avatar'            =>  $user->profile->avatar(),
-            'cover'             =>  $user->profile->cover(),
-            'account_level'     =>  $account_level['account_level'],
-            'account_level_str' =>  $account_level['account_level_str'],
-            'email'             =>  $user->email
-        ];
+            $data = [
+                'id'                =>  $user->id,
+                'fullname'          =>  $user->profile->fullname(),
+                'avatar'            =>  $user->profile->avatar(),
+                'cover'             =>  $user->profile->cover(),
+                'account_level'     =>  $account_level['account_level'],
+                'account_level_str' =>  $account_level['account_level_str'],
+                'email'             =>  $user->email
 
+            ];
+            return response()->json($data, 200);
+        }
 
-        return response()->json($data, 200);
+        return response()->json(['error' => 'Invalid credentials']);
 
     }
 }

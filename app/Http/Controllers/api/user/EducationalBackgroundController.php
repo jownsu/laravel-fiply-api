@@ -19,7 +19,13 @@ class EducationalBackgroundController extends Controller
     public function index($id)
     {
         $userid = $id == 'me' ? auth()->id() : $id;
-        $user = User::findOrFail($userid)->load('educationalBackgrounds');
+
+        $user = User::where('id', $userid)->with('educationalBackgrounds')->IsFollowing()->first();
+        if (!$user){
+            return response()->error('User Not Found');
+        }
+
+        $this->authorize('view', $user);
 
         return response()->success(EducationalBackgroundCollection::collection($user->educationalBackgrounds));
     }

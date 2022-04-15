@@ -11,7 +11,7 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['content', 'image'];
+    protected $fillable = ['content', 'image', 'is_public'];
     //protected $attributes = ['content' => 'fucking default'];
     protected $hidden = ['pivot'];
 

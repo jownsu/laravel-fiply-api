@@ -19,7 +19,13 @@ class JobPreferenceController extends Controller
     public function index($id)
     {
         $userid = $id == 'me' ? auth()->id() : $id;
-        $user = User::findOrFail($userid)->load('jobPreference');
+
+        $user = User::where('id', $userid)->with('jobPreference')->IsFollowing()->first();
+        if (!$user){
+            return response()->error('User Not Found');
+        }
+
+        $this->authorize('view', $user);
         return response()->success($user->jobPreference);
     }
 

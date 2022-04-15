@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_public',
         'email_verified_at'
     ];
 
@@ -217,7 +218,21 @@ class User extends Authenticatable
         return $query;
     }
 
+    public function scopeWithFollowCount($query){
+        return $query->withCount([
+            'following' => function($q){
+                $q->where('accepted', 1);
+            },
+            'followers' => function($q){
+                $q->where('accepted', 1);
+            }]);
+    }
 
+    public function scopeIsFollowing($query){
+        return $query->withCount(['followers AS is_following' => function ($q) {
+            $q->where('user_id', auth()->id())->where('accepted', true);
+        }]);
+    }
 
     public function scopeWithFilterQueries($query)
     {
