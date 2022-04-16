@@ -20,6 +20,7 @@ class PostResource extends JsonResource
             'content'            => $this->content,
             'image'              => $this->image(),
             'date'               => $this->updated_at->diffForHumans(),
-            ];
+            'is_public'          => $this->is_public ? true : false
+        ];
     }
 }

@@ -74,4 +74,18 @@ class PostController extends Controller
         $response = (new PostService())->deletePost($post);
         return response()->success($response);
     }
+
+    public function setAudience(Request $request, Post $post)
+    {
+        $this->authorize('update', $post);
+
+        $input = $request->validate([
+            'is_public' => ['required', 'boolean']
+        ]);
+
+        $post->is_public = $input['is_public'];
+        $post->save();
+
+        return response()->success($post);
+    }
 }

@@ -14,6 +14,7 @@ use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use function PHPUnit\Framework\isEmpty;
 
 class UserController extends Controller
 {
@@ -40,20 +41,9 @@ class UserController extends Controller
             return response()->error('User Not Found');
         }
 
-        $user->is_me = ($id == 'me') ? true : false;
+        $user->is_me = ($id == 'me' || $id == $myId) ? true : false;
 
         return response()->success((new ProfileResource($user)));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     public function uploadAvatar(UploadAvatarRequest $request)
@@ -138,6 +128,42 @@ class UserController extends Controller
 
     }
 
+    public function update(ProfileRequest $request)
+    {
+        $input = $request->validated();
+
+        if($request->has('birthday')){
+            $time = strtotime($input['birthday']);
+            $input['birthday'] = date('Y-m-d',$time);
+        }
+
+        $user = auth()->user();
+
+        $user->profile()->update($input);
+
+        $user->is_me = true;
+
+        if($user){
+            return response()->success('', 204);
+        }
+
+        return response()->success(new ProfileResource($user));
+
+    }
+
+    public function setAudience(Request $request)
+    {
+        $input = $request->validate([
+            'is_public' => ['required', 'boolean']
+        ]);
+
+        $user = auth()->user();
+
+        $user->is_public = $input['is_public'];
+        $user->save();
+
+        return response()->success($user);
+    }
 
     /**
      * Display the specified resource.
@@ -151,28 +177,22 @@ class UserController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProfileRequest $request)
-    {
-        $input = $request->validated();
-        $time = strtotime($input['birthday']);
-        $input['birthday'] = date('Y-m-d',$time);
-
-        $user = auth()->user();
-
-        $user->profile()->update($input);
-
-        $user->is_me = true;
-
-        return response()->success(new ProfileResource($user));
-
-    }
-
     /**
      * Remove the specified resource from storage.
      *

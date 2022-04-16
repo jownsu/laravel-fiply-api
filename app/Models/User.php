@@ -234,12 +234,19 @@ class User extends Authenticatable
         }]);
     }
 
+    public function loadIsFollowing($query){
+        return $query->loadCount(['followers AS is_following' => function ($q) {
+            $q->where('user_id', auth()->id())->where('accepted', true);
+        }]);
+    }
+
     public function scopeWithFilterQueries($query)
     {
-        return $query->when(request('q') == 'notFollowing', function ($q) {
-            $q->whereDoesntHave('followers', function($q){
-                $q->where('user_id', auth()->id());
-            });
+        $myId = auth()->id();
+        return $query->when(request('q') == 'notFollowing', function ($q) use($myId) {
+            $q->whereDoesntHave('followers', function($q) use($myId){
+                $q->where('user_id', $myId);
+            })->where('id', '!=', $myId);
         });
 
 

@@ -18,6 +18,14 @@ class CommentController extends Controller
      */
     public function index(Post $post)
     {
+
+        $user = $post->user;
+        $user->loadIsFollowing($user);
+
+        if(!$post->is_public){
+            $this->authorize('view', $user);
+        }
+
         $comments = (new CommentService())->getPostComments($post);
         return response()->successPaginated($comments);
     }

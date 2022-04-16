@@ -24,8 +24,9 @@ class PostRequest extends FormRequest
     public function rules()
     {
         return [
-            'content'   => ['nullable'],
-            'image'     => ['nullable', 'image']
+            'content'   => ['required_without:image'],
+            'image'     => ['required_without:content', 'image'],
+            'is_public' => ['nullable', 'boolean']
         ];
     }
 }

@@ -19,7 +19,7 @@ class CreatePostsTable extends Migration
                   ->constrained('users')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
-            $table->text('content');
+            $table->text('content')->nullable();
             $table->string('image')->nullable();
             $table->boolean('is_public')->default(true);
             $table->timestamps();

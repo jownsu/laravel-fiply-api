@@ -50,7 +50,8 @@ Route::post('/checkEmail', [AuthController::class, 'checkEmail']);
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/token/logout', [AuthController::class, 'logout']);
 
-    Route::apiResource('/posts', PostController::class);
+    Route::apiResource('/posts', PostController::class)->except('show');
+    Route::put('/posts/{post}/setAudience', [PostController::class, 'setAudience']);
     Route::apiResource('/posts/{post}/comments', CommentController::class)->only(['index', 'store']);
     Route::get('/posts/{post}/upVotes', [UpVoteController::class, 'index']);
     Route::post('/posts/upVote', [UpVoteController::class, 'upVote']);
@@ -97,6 +98,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::group(['prefix' => '/me'], function() {
         Route::put('/', [UserController::class, 'update']);
+        Route::put('/setAudience', [UserController::class, 'setAudience']);
         Route::apiResource('/savedPosts', UserSavedPostController::class)->only('index');
         Route::apiResource('/appliedJobs', UserAppliedJobController::class)->only('index');
         Route::apiResource('/savedJobs', UserSavedJobController::class)->only('index');

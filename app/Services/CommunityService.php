@@ -13,8 +13,8 @@ class CommunityService {
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
         $users = User::with(['profile' => function($q){
-            $q->select('user_id','firstname', 'middlename', 'lastname', 'avatar');
-        }, 'jobPreference' => function($q){
+                $q->select('user_id','firstname', 'middlename', 'lastname', 'avatar');
+            }, 'jobPreference' => function($q){
                 $q->select('user_id', 'job_title');
             }])
             ->withFilterQueries()

@@ -24,6 +24,7 @@ class PostCollection extends JsonResource
             'date'               => $this->updated_at->diffForHumans(),
             'upVotes_count'      => $this->total_upVotes,
             'is_upVoted'         => $this->is_upVoted ? true : false,
+            'is_public'          => $this->is_public ? true: false,
             'comments'           => CommentCollection::collection($this->whenLoaded('comments')),
         ];
     }

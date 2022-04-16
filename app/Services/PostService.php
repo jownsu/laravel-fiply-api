@@ -6,7 +6,9 @@ use App\Http\Requests\post\PostRequest;
 use App\Http\Resources\post\PostCollection;
 use App\Http\Resources\post\PostResource;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class PostService{
@@ -17,12 +19,14 @@ class PostService{
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
         $myId = auth()->id();
+        $user = User::where('id', $userId)->isFollowing()->first();
+
 
         $posts = Post::with([
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
             }
-            ])
+        ])
             ->withCount([
                 'userUpVotes AS total_upVotes',
                 'userUpVotes AS is_upVoted' => function($q) use($myId) {
@@ -31,6 +35,9 @@ class PostService{
             ])
             ->orderByUpVoted()
             ->where('user_id', $userId)
+            ->when(!boolval($user->is_following) && !$user->id == $myId, function($q){
+                $q->where('is_public', true);
+            })
             ->latest()
             ->paginate($per_page);
 
