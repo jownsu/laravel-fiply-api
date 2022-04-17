@@ -38,7 +38,7 @@ class JobService{
     {
         $job->load([
             'user.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
             },
             'userAppliedJobs' => function($q){
                 return $q->where('user_id', auth()->id())->select('user_id')->count();

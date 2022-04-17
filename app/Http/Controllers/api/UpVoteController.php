@@ -20,7 +20,7 @@ class UpVoteController extends Controller
     public function index(Post $post)
     {
         $post->load(['UserUpVotes.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
             }]
         );
 

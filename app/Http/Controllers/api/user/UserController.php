@@ -165,6 +165,13 @@ class UserController extends Controller
         return response()->success($user);
     }
 
+    public function getResume(User $user)
+    {
+        $user->loadIsFollowing($user);
+        $this->authorize('view', $user);
+        return response()->success($user->document->resume());
+    }
+
     /**
      * Display the specified resource.
      *

@@ -17,7 +17,7 @@ class AppliedJobController extends Controller
     public function index(Job $job)
     {
         $job->load(['userAppliedJobs.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
             }]
         );
 

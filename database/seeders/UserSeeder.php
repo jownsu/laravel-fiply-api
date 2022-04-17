@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Comment;
+use App\Models\Document;
 use App\Models\EducationalBackground;
 use App\Models\Experience;
 use App\Models\Job;
@@ -29,6 +30,7 @@ class UserSeeder extends Seeder
             ->has(Comment::factory()->count(5))
             ->has(Job::factory()->count(5))
             ->has(JobPreference::factory()->count(1))
+            ->has(Document::factory()->count(1))
             ->create();
 
 

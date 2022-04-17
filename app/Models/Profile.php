@@ -16,15 +16,13 @@ class Profile extends Model
         'gender',
         'birthday',
         'firstname',
-        'middlename',
         'lastname',
         'location',
         'mobile_no',
         'telephone_no',
         'language',
-        'status',
         'website',
-        'description',
+        'bio',
         'avatar',
         'cover'
     ];
@@ -52,12 +50,7 @@ class Profile extends Model
 
     public function fullname()
     {
-
-        $fullname = $this->firstname . " " .
-            ($this->middlename ? $this->middlename . " " : '') .
-            $this->lastname;
-
-        return $fullname;
+        return $this->firstname . " " . $this->lastname;
     }
 
     public function age()

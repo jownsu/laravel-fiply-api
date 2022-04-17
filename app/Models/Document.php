@@ -30,9 +30,9 @@ class Document extends Model
 
     public function resume()
     {
-        return !empty($this->attributes['resume']) && file_exists(public_path('files'  . DIRECTORY_SEPARATOR . self::RESUME_PATH . DIRECTORY_SEPARATOR . $this->attributes['resume']))
-            ? url('files' . DIRECTORY_SEPARATOR . self::RESUME_PATH . DIRECTORY_SEPARATOR . $this->attributes['resume'])
-            : null;
+        return !empty($this->attributes['resume']) && Storage::disk('resume')->exists($this->attributes['resume'])
+            ? Storage::disk('resume')->url($this->attributes['resume'])
+            : null ;
     }
 
     public function setValidIdImageFrontAttribute($value)

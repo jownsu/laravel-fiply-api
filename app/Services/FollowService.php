@@ -17,7 +17,7 @@ class FollowService {
 
         $paginated = $user->following()
             ->with(['profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
             }])
             ->withFollowingInfo()
             ->withFollowerInfo()
@@ -40,7 +40,7 @@ class FollowService {
 
         $paginated = $user->followers()
             ->with(['profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
             }, 'jobPreference' => function($q){
                 $q->select(['user_id', 'job_title']);
             }])
@@ -68,7 +68,7 @@ class FollowService {
 
         $paginated = $user->followerRequests()
             ->with(['profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
             }, 'jobPreference' => function($q){
                 $q->select(['user_id', 'job_title']);
             }])
@@ -93,7 +93,7 @@ class FollowService {
 
         $paginated = $user->followPendings()
             ->with(['profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
             }])
             ->wherePivot('accepted', false)
             ->latest()

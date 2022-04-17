@@ -30,6 +30,8 @@ class AuthController extends Controller
             $data = [
                 'id'                =>  $user->id,
                 'fullname'          =>  $user->profile->fullname(),
+                'firstname'         =>  $user->profile->firstname,
+                'lastname'          =>  $user->profile->lastname,
                 'avatar'            =>  $user->profile->avatar(),
                 'cover'             =>  $user->profile->cover(),
                 'account_level'     =>  $account_level['account_level'],
@@ -126,6 +128,8 @@ class AuthController extends Controller
             $data = [
                 'id'                =>  $user->id,
                 'fullname'          =>  $user->profile->fullname(),
+                'firstname'         =>  $user->profile->firstname,
+                'lastname'          =>  $user->profile->lastname,
                 'avatar'            =>  $user->profile->avatar(),
                 'cover'             =>  $user->profile->cover(),
                 'account_level'     =>  $account_level['account_level'],

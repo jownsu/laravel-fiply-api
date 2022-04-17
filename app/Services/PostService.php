@@ -24,7 +24,7 @@ class PostService{
 
         $posts = Post::with([
             'user.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
             }
         ])
             ->withCount([
@@ -80,7 +80,7 @@ class PostService{
     {
         $post->load([
             'comments.user.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
             }])
             ->loadCount('userUpVotes');
 
@@ -94,7 +94,7 @@ class PostService{
 
         $posts = Post::with([
             'user.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
             }])
             ->withCount([
                 'userUpVotes AS total_upVotes',

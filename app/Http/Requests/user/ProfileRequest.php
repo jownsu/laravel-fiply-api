@@ -27,7 +27,6 @@ class ProfileRequest extends FormRequest
             'gender'        => ['nullable', 'min:2', 'max:255', 'string'],
             'birthday'      => ['nullable', 'date'],
             'firstname'     => ['required', 'min:2', 'max:255', 'string'],
-            'middlename'    => ['nullable', 'min:2', 'max:255', 'string'],
             'lastname'      => ['required', 'min:2', 'max:255', 'string'],
             'location'      => ['nullable', 'min:2', 'max:255', 'string'],
             'mobile_no'     => ['nullable', 'min:2', 'max:255', 'string'],
@@ -35,7 +34,7 @@ class ProfileRequest extends FormRequest
             'language'      => ['nullable', 'min:2', 'max:255', 'string'],
             'status'        => ['nullable', 'min:2', 'max:255', 'string'],
             'website'       => ['nullable', 'min:2', 'max:255', 'string'],
-            'description'   => ['nullable', 'min:2', 'max:255', 'string'],
+            'bio'           => ['nullable', 'min:2', 'max:255', 'string'],
             //'avatar'        => ['nullable', 'min:2', 'max:255', 'string'],
         ];
     }

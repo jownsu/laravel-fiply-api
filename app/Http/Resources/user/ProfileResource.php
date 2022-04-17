@@ -31,7 +31,6 @@ class ProfileResource extends JsonResource
             'mobile_no'             => $this->profile->mobile_no,
             'telephone_no'          => $this->profile->telephone_no,
             'language'              => $this->profile->language,
-            'status'                => $this->profile->status,
             'website'               => $this->profile->website,
         ] : [];
 
@@ -44,7 +43,6 @@ class ProfileResource extends JsonResource
             'email'                 => $this->email,
             'fullname'              => $this->profile->fullname(),
             'firstname'             => $this->profile->firstname,
-            'middlename'            => $this->profile->middlename,
             'lastname'              => $this->profile->lastname,
             'avatar'                => $this->profile->avatar(),
             'cover'                 => $this->profile->cover(),
@@ -55,7 +53,7 @@ class ProfileResource extends JsonResource
             'preview'               => $preview,
             'account_level'         => $account_level['account_level'],
             'account_level_str'     => $account_level['account_level_str'],
-            'description'           => $this->profile->description,
+            'bio'                   => $this->profile->bio,
             'is_me'                 => $this->is_me,
             'is_public'             => $this->is_public ? true : false
         ], $moreInfo);

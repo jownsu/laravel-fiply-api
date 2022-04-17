@@ -181,7 +181,6 @@ class User extends Authenticatable
         if(!is_null(\request('search'))){
             $query->whereHas('profile', function($q){
                 return $q->where('firstname',  'LIKE','%' . \request('search') . '%')
-                        ->orWhere('middlename',  'LIKE','%' . \request('search') . '%')
                         ->orWhere('lastname',  'LIKE','%' . \request('search') . '%');
             });
         }

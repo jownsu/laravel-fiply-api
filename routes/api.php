@@ -90,6 +90,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/experiences', ExperienceController::class)->only('index');
         Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only('index');
         Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['index']);
+        Route::get('/resume', [UserController::class, 'getResume']);
         Route::apiResource('/posts', UserPostController::class)->except('show');
         Route::get('/following', [FollowController::class, 'following']);
         Route::get('/followers', [FollowController::class, 'followers']);

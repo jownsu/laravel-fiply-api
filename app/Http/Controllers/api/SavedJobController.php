@@ -17,7 +17,7 @@ class SavedJobController extends Controller
     public function index(Job $job)
     {
         $job->load(['UserSavedJobs.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'middlename', 'lastname']);
+                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
             }]
         );
 
