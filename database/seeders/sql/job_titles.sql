@@ -1170,7 +1170,7 @@ INSERT INTO `job_titles` (`id`, `job_category_id`, `name`, `created_at`, `update
 (1169, 10, 'Dietary Cook', NULL, NULL),
 (1170, 10, 'Dietary Manager', NULL, NULL),
 (1171, 10, 'Dining Room Attendant', NULL, NULL);
-INSERT INTO `job_lists` (`id`, `job_category_id`, `name`, `created_at`, `updated_at`) VALUES
+INSERT INTO `job_titles` (`id`, `job_category_id`, `name`, `created_at`, `updated_at`) VALUES
 (1172, 10, 'Dining Room Manager', NULL, NULL),
 (1173, 10, 'Director Of Events', NULL, NULL),
 (1174, 10, 'Dishwasher', NULL, NULL),
@@ -2315,7 +2315,7 @@ INSERT INTO `job_lists` (`id`, `job_category_id`, `name`, `created_at`, `updated
 (2313, 18, 'Business Owner', NULL, NULL),
 (2314, 18, 'Business Partner', NULL, NULL),
 (2315, 18, 'Business Planning Manager', NULL, NULL);
-INSERT INTO `job_lists` (`id`, `job_category_id`, `name`, `created_at`, `updated_at`) VALUES
+INSERT INTO `job_titles` (`id`, `job_category_id`, `name`, `created_at`, `updated_at`) VALUES
 (2316, 18, 'Business Process Consultant', NULL, NULL),
 (2317, 18, 'Business Process Manager', NULL, NULL),
 (2318, 18, 'Business Relationship Manager', NULL, NULL),
@@ -3440,7 +3440,7 @@ INSERT INTO `job_lists` (`id`, `job_category_id`, `name`, `created_at`, `updated
 (3437, 25, 'Ticketing Agent', NULL, NULL),
 (3438, 25, 'Toy Designer', NULL, NULL),
 (3439, 25, 'Venue Manager', NULL, NULL);
-INSERT INTO `job_lists` (`id`, `job_category_id`, `name`, `created_at`, `updated_at`) VALUES
+INSERT INTO `job_titles` (`id`, `job_category_id`, `name`, `created_at`, `updated_at`) VALUES
 (3440, 25, 'Vfx Artist', NULL, NULL),
 (3441, 25, 'Video Editor', NULL, NULL),
 (3442, 25, 'Video Game Designer', NULL, NULL),
@@ -4563,7 +4563,7 @@ INSERT INTO `job_lists` (`id`, `job_category_id`, `name`, `created_at`, `updated
 (4559, 40, 'Business Operations Analyst', NULL, NULL),
 (4560, 40, 'Business Process Analyst', NULL, NULL),
 (4561, 40, 'Business Strategist', NULL, NULL);
-INSERT INTO `job_lists` (`id`, `job_category_id`, `name`, `created_at`, `updated_at`) VALUES
+INSERT INTO `job_titles` (`id`, `job_category_id`, `name`, `created_at`, `updated_at`) VALUES
 (4562, 40, 'Business Systems Analyst', NULL, NULL),
 (4563, 40, 'Cobol Developer', NULL, NULL),
 (4564, 40, 'Cobol Programmer', NULL, NULL),
