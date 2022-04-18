@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Job extends Model
@@ -34,9 +35,9 @@ class Job extends Model
 
     public function image()
     {
-        return !empty($this->attributes['image']) && file_exists(public_path('img'  . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->attributes['image']))
-            ? url('img' . DIRECTORY_SEPARATOR . self::IMG_PATH . DIRECTORY_SEPARATOR . $this->attributes['image'])
-            : url('img'. DIRECTORY_SEPARATOR . 'logo.png');
+        return !empty($this->attributes['image']) && Storage::disk('logo')->exists($this->attributes['image'])
+            ? Storage::disk('logo')->url($this->attributes['image'])
+            : Storage::disk('placeholder')->url('logo.png');
     }
 
     public function user()
