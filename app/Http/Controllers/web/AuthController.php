@@ -42,7 +42,7 @@ class AuthController extends Controller
             return response()->json($data, 200);
         }
 
-        return response()->json(['error' => 'Invalid credentials']);
+        return response()->error(['error' => 'Invalid credentials']);
 
 
 
@@ -140,7 +140,7 @@ class AuthController extends Controller
             return response()->json($data, 200);
         }
 
-        return response()->json(['error' => 'Invalid credentials']);
+        return response()->error(['error' => 'Invalid credentials']);
 
     }
 }
