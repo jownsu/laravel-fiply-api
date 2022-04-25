@@ -61,8 +61,8 @@ class User extends Authenticatable
 
     public function account_level()
     {
-
         $account_lvl = 0;
+
 
         if(( $this->educationalBackgrounds()->exists() || $this->experiences()->exists() ) && ($this->document()->exists() && !is_null($this->document->resume))){
             $account_lvl++;
@@ -75,6 +75,8 @@ class User extends Authenticatable
                 $account_lvl++;
             }
         }
+
+
 
         switch ($account_lvl)
         {
@@ -97,6 +99,11 @@ class User extends Authenticatable
     public function profile()
     {
         return $this->hasOne(Profile::class);
+    }
+
+    public function company()
+    {
+        return $this->hasOne(Company::class);
     }
 
     public function document()
@@ -127,11 +134,6 @@ class User extends Authenticatable
     public function savedPosts()
     {
         return $this->belongsToMany(Post::class, 'saved_posts');
-    }
-
-    public function jobs()
-    {
-        return $this->hasMany(Job::class);
     }
 
     public function comments()

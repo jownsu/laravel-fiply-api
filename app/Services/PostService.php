@@ -25,6 +25,9 @@ class PostService{
         $posts = Post::with([
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
+            },
+            'user.company' => function($q){
+                $q->select(['user_id', 'avatar', 'name']);
             }
         ])
             ->withCount([
@@ -39,6 +42,7 @@ class PostService{
                 $q->where('is_public', true);
             })
             ->latest()
+            ->orderBy('id', 'asc')
             ->paginate($per_page);
 
         $posts->withPath("$userId/posts");
@@ -57,7 +61,14 @@ class PostService{
         $user = auth()->user();
 
         $posts = $user->savedPosts()
-            ->with('user.profile')
+            ->with([
+                'user.profile' => function($q){
+                    $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
+                },
+                'user.company' => function($q){
+                    $q->select(['user_id', 'avatar', 'name']);
+                }
+            ])
             ->withCount([
                 'userUpVotes AS total_upVotes',
                 'userUpVotes AS is_upVoted' => function($q) use($user) {
@@ -66,6 +77,7 @@ class PostService{
             ])
             ->orderByUpVoted()
             ->latest()
+            ->orderBy('id', 'asc')
             ->paginate($per_page);
         $posts->withPath("me/savedPosts");
 
@@ -95,7 +107,12 @@ class PostService{
         $posts = Post::with([
             'user.profile' => function($q){
                 $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
-            }])
+            },
+            'user.company' => function($q){
+                $q->select(['user_id', 'avatar', 'name']);
+            }
+
+            ])
             ->withCount([
                 'userUpVotes AS total_upVotes',
                 'userUpVotes AS is_upVoted' => function($q) use($userId) {
@@ -103,9 +120,11 @@ class PostService{
                 }
             ])
             ->latest()
+            ->orderBy('id', 'asc')
             ->paginate($per_page);
 
         $posts->withPath('/posts');
+
         return PostCollection::collection($posts)->response()->getData(true);
     }
 

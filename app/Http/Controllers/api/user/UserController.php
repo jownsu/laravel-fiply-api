@@ -8,6 +8,7 @@ use App\Http\Requests\user\UploadAvatarRequest;
 use App\Http\Requests\user\UploadCoverRequest;
 use App\Http\Requests\user\UploadResumeRequest;
 use App\Http\Requests\user\UploadValidIdRequest;
+use App\Http\Resources\company\CompanyProfileResource;
 use App\Http\Resources\user\ProfileResource;
 use App\Models\Document;
 use App\Models\Profile;
@@ -27,6 +28,7 @@ class UserController extends Controller
 
     public function index($id)
     {
+
         $userid = $id == 'me' ? auth()->id() : $id;
         $myId = auth()->id();
 
@@ -34,7 +36,7 @@ class UserController extends Controller
             ->withFollowingInfo()
             ->withFollowerInfo()
             ->withFollowCount()
-            ->with(['profile'])
+            ->with(['profile', 'company'])
             ->first();
 
         if (!$user){
@@ -43,7 +45,12 @@ class UserController extends Controller
 
         $user->is_me = ($id == 'me' || $id == $myId) ? true : false;
 
+        if($user->company){
+            return response()->success((new CompanyProfileResource($user)));
+        }
+
         return response()->success((new ProfileResource($user)));
+
     }
 
     public function uploadAvatar(UploadAvatarRequest $request)

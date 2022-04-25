@@ -19,15 +19,24 @@ class FollowController extends Controller
     {
         $userId = $id == 'me' ? auth()->id() : $id;
 
-        $following = (new FollowService())->getFollowing($userId);
+        $response = (new FollowService())->getFollowing($userId);
 
-        return response()->successPaginated($following);
+        if(!$response){
+            return response()->error('Your not authorized to see this', 404);
+        }
+
+        return response()->successPaginated($response);
     }
     public function followers($id)
     {
         $userId = $id == 'me' ? auth()->id() : $id;
-        $followers = (new FollowService())->getFollowers($userId);
-        return response()->successPaginated($followers);
+        $response = (new FollowService())->getFollowers($userId);
+
+        if(!$response){
+            return response()->error('Your not authorized to see this', 404);
+        }
+
+        return response()->successPaginated($response);
     }
 
     public function follow(Request $request)

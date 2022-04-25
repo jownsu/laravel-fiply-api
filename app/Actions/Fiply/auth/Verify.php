@@ -15,7 +15,6 @@ class Verify{
         if($user) return false;
 
         $code = random_int(100000, 999999);
-        $img = asset('img/maill.png');
 
         $mail_data = [
             'recipient' => $input['email'],
@@ -25,7 +24,7 @@ class Verify{
             //'body'  => 'Your Verification code is ' . $code
         ];
 
-        Mail::send('email', ['code' => $code, 'img' => $img], function($message) use ($mail_data){
+        Mail::send('email', ['code' => $code], function($message) use ($mail_data){
             $message->to($mail_data['recipient'])
                 ->from($mail_data['fromEmail'], $mail_data['fromName'])
                 ->subject($mail_data['subject']);

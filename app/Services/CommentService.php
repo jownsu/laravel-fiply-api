@@ -12,7 +12,14 @@ class CommentService {
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
         $comments = $post->comments()
-                        ->with('user.profile')
+                        ->with([
+                            'user.profile' => function($q){
+                                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
+                            },
+                            'user.company' => function($q){
+                                $q->select(['user_id', 'avatar', 'name']);
+                            }
+                        ])
                         ->latest()
                         ->paginate($per_page);
 

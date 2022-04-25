@@ -33,10 +33,10 @@ class FollowCollection extends JsonResource
 
         return [
             'id'                     => $this->id,
-            'fullname'               => $this->profile->fullname(),
+            'name'                   => $this->profile ? $this->profile->fullname() : $this->company->name,
             'email'                  => $this->email,
             'preview'                => $preview,
-            'avatar'                 => $this->profile->avatar(),
+            'avatar'                 => $this->profile ? $this->profile->avatar() : $this->company->avatar(),
             'is_follower'            => $this->is_follower ? true : false,
             'is_follower_pending'    => $this->is_follower_pending ? true : false,
             'is_following'           => $this->is_following ? true : false,

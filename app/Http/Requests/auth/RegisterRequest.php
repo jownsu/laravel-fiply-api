@@ -40,15 +40,28 @@ class RegisterRequest extends FormRequest
                                         ->numbers()
                                         ->symbols()
                                     ],
-            'firstname'         => ['required', 'string', 'min:2', 'max:255'],
-            'lastname'          => ['required', 'string', 'min:2',  'max:255'],
-            'birthday'          => ['required'],
             'code'              => ['required', 'min:6', 'max:6'],
+
+            'profile'                   => ['nullable', 'array'],
+            'profile.firstname'         => ['required_with:profile', 'string', 'min:2', 'max:255'],
+            'profile.lastname'          => ['required_with:profile', 'string', 'min:2',  'max:255'],
+            'profile.birthday'          => ['required_with:profile'],
 
             'job_preference'                   => ['nullable', 'array'],
             'job_preference.job_title'         => ['required_with:job_preference', 'string', 'min:2', 'max:255'],
             'job_preference.location'          => ['required_with:job_preference', 'string', 'min:2', 'max:255'],
-            'job_preference.employment_type'   => ['required_with:job_preference', 'string', 'min:2', 'max:255']
+            'job_preference.employment_type'   => ['required_with:job_preference', 'string', 'min:2', 'max:255'],
+
+            'company'                   => ['nullable', 'array'],
+            'company.name'              => ['required_with:company', 'string', 'min:2', 'max:255'],
+            'company.registration_no'   => ['required_with:company', 'string', 'min:2', 'max:255'],
+            'company.telephone_no'      => ['nullable', 'string', 'min:2', 'max:255'],
+            'company.location'          => ['required_with:company', 'string', 'min:2', 'max:255'],
+
+            'applicant_preference'                      => ['nullable', 'array'],
+            'applicant_preference.level_of_experience'  => ['required_with:applicant_preference', 'string', 'min:2', 'max:255'],
+            'applicant_preference.field_of_expertise'   => ['required_with:applicant_preference', 'string', 'min:2', 'max:255'],
+            'applicant_preference.location'             => ['required_with:applicant_preference', 'string', 'min:2', 'max:255'],
 
         ];
     }

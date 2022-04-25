@@ -65,6 +65,18 @@ return [
             'visibility' => 'public',
             'url' => env('APP_URL') . '/resume',
         ],
+        'company_id' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/files/companyId'),
+            'visibility' => 'public',
+            'url' => env('APP_URL') . '/companyId',
+        ],
+        'company_certificate' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/files/companyCertificate'),
+            'visibility' => 'public',
+            'url' => env('APP_URL') . '/companyId',
+        ],
         'placeholder' => [
             'driver' => 'local',
             'root' => storage_path('app/public/img/placeholder'),
@@ -80,7 +92,6 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
-
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -121,6 +132,8 @@ return [
         public_path('id') => storage_path('app/public/files/id'),
         public_path('resume') => storage_path('app/public/files/resume'),
         public_path('post') => storage_path('app/public/post'),
+        public_path('companyId') => storage_path('app/public/files/companyId'),
+        public_path('companyCertificate') => storage_path('app/public/files/companyCertificate'),
     ],
 
 ];

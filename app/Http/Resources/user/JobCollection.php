@@ -18,9 +18,9 @@ class JobCollection extends JsonResource
             'id'                => $this->id,
             'title'             => $this->title,
             'employment_type'   => $this->employment_type,
-            'image'             => $this->image(),
-            'company'           => $this->company,
-            'location'          => $this->location,
+            'avatar'            => $this->hiringManager->company->avatar(),
+            'company'           => $this->hiringManager->company->name,
+            'location'          => $this->hiringManager->company->location,
             'posted_at'         => $this->created_at->diffForHumans(),
         ];
     }

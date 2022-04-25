@@ -4,8 +4,11 @@ use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\{AppliedJobController,
     CommentController,
     CommunityController,
+    company\ApplicantPreferenceController,
+    company\CompanyController,
+    company\HiringManagerController,
+    datasets\CompanyCertificateController,
     datasets\JobCategoryController,
-    DocumentController,
     JobController,
     PostController,
     SavedJobController,
@@ -44,6 +47,7 @@ Route::apiResource('/jobCategories', JobCategoryController::class)->only(['index
 Route::apiResource('/employmentTypes', EmploymentTypeController::class)->only(['index']);
 Route::apiResource('/positionLevels', PositionLevelController::class)->only(['index']);
 Route::apiResource('/validIds', ValidIdController::class)->only(['index']);
+Route::apiResource('/companyCertificates', CompanyCertificateController::class)->only(['index']);
 
 Route::post('/checkEmail', [AuthController::class, 'checkEmail']);
 
@@ -67,14 +71,13 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/jobs/apply', [AppliedJobController::class, 'applyJob']);
     Route::post('/jobs/unApply', [AppliedJobController::class, 'unApplyJob']);
 
-    Route::apiResource('/experiences', ExperienceController::class)->only(['store', 'update', 'destroy']);
-    Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only(['store', 'update', 'destroy']);
-    Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['store', 'update']);
-
+    //uploads
     Route::put('/uploadAvatar', [UserController::class, 'uploadAvatar']);
     Route::put('/uploadCover', [UserController::class, 'uploadCover']);
     Route::put('/uploadResume', [UserController::class, 'uploadResume']);
     Route::put('/uploadValidId', [UserController::class, 'uploadValidId']);
+    Route::put('/uploadCompanyId', [CompanyController::class, 'uploadCompanyId']);
+    Route::put('/uploadCertificate', [CompanyController::class, 'uploadCertificate']);
 
     Route::post('/follow', [FollowController::class, 'follow']);
     Route::post('/unFollow', [FollowController::class, 'unFollow']);
@@ -87,13 +90,18 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::group(['prefix' => '/{user}'], function() {
 
         Route::get('/', [UserController::class, 'index']);
+        Route::apiResource('/posts', UserPostController::class)->except('show');
         Route::apiResource('/experiences', ExperienceController::class)->only('index');
         Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only('index');
         Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['index']);
+        Route::apiResource('/applicantPreferences', ApplicantPreferenceController::class)->only(['index']);
+
         Route::get('/resume', [UserController::class, 'getResume']);
-        Route::apiResource('/posts', UserPostController::class)->except('show');
+
         Route::get('/following', [FollowController::class, 'following']);
         Route::get('/followers', [FollowController::class, 'followers']);
+
+        Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['index']);
 
     });
 
@@ -105,6 +113,13 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/savedJobs', UserSavedJobController::class)->only('index');
         Route::get('/followerRequests', [FollowController::class, 'followerRequests']);
         Route::get('/followPendings', [FollowController::class, 'followPendings']);
+
+        Route::apiResource('/experiences', ExperienceController::class)->only(['store', 'update', 'destroy']);
+        Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only(['store', 'update', 'destroy']);
+        Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['store', 'update']);
+        Route::apiResource('/applicantPreferences', ApplicantPreferenceController::class)->only(['store', 'update']);
+
+        Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['store', 'update', 'destroy']);
     });
 
 });

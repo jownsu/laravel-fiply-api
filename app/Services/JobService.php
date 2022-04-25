@@ -6,6 +6,7 @@ use App\Http\Requests\job\JobRequest;
 use App\Http\Resources\job\JobCollection;
 use App\Http\Resources\user\JobCollection as UserJobCollection;
 use App\Http\Resources\job\JobResource;
+use App\Models\HiringManager;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -15,18 +16,22 @@ class JobService{
 
     public function getJobs()
     {
+
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
-        $jobs = Job::with([
-            'userAppliedJobs' => function($q){
-                return $q->where('user_id', auth()->id())->select('user_id');
-            },
-            'userSavedJobs' => function($q){
-                return $q->where('user_id', auth()->id())->select('user_id');
-            }
-        ])
-                ->select(['id', 'title', 'employment_type', 'image',  'company', 'location', 'created_at'])
+        $jobs = Job::withUserApplied()
+                ->withUserSaved()
+                ->with([
+                    'hiringManager'=> function($q){
+                        $q->select('id', 'company_id');
+                    },
+                    'hiringManager.company' => function($q){
+                        $q->select('id', 'name', 'location', 'avatar');
+                    },
+                ])
+                ->select(['id', 'hiring_manager_id','title', 'employment_type', 'location', 'created_at',])
                 ->latest()
+                ->orderBy('id', 'asc')
                 ->paginate($per_page);
 
         $jobs->withPath('/jobs');
@@ -37,15 +42,19 @@ class JobService{
     public function getSingleJob(Job $job)
     {
         $job->load([
-            'user.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
-            },
             'userAppliedJobs' => function($q){
                 return $q->where('user_id', auth()->id())->select('user_id')->count();
             },
             'userSavedJobs' => function($q){
                 return $q->where('user_id', auth()->id())->select('user_id')->count();
-            }]);
+            },
+            'hiringManager'=> function($q){
+                $q->select('id', 'company_id', 'firstname', 'lastname', 'avatar');
+            },
+            'hiringManager.company' => function($q){
+                $q->select('id', 'name', 'location', 'avatar');
+            }
+        ]);
 
         return new JobResource($job);
     }
@@ -57,13 +66,34 @@ class JobService{
         $user = auth()->user();
 
         if($type == 'saved'){
-            $jobs = $user->jobsSaved()->latest()->paginate($per_page);
+            $jobs = $user->jobsSaved()
+                ->with([
+                    'hiringManager'=> function($q){
+                        $q->select('id', 'company_id');
+                    },
+                    'hiringManager.company' => function($q){
+                        $q->select('id', 'name', 'location', 'avatar');
+                    },
+                ])
+                ->latest()
+                ->orderBy('id', 'asc')
+                ->paginate($per_page);
             $jobs->withPath("me/savedJobs");
         }else{
-            $jobs = $user->jobsApplied()->latest()->paginate($per_page);
+            $jobs = $user->jobsApplied()
+                ->with([
+                    'hiringManager'=> function($q){
+                        $q->select('id', 'company_id');
+                    },
+                    'hiringManager.company' => function($q){
+                        $q->select('id', 'name', 'location', 'avatar');
+                    },
+                ])
+                ->latest()
+                ->orderBy('id', 'asc')
+                ->paginate($per_page);
             $jobs->withPath("me/appliedJobs");
         }
-
 
         return UserJobCollection::collection($jobs)->response()->getData(true);
     }

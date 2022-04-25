@@ -22,10 +22,10 @@ class FollowRequestCollection extends JsonResource
 
         return [
             'id'                     => $this->id,
-            'fullname'               => $this->profile->fullname(),
+            'name'                   => $this->profile ? $this->profile->fullname() : $this->company->name,
             'email'                  => $this->email,
             'preview'                => $preview,
-            'avatar'                 => $this->profile->avatar()
+            'avatar'                 => $this->profile ? $this->profile->avatar() : $this->company->avatar()
         ];
     }
 }

@@ -19,10 +19,10 @@ class JobCollection extends JsonResource
             'id'                => $this->id,
             'title'             => $this->title,
             'employment_type'   => $this->employment_type,
-            'image'             => $this->image(),
-            'company'           => $this->company,
-            'location'          => $this->location,
+            'company'           => $this->hiringManager->company->name,
+            'location'          => $this->hiringManager->company->location,
             'posted_at'         => $this->created_at->diffForHumans(),
+            'avatar'            => $this->hiringManager->company->avatar(),
             'is_applied'        => $this->userAppliedJobs->first() ? true : false,
             'is_saved'          => $this->userSavedJobs->first() ? true : false,
         ];

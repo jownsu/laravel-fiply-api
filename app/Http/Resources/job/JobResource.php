@@ -4,7 +4,7 @@ namespace App\Http\Resources\job;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class JobResource extends JsonResource
+class  JobResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,23 +15,22 @@ class JobResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'                    => $this->id,
-            'user_id'               => $this->user->id,
-            'email'                 => $this->user->email,
-            'avatar'                => $this->user->profile->avatar(),
-            'fullname'              => $this->user->profile->fullname(),
-            'title'                 => $this->title,
-            'employment_type'       => $this->employment_type,
-            'image'                 => $this->image(),
-            'company'               => $this->company,
-            'location'              => $this->location,
-            'position_level'        => $this->position_level,
-            'specialization'        => $this->specialization,
-            'job_responsibilities'  => $this->job_responsibilities,
-            'qualifications'        => $this->qualifications,
-            'posted_at'             => $this->created_at->diffForHumans(),
-            'is_applied'            => $this->userAppliedJobs->first() ? true : false,
-            'is_saved'              => $this->userSavedJobs->first() ? true : false
+            'id'                       => $this->id,
+            'hiring_manager_id'        => $this->hiring_manager_id,
+            'company_id'               => $this->hiringManager->company_id,
+            'title'                    => $this->title,
+            'employment_type'          => $this->employment_type,
+            'position_level'           => $this->position_level,
+            'job_responsibilities'     => $this->job_responsibilities,
+            'qualifications'           => $this->qualifications,
+            'hiring_manager'           => $this->hiringManager->firstname . ' ' . $this->hiringManager->lastname,
+            'hiring_manager_avatar'    => $this->hiringManager->avatar(),
+            'company_avatar'           => $this->hiringManager->company->avatar(),
+            'company_name'             => $this->hiringManager->company->name,
+            'location'                 => $this->hiringManager->company->location,
+            'posted_at'                => $this->created_at->diffForHumans(),
+            'is_applied'               => $this->userAppliedJobs->first() ? true : false,
+            'is_saved'                 => $this->userSavedJobs->first() ? true : false
         ];
     }
 }

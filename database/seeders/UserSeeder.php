@@ -28,11 +28,9 @@ class UserSeeder extends Seeder
             ->has(EducationalBackground::factory()->count(1))
             ->has(Post::factory()->count(3))
             ->has(Comment::factory()->count(5))
-            ->has(Job::factory()->count(5))
+            //->has(Job::factory()->count(5))
             ->has(JobPreference::factory()->count(1))
             ->has(Document::factory()->count(1))
             ->create();
-
-
     }
 }

@@ -17,8 +17,8 @@ class PostCollection extends JsonResource
         return [
             'id'                 => $this->id,
             'user_id'            => $this->user->id,
-            'posted_by'          => $this->user->profile->fullname(),
-            'avatar'             => $this->user->profile->avatar(),
+            'posted_by'          => $this->user->profile ? $this->user->profile->fullname() : $this->user->company->name,
+            'avatar'             => $this->user->profile ? $this->user->profile->avatar() : $this->user->company->avatar(),
             'content'            => $this->content,
             'image'              => $this->image(),
             'date'               => $this->updated_at->diffForHumans(),

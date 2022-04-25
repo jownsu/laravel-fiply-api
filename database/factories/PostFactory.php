@@ -22,7 +22,7 @@ class PostFactory extends Factory
             '5.jpg',
             '6.jpg',
             '7.jpg',
-            '8.jpg',
+            '8.jpeg',
             '9.jpg',
             '10.jpg',
             '11.jpg',

@@ -34,14 +34,10 @@ class ProfileResource extends JsonResource
             'website'               => $this->profile->website,
         ] : [];
 
-
-
-
-
         return array_merge([
             'id'                    => $this->id,
             'email'                 => $this->email,
-            'fullname'              => $this->profile->fullname(),
+            'name'                  => $this->profile->fullname(),
             'firstname'             => $this->profile->firstname,
             'lastname'              => $this->profile->lastname,
             'avatar'                => $this->profile->avatar(),

@@ -21,8 +21,8 @@ class CreateProfilesTable extends Migration
                 ->onUpdate('cascade');
             $table->string('gender')->nullable();
             $table->date('birthday')->nullable();
-            $table->string('firstname');
-            $table->string('lastname');
+            $table->string('firstname')->nullable();
+            $table->string('lastname')->nullable();
             $table->string('location')->nullable();
             $table->string('mobile_no')->nullable();
             $table->string('telephone_no')->nullable();

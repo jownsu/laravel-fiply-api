@@ -13,12 +13,21 @@ class FollowService {
     {
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
-        $user = User::findOrFail($userId);
+        $user = User::where('id', $userId)->isFollowing()->first();
+
+        if(auth()->user()->cannot('view', $user)){
+            return false;
+        }
 
         $paginated = $user->following()
-            ->with(['profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
-            }])
+            ->with([
+                'profile' => function($q){
+                    $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
+                },
+                'company' => function($q){
+                    $q->select(['user_id', 'avatar', 'name']);
+                }
+            ])
             ->withFollowingInfo()
             ->withFollowerInfo()
             ->withSearch()
@@ -38,12 +47,22 @@ class FollowService {
 
         $user = User::findOrFail($userId);
 
+        if(auth()->user()->cannot('view', $user)){
+            return false;
+        }
+
         $paginated = $user->followers()
-            ->with(['profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
-            }, 'jobPreference' => function($q){
-                $q->select(['user_id', 'job_title']);
-            }])
+            ->with([
+                'profile' => function($q){
+                    $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
+                },
+                'company' => function($q){
+                    $q->select(['user_id', 'avatar', 'name']);
+                },
+                'jobPreference' => function($q){
+                    $q->select(['user_id', 'job_title']);
+                }
+            ])
             ->withFollowingInfo()
             ->withFollowerInfo()
             ->withSearch()
@@ -67,11 +86,17 @@ class FollowService {
         $user = auth()->user();
 
         $paginated = $user->followerRequests()
-            ->with(['profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
-            }, 'jobPreference' => function($q){
-                $q->select(['user_id', 'job_title']);
-            }])
+            ->with([
+                'profile' => function($q){
+                    $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
+                },
+                'company' => function($q){
+                    $q->select(['user_id', 'avatar', 'name']);
+                },
+                'jobPreference' => function($q){
+                    $q->select(['user_id', 'job_title']);
+                }
+            ])
             ->wherePivot('accepted', false)
             ->latest()
             ->paginate($per_page);
@@ -92,9 +117,14 @@ class FollowService {
         $user = auth()->user();
 
         $paginated = $user->followPendings()
-            ->with(['profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
-            }])
+            ->with([
+                'profile' => function($q){
+                    $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
+                },
+                'company' => function($q){
+                    $q->select(['user_id', 'avatar', 'name']);
+                },
+            ])
             ->wherePivot('accepted', false)
             ->latest()
             ->paginate($per_page);

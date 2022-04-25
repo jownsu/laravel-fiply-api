@@ -14,8 +14,6 @@ class Job extends Model
     protected $fillable = [
         'title',
         'employment_type',
-        'image',
-        'company',
         'location',
         'position_level',
         'specialization',
@@ -53,6 +51,25 @@ class Job extends Model
     public function userSavedJobs()
     {
         return $this->belongsToMany(User::class, 'saved_jobs');
+    }
+
+    public function hiringManager()
+    {
+        return $this->belongsTo(HiringManager::class);
+    }
+
+    //SCOPES
+
+    public function scopeWithUserApplied($query){
+        return $query->with(['userAppliedJobs' => function($q){
+            return $q->where('user_id', auth()->id())->select('user_id');
+        },]);
+    }
+
+    public function scopeWithUserSaved($query){
+        return $query->with(['userSavedJobs' => function($q){
+            return $q->where('user_id', auth()->id())->select('user_id');
+        }]);
     }
 
 

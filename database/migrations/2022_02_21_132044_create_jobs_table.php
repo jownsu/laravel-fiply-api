@@ -15,13 +15,12 @@ class CreateJobsTable extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->foreignId('hiring_manager_id')
+                ->constrained('hiring_managers')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->string('title');
             $table->string('employment_type');
-            $table->string('image')->nullable();
-            $table->string('company');
             $table->string('location');
             $table->string('position_level');
             $table->string('specialization')->nullable();
