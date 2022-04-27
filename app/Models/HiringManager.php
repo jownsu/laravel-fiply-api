@@ -15,14 +15,12 @@ class HiringManager extends Model
         'email',
         'contact_no',
         'username',
-        'password',
         'avatar',
         'code',
-        'token'
     ];
 
     protected $hidden = [
-        'password',
+        'code',
     ];
 
     public function user()

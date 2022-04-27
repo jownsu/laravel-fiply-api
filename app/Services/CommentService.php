@@ -25,6 +25,10 @@ class CommentService {
 
         $comments->withPath("/post/{$post->id}/comments");
 
+        if(\request('per_page')){
+            $comments->appends(['per_page' => \request('per_page')]);
+        }
+
         return CommentCollection::collection($comments)->response()->getData(true);
     }
 

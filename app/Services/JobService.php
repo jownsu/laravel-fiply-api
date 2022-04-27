@@ -36,6 +36,11 @@ class JobService{
 
         $jobs->withPath('/jobs');
 
+        if(\request('per_page')){
+            $jobs->appends(['per_page' => \request('per_page')]);
+        }
+
+
         return JobCollection::collection($jobs)->response()->getData(true);
     }
 
@@ -79,6 +84,10 @@ class JobService{
                 ->orderBy('id', 'asc')
                 ->paginate($per_page);
             $jobs->withPath("me/savedJobs");
+
+            if(\request('per_page')){
+                $jobs->appends(['per_page' => \request('per_page')]);
+            }
         }else{
             $jobs = $user->jobsApplied()
                 ->with([
@@ -93,6 +102,10 @@ class JobService{
                 ->orderBy('id', 'asc')
                 ->paginate($per_page);
             $jobs->withPath("me/appliedJobs");
+
+            if(\request('per_page')){
+                $jobs->appends(['per_page' => \request('per_page')]);
+            }
         }
 
         return UserJobCollection::collection($jobs)->response()->getData(true);

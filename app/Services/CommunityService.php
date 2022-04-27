@@ -33,6 +33,10 @@ class CommunityService {
             $users->appends(['q' => \request('q')]);
         }
 
+        if(\request('per_page')){
+            $users->appends(['per_page' => \request('per_page')]);
+        }
+
         return FollowCollection::collection($users)->response()->getData(true);
     }
 

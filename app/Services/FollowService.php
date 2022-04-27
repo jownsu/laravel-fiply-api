@@ -37,6 +37,15 @@ class FollowService {
 
         $paginated->withPath("/$userId/following");
 
+        if(\request('search')){
+            $paginated->appends(['search' => \request('search')]);
+        }
+
+        if(\request('per_page')){
+            $paginated->appends(['per_page' => \request('per_page')]);
+        }
+
+
         return FollowCollection::collection($paginated)->response()->getData(true);
 
     }
@@ -76,6 +85,10 @@ class FollowService {
             $paginated->appends(['search' => \request('search')]);
         }
 
+        if(\request('per_page')){
+            $paginated->appends(['per_page' => \request('per_page')]);
+        }
+
         return FollowCollection::collection($paginated)->response()->getData(true);
     }
 
@@ -107,6 +120,10 @@ class FollowService {
             $paginated->appends(['search' => \request('search')]);
         }
 
+        if(\request('per_page')){
+            $paginated->appends(['per_page' => \request('per_page')]);
+        }
+
         return FollowRequestCollection::collection($paginated)->response()->getData(true);
     }
 
@@ -130,7 +147,9 @@ class FollowService {
             ->paginate($per_page);
 
         $paginated->withPath("/me/followPendings");
-
+        if(\request('per_page')){
+            $paginated->appends(['per_page' => \request('per_page')]);
+        }
         return FollowRequestCollection::collection($paginated)->response()->getData(true);
 
     }

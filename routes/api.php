@@ -6,6 +6,7 @@ use App\Http\Controllers\api\{AppliedJobController,
     CommunityController,
     company\ApplicantPreferenceController,
     company\CompanyController,
+    company\DashboardController,
     company\HiringManagerController,
     company\hiringManager\HiringManagerController as UserHiringManagerController,
     datasets\CompanyCertificateController,
@@ -58,8 +59,6 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/loginAsHiringManager', [AuthController::class, 'loginAsHiringManager']);
     Route::post('/loginAsEmployerAdmin', [AuthController::class, 'loginAsEmployerAdmin']);
 
-
-
     Route::apiResource('/posts', PostController::class)->except('show');
     Route::put('/posts/{post}/setAudience', [PostController::class, 'setAudience']);
     Route::apiResource('/posts/{post}/comments', CommentController::class)->only(['index', 'store']);
@@ -93,23 +92,16 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     //Community
     Route::apiResource('/users', CommunityController::class)->only(['index']);
 
-    Route::group(['prefix' => '/{user}'], function() {
 
-        Route::get('/', [UserController::class, 'index']);
-        Route::apiResource('/posts', UserPostController::class)->except('show');
-        Route::apiResource('/experiences', ExperienceController::class)->only('index');
-        Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only('index');
-        Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['index']);
-        Route::apiResource('/applicantPreferences', ApplicantPreferenceController::class)->only(['index']);
 
-        Route::get('/resume', [UserController::class, 'getResume']);
+        Route::group(['middleware' => ['canHire:company']], function (){
+            //manage hiring manager routes here
 
-        Route::get('/following', [FollowController::class, 'following']);
-        Route::get('/followers', [FollowController::class, 'followers']);
+            Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['store', 'update', 'destroy']);
 
-        Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['index']);
+        } );
 
-    });
+    Route::apiResource('/dashboard', DashboardController::class)->only('index');
 
     Route::group(['prefix' => '/me'], function() {
         Route::put('/', [UserController::class, 'update']);
@@ -132,12 +124,24 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
         } );
 
-        Route::group(['middleware' => ['canHire:company']], function (){
-            //manage hiring manager routes here
+    });
 
-            Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['store', 'update', 'destroy']);
+    Route::group(['prefix' => '/{user}'], function() {
 
-        } );
+        Route::get('/', [UserController::class, 'index']);
+        Route::apiResource('/posts', UserPostController::class)->except('show');
+        Route::apiResource('/experiences', ExperienceController::class)->only('index');
+        Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only('index');
+        Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['index']);
+        Route::apiResource('/applicantPreferences', ApplicantPreferenceController::class)->only(['index']);
+
+        Route::get('/resume', [UserController::class, 'getResume']);
+
+        Route::get('/following', [FollowController::class, 'following']);
+        Route::get('/followers', [FollowController::class, 'followers']);
+
+        Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['index']);
+
     });
 
 });

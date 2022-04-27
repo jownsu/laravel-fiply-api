@@ -51,6 +51,10 @@ class PostService{
             $posts->appends(['q' => \request('q')]);
         }
 
+        if(\request('per_page')){
+            $posts->appends(['per_page' => \request('per_page')]);
+        }
+
         return PostCollection::collection($posts)->response()->getData(true);
     }
 
@@ -84,6 +88,11 @@ class PostService{
         if(\request('q')){
             $posts->appends(['q' => \request('q')]);
         }
+
+        if(\request('per_page')){
+            $posts->appends(['per_page' => \request('per_page')]);
+        }
+
 
         return PostCollection::collection($posts)->response()->getData(true);
     }
@@ -124,6 +133,10 @@ class PostService{
             ->paginate($per_page);
 
         $posts->withPath('/posts');
+
+        if(\request('per_page')){
+            $posts->appends(['per_page' => \request('per_page')]);
+        }
 
         return PostCollection::collection($posts)->response()->getData(true);
     }

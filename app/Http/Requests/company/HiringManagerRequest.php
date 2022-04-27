@@ -28,6 +28,7 @@ class HiringManagerRequest extends FormRequest
             'lastname'      => ['required', 'min:2', 'max:255', 'string'],
             'email'         => ['required', 'min:2', 'max:255', 'string'],
             'contact_no'    => ['required', 'min:2', 'max:255', 'string'],
+            'code'          => ['required', 'numeric', 'min:0000', 'max:9999'],
             'avatar'        => ['nullable', 'image'],
         ];
     }

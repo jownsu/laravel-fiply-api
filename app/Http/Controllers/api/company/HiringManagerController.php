@@ -57,6 +57,8 @@ class HiringManagerController extends Controller
             $hiringManager->avatar = $request->avatar->store('', 'avatar');
         }
 
+        $hiringManager->code = bcrypt($request->code);
+
         auth()->user()->company->hiringManagers()->save($hiringManager);
 
         return response()->success($hiringManager);
