@@ -39,7 +39,7 @@
         src="https://st2.depositphotos.com/3326513/46327/v/380/depositphotos_463279490-stock-illustration-open-letter-confirmation-email-concept.jpg?forcejpeg=true"
         alt="mail_img"
     />
-    <p style="color: #fff">Your verification code is</p>
+    <p style="color: #fff">{{$body}}</p>
     <p class="code">{{$code}}</p>
 </div>
 

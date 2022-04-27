@@ -43,7 +43,8 @@ class CreateUser{
                 'name'                => $input['company']['name'],
                 'registration_no'     => $input['company']['registration_no'],
                 'telephone_no'        => $input['company']['telephone_no'],
-                'location'            => $input['company']['location']
+                'location'            => $input['company']['location'],
+                'code'                => bcrypt($input['company']['code'])
             ]);
         }
 
@@ -63,9 +64,9 @@ class CreateUser{
 
         if($user->company){
             $moreInfo = [
-                'name' => $user->company->name,
+                'name'    => $user->company->name,
                 'avatar'  =>  $user->company->avatar(),
-                'company' => true
+                'company' => $user->company->id
             ];
         }else{
             $moreInfo = [

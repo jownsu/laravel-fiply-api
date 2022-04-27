@@ -25,7 +25,8 @@ class CreateHiringManagersTable extends Migration
             $table->string('email');
             $table->string('contact_no')->nullable();
             $table->string('avatar')->nullable();
-            $table->string('code')->nullable();
+            $table->string('code')->default(bcrypt('0000'));
+            $table->string('token')->nullable();
             $table->timestamps();
         });
     }

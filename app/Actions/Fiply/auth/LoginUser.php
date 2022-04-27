@@ -23,7 +23,7 @@ class LoginUser{
             $moreInfo = [
                 'name'    => $user->company->name,
                 'avatar'  =>  $user->company->avatar(),
-                'company' => true
+                'company' => $user->company->id
             ];
         }else{
             $moreInfo = [

@@ -10,7 +10,8 @@ class  Company extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'registration_no', 'telephone_no', 'location', 'avatar', 'cover', 'bio'];
+    protected $fillable = ['name', 'registration_no', 'telephone_no', 'location', 'avatar', 'cover', 'bio', 'code'];
+    protected $hidden = ['code'];
 
     public function user()
     {
@@ -46,6 +47,10 @@ class  Company extends Model
             : Storage::disk('placeholder')->url('cover.png');
     }
 
+    public function token()
+    {
+        return $this->morphOne(HiringManagerToken::class, 'tokenable');
+    }
 
 
 

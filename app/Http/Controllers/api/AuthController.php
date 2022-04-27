@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\api;
 
 use App\Actions\Fiply\Auth\CreateUser;
+use App\Actions\Fiply\Auth\HiringManagerOTP;
 use App\Actions\Fiply\Auth\LoginUser;
 use App\Actions\Fiply\Auth\Verify;
 use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\auth\RegisterRequest;
 use App\Http\Requests\auth\VerificationRequest;
+use App\Models\HiringManager;
+use App\Models\HiringManagerToken;
 use App\Models\User;
 use App\Models\UserVerify;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -76,7 +80,108 @@ class AuthController extends ApiController
         $email = User::where('email', $validated['email'])->count();
 
         return response()->success($email == 1 ? true : false);
-
-
     }
+
+/*    public function otpHiringManager(Request $request, HiringManagerOTP $action)
+    {
+        $input = $request->validate([
+            'hiring_manager_id' => ['required']
+        ]);
+
+        $hiringManager = HiringManager::where('id', $input['hiring_manager_id'])->first();
+
+        if(auth()->user()->cannot('create', $hiringManager)){
+            return response()->error('User do not own this Hiring Manager');
+        };
+
+        if(!$this->isOnline()){
+            return response()->error("Check your internet connection.");
+        }
+
+        $verify = $action->handle($hiringManager->email);
+
+        if(!$verify) return response()->error('Hiring Manager dont exists');
+
+        return response()->success('Verification sent to your email');
+    }*/
+
+    public function loginAsHiringManager(Request $request)
+    {
+        $input = $request->validate([
+            'hiring_manager_id' => ['required'],
+            'code'              => ['required']
+        ]);
+
+        $hiringManager = HiringManager::where('id', $request->hiring_manager_id)->first();
+
+        if(!$hiringManager || !Hash::check($input['code'], $hiringManager->code)){
+            return response()->error('Code Not Match/Invalid');
+        }
+
+        $randomCode = random_int(100000, 999999);
+
+        $hiringToken = Crypt::encryptString($randomCode);
+
+        HiringManagerToken::updateOrInsert(
+            [
+                'tokenable_type' => get_class($hiringManager),
+                'tokenable_id' => $hiringManager->id,
+            ],
+            [
+                'token' => bcrypt($randomCode)
+            ],
+        );
+
+        $data = [
+            'id'        => $hiringManager->id,
+            'name'      => $hiringManager->firstname . ' ' . $hiringManager->lastname,
+            'firstname' => $hiringManager->firstname,
+            'lastname'  => $hiringManager->lastname,
+            'avatar'    => $hiringManager->avatar(),
+            'token'     => $hiringToken
+        ];
+
+        return response()->success($data);
+    }
+
+    public function loginAsEmployerAdmin(Request $request)
+    {
+        $input = $request->validate([
+            'code'              => ['required']
+        ]);
+
+        $company = auth()->user()->company;
+
+
+        if(!Hash::check($input['code'], $company->code)){
+            return response()->error('Code Not Natch/Invalid');
+        }
+
+        $randomCode = random_int(100000, 999999);
+
+        $hiringToken = Crypt::encryptString($randomCode);
+
+
+        HiringManagerToken::updateOrInsert(
+            [
+                'tokenable_type' => get_class($company),
+                'tokenable_id' => $company->id,
+            ],
+            [
+                'token' => bcrypt($randomCode)
+            ]
+        );
+
+        $data = [
+            'token'     => $hiringToken
+        ];
+
+        return response()->success($data);
+    }
+
+    public function test()
+    {
+        return 'hello dipshit';
+    }
+
 }

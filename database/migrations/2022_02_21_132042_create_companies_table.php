@@ -19,6 +19,7 @@ class CreateCompaniesTable extends Migration
                 ->constrained("users")
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+            $table->string('code');
             $table->string('name');
             $table->string('registration_no');
             $table->string('telephone_no');

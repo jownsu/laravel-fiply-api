@@ -1,43 +1,40 @@
 <?php
 
 namespace App\Actions\Fiply\Auth;
+use App\Models\HiringManager;
 use App\Models\User;
 use App\Models\UserVerify;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
-class Verify{
+class HiringManagerOTP{
 
-    public function handle(array $input)
+    public function handle(string $email)
     {
-        $user = User::where('email', $input['email'])->first();
+        $hiringManager = HiringManager::where('email', $email)->first();
 
-        if($user) return false;
+        if(!$hiringManager) return false;
 
         $code = random_int(100000, 999999);
 
         $mail_data = [
-            'recipient' => $input['email'],
+            'recipient' => $email,
             'fromEmail' => 'carja@fiply.tech',
             'fromName' => 'Fiply',
-            'subject' => 'Please Verify Your Email',
+            'subject' => 'Verify Your Email',
             //'body'  => 'Your Verification code is ' . $code
         ];
 
-        Mail::send('email', ['code' => $code, 'body' => 'Your Verification Code is '], function($message) use ($mail_data){
+
+        Mail::send('email', ['code' => $code, 'body' => 'Your Verification Code to login as Hiring Manager is '], function($message) use ($mail_data){
             $message->to($mail_data['recipient'])
                 ->from($mail_data['fromEmail'], $mail_data['fromName'])
                 ->subject($mail_data['subject']);
         });
 
-        UserVerify::updateOrInsert(
-            [
-                'email' => $input['email'],
-            ],
-            [
-                'code' => bcrypt($code)
-            ]
-        );
+        $hiringManager->code = bcrypt($code);
+
+        $hiringManager->save();
 
         return true;
     }

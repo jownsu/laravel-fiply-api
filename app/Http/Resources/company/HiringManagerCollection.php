@@ -15,6 +15,7 @@ class HiringManagerCollection extends JsonResource
     public function toArray($request)
     {
         return [
+            'id'         => $this->id,
             'firstname'  => $this->firstname,
             'lastname'   => $this->lastname,
             'name'       => $this->firstname . ' ' . $this->lastname,

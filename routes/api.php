@@ -7,6 +7,7 @@ use App\Http\Controllers\api\{AppliedJobController,
     company\ApplicantPreferenceController,
     company\CompanyController,
     company\HiringManagerController,
+    company\hiringManager\HiringManagerController as UserHiringManagerController,
     datasets\CompanyCertificateController,
     datasets\JobCategoryController,
     JobController,
@@ -53,6 +54,11 @@ Route::post('/checkEmail', [AuthController::class, 'checkEmail']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/token/logout', [AuthController::class, 'logout']);
+    //Route::post('/otp/hiringManager', [AuthController::class, 'otpHiringManager']);
+    Route::post('/loginAsHiringManager', [AuthController::class, 'loginAsHiringManager']);
+    Route::post('/loginAsEmployerAdmin', [AuthController::class, 'loginAsEmployerAdmin']);
+
+
 
     Route::apiResource('/posts', PostController::class)->except('show');
     Route::put('/posts/{post}/setAudience', [PostController::class, 'setAudience']);
@@ -119,7 +125,19 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['store', 'update']);
         Route::apiResource('/applicantPreferences', ApplicantPreferenceController::class)->only(['store', 'update']);
 
-        Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['store', 'update', 'destroy']);
+        Route::group(['middleware' => ['canHire:hiring_manager']], function (){
+            //Job post routes here
+            Route::get('/hiringManagerProfile', [UserHiringManagerController::class, 'index']);
+            Route::get('/test', [AuthController::class, 'test']);
+
+        } );
+
+        Route::group(['middleware' => ['canHire:company']], function (){
+            //manage hiring manager routes here
+
+            Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['store', 'update', 'destroy']);
+
+        } );
     });
 
 });

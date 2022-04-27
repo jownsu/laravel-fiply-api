@@ -29,6 +29,7 @@ class CompanyFactory extends Factory
             'registration_no'    => $this->faker->creditCardNumber(),
             'telephone_no'       => $this->faker->e164PhoneNumber(),
             'location'           => $location,
+            'code'               => bcrypt('9999'),
             'bio'                => $this->faker->catchPhrase(),
             'avatar'             => self::$img++ . '.jpeg',
             'cover'              => self::$cover++ . '.jpg',

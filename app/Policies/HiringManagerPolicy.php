@@ -40,9 +40,11 @@ class HiringManagerPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user)
+    public function create(User $user, HiringManager $hiringManager)
     {
-        //
+        return $user->id === $hiringManager->company->user_id
+            ? Response::allow()
+            : Response::deny('The user do not own this Hiring Manager');
     }
 
     /**

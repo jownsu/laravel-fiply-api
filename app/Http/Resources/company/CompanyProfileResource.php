@@ -33,7 +33,7 @@ class CompanyProfileResource extends JsonResource
             'bio'                   => $this->company->bio,
             'is_me'                 => $this->is_me,
             'is_public'             => $this->is_public ? true : false,
-            'company'               => true
+            'company'               => $this->company->id
         ];
     }
 }

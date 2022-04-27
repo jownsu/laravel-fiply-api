@@ -57,6 +57,7 @@ class RegisterRequest extends FormRequest
             'company.registration_no'   => ['required_with:company', 'string', 'min:2', 'max:255'],
             'company.telephone_no'      => ['nullable', 'string', 'min:2', 'max:255'],
             'company.location'          => ['required_with:company', 'string', 'min:2', 'max:255'],
+            'company.code'              => ['required', 'numeric', 'min:0000', 'max:9999'],
 
             'applicant_preference'                      => ['nullable', 'array'],
             'applicant_preference.level_of_experience'  => ['required_with:applicant_preference', 'string', 'min:2', 'max:255'],

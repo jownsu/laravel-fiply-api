@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -53,6 +54,11 @@ class Handler extends ExceptionHandler
                 //Throw custom error if the Http Request is incorrect
                 if($e instanceof AccessDeniedHttpException){
                     return response()->error($e->getMessage());
+                }
+
+                //Throw custome error if the hiring token is invalid
+                if($e instanceof DecryptException){
+                    return response()->error('Unauthorized Hiring Managerr');
                 }
 
             }

@@ -28,7 +28,7 @@ class HiringManagerController extends Controller
                     $q->select('id', 'user_id', 'name');
                 },
                 'company.hiringManagers' => function($q){
-                    $q->select('company_id', 'firstname', 'lastname', 'email', 'avatar', 'contact_no');
+                    $q->select('id','company_id', 'firstname', 'lastname', 'email', 'avatar', 'contact_no');
                 }
             ])->first();
 

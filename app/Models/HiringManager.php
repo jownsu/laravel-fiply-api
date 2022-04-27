@@ -17,6 +17,8 @@ class HiringManager extends Model
         'username',
         'password',
         'avatar',
+        'code',
+        'token'
     ];
 
     protected $hidden = [
@@ -43,6 +45,11 @@ class HiringManager extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function token()
+    {
+        return $this->morphOne(HiringManagerToken::class, 'tokenable');
     }
 
 }

@@ -27,51 +27,32 @@ class AuthController extends Controller
             $user = Auth::user();
             $account_level = $user->account_level();
 
-            $data = [
+            if($user->company()->exists()){
+                $moreInfo = [
+                    'name'    => $user->company->name,
+                    'avatar'  =>  $user->company->avatar(),
+                    'company' => $user->company->id
+                ];
+            }else{
+                $moreInfo = [
+                    'name'       =>  $user->profile->fullname(),
+                    'firstname'  =>  $user->profile->firstname,
+                    'lastname'   =>  $user->profile->lastname,
+                    'avatar'     =>  $user->profile->avatar(),
+                ];
+            }
+
+            $data = array_merge([
                 'id'                =>  $user->id,
-                'fullname'          =>  $user->profile->fullname(),
-                'firstname'         =>  $user->profile->firstname,
-                'lastname'          =>  $user->profile->lastname,
-                'avatar'            =>  $user->profile->avatar(),
-                'cover'             =>  $user->profile->cover(),
                 'account_level'     =>  $account_level['account_level'],
                 'account_level_str' =>  $account_level['account_level_str'],
-                'email'             =>  $user->email
+            ], $moreInfo);
 
-            ];
             return response()->json($data, 200);
         }
 
         return response()->error(['error' => 'Invalid credentials']);
 
-
-
-/*        $user = User::where('email', $input['email'])->first();
-
-        if(!$user || !Hash::check($input['password'] ,$user->password)){
-            return response()->json(['error' => 'Invalid credentials'], 400);
-        }
-
-        $request->session()->regenerate();
-
-        $account_level = $user->account_level();
-
-        $data = [
-            'id'                =>  $user->id,
-            'fullname'          =>  $user->profile->fullname(),
-            'avatar'            =>  $user->profile->avatar(),
-            'cover'             =>  $user->profile->cover(),
-            'account_level'     =>  $account_level['account_level'],
-            'account_level_str' =>  $account_level['account_level_str'],
-            'email'             =>  $user->email
-
-        ];
-
-        return response()->json($data, 200);*/
-
-/*        if (Auth::guard()->attempt($request->only('email', 'password'))) {
-
-        }*/
 
     }
 
@@ -103,18 +84,37 @@ class AuthController extends Controller
 
         ]);
 
-        $user->profile()->create([
-            'firstname' => $input['firstname'],
-            'lastname'  => $input['lastname'],
-            'birthday'  => $input['birthday']
-        ]);
+        if(array_key_exists("profile", $input) && !empty($input['profile'])){
+            $user->profile()->create([
+                'firstname' => $input['profile']['firstname'],
+                'lastname'  => $input['profile']['lastname'],
+                'birthday'  => $input['profile']['birthday']
+            ]);
+        }
 
-        if(array_key_exists("job_preference", $input)){
+        if(array_key_exists("job_preference", $input) && !empty($input['job_preference'])){
             $user->jobPreference()->create([
                 'job_title'         => $input['job_preference']['job_title'],
                 'location'          => $input['job_preference']['location'],
                 'employment_type'   => $input['job_preference']['employment_type'],
-                'status'            => 'Looking for a job'
+            ]);
+        }
+
+        if(array_key_exists("company", $input) && !empty($input['company'])){
+            $user->company()->create([
+                'name'                => $input['company']['name'],
+                'registration_no'     => $input['company']['registration_no'],
+                'telephone_no'        => $input['company']['telephone_no'],
+                'location'            => $input['company']['location'],
+                'code'                => bcrypt($input['company']['code'])
+            ]);
+        }
+
+        if(array_key_exists("applicant_preference", $input) && !empty($input['applicant_preference'])){
+            $user->company->applicantPreference()->create([
+                'level_of_experience' => $input['applicant_preference']['level_of_experience'],
+                'field_of_expertise'  => $input['applicant_preference']['field_of_expertise'],
+                'location'            => $input['applicant_preference']['location']
             ]);
         }
 
@@ -125,18 +125,27 @@ class AuthController extends Controller
             $user = Auth::user();
             $account_level = $user->account_level();
 
-            $data = [
+            if($user->company){
+                $moreInfo = [
+                    'name'    => $user->company->name,
+                    'avatar'  =>  $user->company->avatar(),
+                    'company' => $user->company->id
+                ];
+            }else{
+                $moreInfo = [
+                    'name'       =>  $user->profile->fullname(),
+                    'firstname'  =>  $user->profile->firstname,
+                    'lastname'   =>  $user->profile->lastname,
+                    'avatar'     =>  $user->profile->avatar(),
+                ];
+            }
+
+            $data = array_merge([
                 'id'                =>  $user->id,
-                'fullname'          =>  $user->profile->fullname(),
-                'firstname'         =>  $user->profile->firstname,
-                'lastname'          =>  $user->profile->lastname,
-                'avatar'            =>  $user->profile->avatar(),
-                'cover'             =>  $user->profile->cover(),
                 'account_level'     =>  $account_level['account_level'],
                 'account_level_str' =>  $account_level['account_level_str'],
-                'email'             =>  $user->email
+            ], $moreInfo);
 
-            ];
             return response()->json($data, 200);
         }
 
