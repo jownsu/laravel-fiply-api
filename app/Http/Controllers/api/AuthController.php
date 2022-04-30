@@ -114,7 +114,9 @@ class AuthController extends ApiController
             'code'              => ['required']
         ]);
 
-        $hiringManager = HiringManager::where('id', $request->hiring_manager_id)->first();
+        $hiringManager = HiringManager::where('id', $request->hiring_manager_id)
+                ->where('company_id', auth()->user()->company->id)
+                ->first();
 
         if(!$hiringManager || !Hash::check($input['code'], $hiringManager->code)){
             return response()->error('Code Not Match/Invalid');

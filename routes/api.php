@@ -14,6 +14,7 @@ use App\Http\Controllers\api\{AppliedJobController,
     JobController,
     company\JobController as EmployerJobController,
     PostController,
+    QuestionController,
     SavedJobController,
     UpVoteController,
     datasets\DegreeController,
@@ -70,6 +71,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::apiResource('/comments', CommentController::class)->only(['update', 'destroy']);
 
     Route::apiResource('/jobs', JobController::class)->only(['show', 'index']);
+    Route::apiResource('/jobs/{job}/questions', QuestionController::class)->only('index');
     Route::get('/jobs/{job}/saves', [SavedJobController::class, 'index']);
     Route::get('/jobs/{job}/applies', [AppliedJobController::class, 'index']);
     Route::post('/jobs/save', [SavedJobController::class, 'saveJob']);

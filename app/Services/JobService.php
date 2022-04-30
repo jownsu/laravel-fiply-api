@@ -60,8 +60,8 @@ class JobService{
             },
             'hiringManager.company' => function($q){
                 $q->select('id', 'name', 'location', 'avatar');
-            }
-        ]);
+            },
+        ])->loadCount('questions');
 
         return new JobResource($job);
     }
@@ -115,10 +115,15 @@ class JobService{
 
     public function createJob(JobRequest $request)
     {
-
         $hiringManager = HiringManager::where('id', $request->header('hiring_id'))->first();
 
         $job = $hiringManager->jobs()->create($request->validated());
+
+        if($request->has('questions'))
+        {
+            $job->questions()->createMany($request->questions);
+        }
+
 
         return $job;
     }

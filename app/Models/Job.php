@@ -58,6 +58,11 @@ class Job extends Model
         return $this->belongsTo(HiringManager::class);
     }
 
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+
     //SCOPES
 
     public function scopeWithUserApplied($query){

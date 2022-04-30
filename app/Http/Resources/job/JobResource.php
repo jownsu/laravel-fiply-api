@@ -29,6 +29,7 @@ class  JobResource extends JsonResource
             'company_name'             => $this->hiringManager->company->name,
             'location'                 => $this->hiringManager->company->location,
             'posted_at'                => $this->created_at->diffForHumans(),
+            'questionnaire'            => $this->questions_count > 0 ? true : false,
             'is_applied'               => $this->userAppliedJobs->first() ? true : false,
             'is_saved'                 => $this->userSavedJobs->first() ? true : false
         ];
