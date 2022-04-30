@@ -9,6 +9,7 @@ use App\Actions\Fiply\Auth\Verify;
 use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\auth\RegisterRequest;
 use App\Http\Requests\auth\VerificationRequest;
+use App\Models\Company;
 use App\Models\HiringManager;
 use App\Models\HiringManagerToken;
 use App\Models\User;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 
 class AuthController extends ApiController
 {
@@ -147,14 +149,14 @@ class AuthController extends ApiController
     public function loginAsEmployerAdmin(Request $request)
     {
         $input = $request->validate([
-            'code'              => ['required']
+            'code' => ['required']
         ]);
 
         $company = auth()->user()->company;
 
 
         if(!Hash::check($input['code'], $company->code)){
-            return response()->error('Code Not Natch/Invalid');
+            return response()->error('Code Not Match/Invalid');
         }
 
         $randomCode = random_int(100000, 999999);
@@ -177,6 +179,25 @@ class AuthController extends ApiController
         ];
 
         return response()->success($data);
+    }
+
+    public function logoutAsEmployer(Request $request)
+    {
+
+        $input = $request->validate([
+            'type' => ['required', Rule::in(['company', 'hiring_manager'])]
+        ]);
+
+        $token = HiringManagerToken::where('tokenable_id', $request->header('hiring_id'))
+            ->when($input['type']  == 'hiring_manager', function($q){
+                return $q->where('tokenable_type', HiringManager::class);
+            })
+            ->when($input['type'] == 'company', function($q){
+                return $q->where('tokenable_type', Company::class);
+            })
+            ->first();
+
+        return $token->delete();
     }
 
     public function test()

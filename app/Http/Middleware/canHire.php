@@ -19,30 +19,24 @@ class canHire
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $userType)
+    public function handle(Request $request, Closure $next, $userType = 'both')
     {
-/*        if(!$request->input('hiring_token')){
-            return response()->error('Hiring Token Not Found',404);
-        }
-        if(!$request->input('hiring_id')){
-            return response()->error('ID Not Found',404);
-        }*/
-        if($userType == 'hiring_manager'){
-            $type = HiringManager::class ;
-            $who = 'Hiring Manager';
-        }
 
-        if($userType == 'company'){
-            $type = Company::class;
-            $who = 'Company Admin';
-        }
-
-        $accessToken = HiringManagerToken::where('tokenable_id',$request->header('hiring_id'))
-            ->where('tokenable_type', $type)
+        $accessToken = HiringManagerToken::where('tokenable_id', $request->header('hiring_id'))
+            ->when($userType == 'hiring_manager', function($q){
+                return $q->where('tokenable_type', HiringManager::class);
+            })
+            ->when($userType == 'company', function($q){
+                return $q->where('tokenable_type', Company::class);
+            })
+            ->when($userType == 'both', function($q){
+                return $q->whereIn('tokenable_type', [Company::class, HiringManager::class]);
+            })
             ->first();
 
+
         if(!$accessToken || !Hash::check(Crypt::decryptString($request->header('hiring_token')) ,$accessToken->token)){
-            return response()->error("Unauthorized $who" ,404);
+            return response()->error('Unauthorized employer'  ,404);
         }
 
         return $next($request);

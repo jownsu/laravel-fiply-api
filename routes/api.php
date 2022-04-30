@@ -12,6 +12,7 @@ use App\Http\Controllers\api\{AppliedJobController,
     datasets\CompanyCertificateController,
     datasets\JobCategoryController,
     JobController,
+    company\JobController as EmployerJobController,
     PostController,
     SavedJobController,
     UpVoteController,
@@ -68,7 +69,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/posts/unSave', [UserSavedPostController::class, 'unSavePost']);
     Route::apiResource('/comments', CommentController::class)->only(['update', 'destroy']);
 
-    Route::apiResource('/jobs', JobController::class);
+    Route::apiResource('/jobs', JobController::class)->only(['show', 'index']);
     Route::get('/jobs/{job}/saves', [SavedJobController::class, 'index']);
     Route::get('/jobs/{job}/applies', [AppliedJobController::class, 'index']);
     Route::post('/jobs/save', [SavedJobController::class, 'saveJob']);
@@ -94,12 +95,21 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
 
 
-        Route::group(['middleware' => ['canHire:company']], function (){
-            //manage hiring manager routes here
+    Route::group(['middleware' => ['canHire:company']], function (){
+        //manage hiring manager routes here
+        Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['store', 'update', 'destroy']);
+    } );
 
-            Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['store', 'update', 'destroy']);
+    Route::group(['middleware' => ['canHire:hiring_manager']], function (){
+        //Job post routes here
+        Route::get('/hiringManagerProfile', [UserHiringManagerController::class, 'index']);
+        Route::apiResource('/jobs', EmployerJobController::class)->only(['store', 'update', 'destroy']);
+        Route::get('/test', [AuthController::class, 'test']);
+    } );
 
-        } );
+    Route::group(['middleware' => ['canHire']], function (){
+        Route::post('/logoutAsEmployer', [AuthController::class, 'logoutAsEmployer']);
+    } );
 
     Route::apiResource('/dashboard', DashboardController::class)->only('index');
 
@@ -116,18 +126,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only(['store', 'update', 'destroy']);
         Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['store', 'update']);
         Route::apiResource('/applicantPreferences', ApplicantPreferenceController::class)->only(['store', 'update']);
-
-        Route::group(['middleware' => ['canHire:hiring_manager']], function (){
-            //Job post routes here
-            Route::get('/hiringManagerProfile', [UserHiringManagerController::class, 'index']);
-            Route::get('/test', [AuthController::class, 'test']);
-
-        } );
-
     });
 
     Route::group(['prefix' => '/{user}'], function() {
-
         Route::get('/', [UserController::class, 'index']);
         Route::apiResource('/posts', UserPostController::class)->except('show');
         Route::apiResource('/experiences', ExperienceController::class)->only('index');
@@ -141,11 +142,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::get('/followers', [FollowController::class, 'followers']);
 
         Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['index']);
-
     });
-
 });
-
 
 //if route does not exists
 Route::fallback(function(){

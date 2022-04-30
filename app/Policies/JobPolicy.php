@@ -6,6 +6,7 @@ use App\Models\Job;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Http\Request;
 
 class JobPolicy
 {
@@ -45,9 +46,9 @@ class JobPolicy
 
         $account_level = $user->account_level();
 
-        return ( $account_level['account_level'] == User::VERIFIED )
+        return ( $account_level['account_level'] == User::SEMI_VERIFIED || $account_level['account_level']  == User::VERIFIED)
             ? Response::allow()
-            : Response::deny('Account must be fully verified');
+            : Response::deny('Account must be semi-verified');
     }
 
     /**
@@ -59,7 +60,7 @@ class JobPolicy
      */
     public function update(User $user, Job $job)
     {
-        return $user->id === $job->user_id
+        return \request()->header('hiring_id') == $job->hiring_manager_id
             ? Response::allow()
             : Response::deny('The user do not own this Job Post');
     }
@@ -73,7 +74,7 @@ class JobPolicy
      */
     public function delete(User $user, Job $job)
     {
-        return $user->id === $job->user_id
+        return \request()->header('hiring_id') == $job->hiring_manager_id
             ? Response::allow()
             : Response::deny('The user do not own this Job Post');
     }

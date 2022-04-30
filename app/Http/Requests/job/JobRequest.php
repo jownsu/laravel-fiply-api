@@ -26,8 +26,6 @@ class JobRequest extends FormRequest
         return [
             'title'                 => ['required'],
             'employment_type'       => ['required'],
-            'image'                 => ['nullable', 'image'],
-            'company'               => ['required'],
             'location'              => ['required'],
             'position_level'        => ['required'],
             'specialization'        => ['nullable'],

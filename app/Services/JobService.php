@@ -9,6 +9,8 @@ use App\Http\Resources\job\JobResource;
 use App\Models\HiringManager;
 use App\Models\Job;
 use App\Models\User;
+use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\True_;
 
@@ -113,33 +115,25 @@ class JobService{
 
     public function createJob(JobRequest $request)
     {
-        $job = new Job($request->validated());
 
-        if($request->hasFile('image')){
-            $job->image= $request->image->store(Job::IMG_PATH);
-        }
+        $hiringManager = HiringManager::where('id', $request->header('hiring_id'))->first();
 
-        auth()->user()->posts()->save($job);
+        $job = $hiringManager->jobs()->create($request->validated());
 
-        return new JobResource($job);
-
+        return $job;
     }
 
     public function updateJob(JobRequest $request, Job $job)
     {
         $input = $request->validated();
-        if($request->hasFile('image')){
-            Storage::delete(Job::IMG_PATH . DIRECTORY_SEPARATOR . $job->image);
-            $input['image'] = $request->image->store(Job::IMG_PATH);
-        }
+
         $job->update($input);
 
-        return new JobResource($job);
+        return $job;
     }
 
     public function deleteJob(Job $job)
     {
-        Storage::delete(Job::IMG_PATH . DIRECTORY_SEPARATOR . $job->image);
         return $job->delete() ? 'Job is deleted' : 'Error in deleting the job';
     }
 

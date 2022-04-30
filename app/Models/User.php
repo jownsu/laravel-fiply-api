@@ -63,18 +63,34 @@ class User extends Authenticatable
     {
         $account_lvl = 0;
 
-
-        if(( $this->educationalBackgrounds()->exists() || $this->experiences()->exists() ) && ($this->document()->exists() && !is_null($this->document->resume))){
-            $account_lvl++;
-            if(
-                $this->document()->exists() &&
-                $this->document->status &&
-                !is_null($this->document->valid_id_image_front) &&
-                !is_null($this->document->valid_id_image_back)
-            ){
+        if($this->company()->exists()){
+            if(( $this->company->hiringManagers()->exists() )){
                 $account_lvl++;
+                if(
+                    $this->company->companyDocument()->exists() &&
+                    $this->company->companyDocument->status &&
+                    !is_null($this->company->companyDocument->valid_id_image_front) &&
+                    !is_null($this->company->companyDocument->valid_id_image_back)
+                ){
+                    $account_lvl++;
+                }
+            }
+        }else{
+            if(( $this->educationalBackgrounds()->exists() || $this->experiences()->exists() ) && ($this->document()->exists() && !is_null($this->document->resume))){
+                $account_lvl++;
+                if(
+                    $this->document()->exists() &&
+                    $this->document->status &&
+                    !is_null($this->document->valid_id_image_front) &&
+                    !is_null($this->document->valid_id_image_back)
+                ){
+                    $account_lvl++;
+                }
             }
         }
+
+
+
 
 
 
