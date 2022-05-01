@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Actions\Fiply\Auth;
+use App\Models\Company;
+use App\Models\HiringManagerToken;
 use App\Models\User;
 use App\Models\UserVerify;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 
 class CreateUser{
@@ -62,11 +65,29 @@ class CreateUser{
 
         $account_level = $user->account_level();
 
+
+
         if($user->company){
+
+            $randomCode = random_int(100000, 999999);
+
+            $hiringToken = Crypt::encryptString($randomCode);
+
+            HiringManagerToken::updateOrInsert(
+                [
+                    'tokenable_type' => Company::class,
+                    'tokenable_id' => $user->company->id,
+                ],
+                [
+                    'token' => bcrypt($randomCode)
+                ]
+            );
+
             $moreInfo = [
-                'name'    => $user->company->name,
-                'avatar'  =>  $user->company->avatar(),
-                'company' => $user->company->id
+                'name'         => $user->company->name,
+                'avatar'       => $user->company->avatar(),
+                'company'      => $user->company->id,
+                'companyToken' => $hiringToken
             ];
         }else{
             $moreInfo = [

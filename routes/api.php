@@ -57,7 +57,6 @@ Route::post('/checkEmail', [AuthController::class, 'checkEmail']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/token/logout', [AuthController::class, 'logout']);
-    //Route::post('/otp/hiringManager', [AuthController::class, 'otpHiringManager']);
     Route::post('/loginAsHiringManager', [AuthController::class, 'loginAsHiringManager']);
     Route::post('/loginAsEmployerAdmin', [AuthController::class, 'loginAsEmployerAdmin']);
 

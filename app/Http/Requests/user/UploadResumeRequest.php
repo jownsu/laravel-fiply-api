@@ -24,7 +24,7 @@ class UploadResumeRequest extends FormRequest
     public function rules()
     {
         return [
-            'resume' => ['required', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp,pdf,docx', 'max:2048']
+            'resume' => ['required', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp,pdf,docx', 'max:5120']
         ];
     }
 }
