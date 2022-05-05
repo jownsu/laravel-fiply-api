@@ -202,9 +202,16 @@ class AuthController extends ApiController
         return $token->delete();
     }
 
-    public function test()
+    public function test(Request $request)
     {
-        return 'hello dipshit';
+        $test = HiringManager::where('company_id', auth()->user()->company->id)
+            ->where('id', $request->header('hiring_id'))
+            ->with(['hiringManagerToken' => function($q){
+                return $q->where('tokenable_type', HiringManager::class);
+            }])
+            ->first();
+
+        return $test;
     }
 
 }

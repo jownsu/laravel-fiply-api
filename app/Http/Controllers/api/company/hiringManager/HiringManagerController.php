@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\company\hiringManager;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\company\HiringManagerCollection;
 use App\Models\HiringManager;
 use App\Models\HiringManagerToken;
 use Illuminate\Http\Request;
@@ -17,7 +18,8 @@ class HiringManagerController extends Controller
      */
     public function index(Request $request)
     {
-        return HiringManager::where('id', $request->header('hiring_id'))->first();
+        $hiringManager = HiringManager::where('id', $request->header('hiring_id'))->first();
+        return response()->success(new HiringManagerCollection($hiringManager));
     }
 
     /**

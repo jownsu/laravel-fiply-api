@@ -52,7 +52,6 @@ class HiringManagerController extends Controller
 
         $hiringManager = new HiringManager($request->validated());
 
-
         if($request->hasFile('avatar')){
             $hiringManager->avatar = $request->avatar->store('', 'avatar');
         }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\job\ApplyJobRequest;
 use App\Http\Resources\vote\UserCollection;
 use App\Models\Job;
 use App\Services\JobService;
@@ -31,11 +32,13 @@ class AppliedJobController extends Controller
      * Store a newly created resource in storage.
      *
      */
-    public function applyJob(Request $request)
+    public function applyJob(ApplyJobRequest $request)
     {
         $this->authorize('create', Job::class);
-        $validated = $request->validate(['job_id' => 'required']);
-        $response = (new JobService())->applyJob($validated['job_id']);
+        $response = (new JobService())->applyJob($request->validated());
+        if($response === 'error'){
+            return response()->error("Answer the Questionnaire");
+        }
         return response()->success($response);
     }
 

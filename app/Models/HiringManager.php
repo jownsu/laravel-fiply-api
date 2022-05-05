@@ -45,7 +45,7 @@ class HiringManager extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function token()
+    public function hiringManagerToken()
     {
         return $this->morphOne(HiringManagerToken::class, 'tokenable');
     }

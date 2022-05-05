@@ -32,7 +32,9 @@ class JobPolicy
      */
     public function view(User $user, Job $job)
     {
-        //
+        return ( $job->hiringManager->company->id == $user->company->id )
+            ? Response::allow()
+            : Response::deny('This Job Post does not belong to this company');
     }
 
     /**
@@ -46,7 +48,7 @@ class JobPolicy
 
         $account_level = $user->account_level();
 
-        return ( $account_level['account_level'] == User::SEMI_VERIFIED || $account_level['account_level']  == User::VERIFIED)
+        return ( ( $account_level['account_level'] == User::SEMI_VERIFIED || $account_level['account_level']  == User::VERIFIED) )
             ? Response::allow()
             : Response::deny('Account must be semi-verified');
     }

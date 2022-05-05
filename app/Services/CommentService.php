@@ -21,6 +21,7 @@ class CommentService {
                             }
                         ])
                         ->latest()
+                        ->orderBy('id', 'asc')
                         ->paginate($per_page);
 
         $comments->withPath("/post/{$post->id}/comments");

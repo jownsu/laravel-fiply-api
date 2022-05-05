@@ -83,6 +83,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::put('/uploadCover', [UserController::class, 'uploadCover']);
     Route::put('/uploadResume', [UserController::class, 'uploadResume']);
     Route::put('/uploadValidId', [UserController::class, 'uploadValidId']);
+
+    // Try kung gagana pag ililipat sa company middleware
     Route::put('/uploadCompanyId', [CompanyController::class, 'uploadCompanyId']);
     Route::put('/uploadCertificate', [CompanyController::class, 'uploadCertificate']);
 
@@ -94,25 +96,27 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     //Community
     Route::apiResource('/users', CommunityController::class)->only(['index']);
 
-
-
-    Route::group(['middleware' => ['canHire:company']], function (){
-        //manage hiring manager routes here
-        Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['store', 'update', 'destroy']);
-    } );
-
-    Route::group(['middleware' => ['canHire:hiring_manager']], function (){
-        //Job post routes here
-        Route::get('/hiringManagerProfile', [UserHiringManagerController::class, 'index']);
-        Route::apiResource('/jobs', EmployerJobController::class)->only(['store', 'update', 'destroy']);
+    Route::group(['middleware' => ['company']], function (){
         Route::get('/test', [AuthController::class, 'test']);
-    } );
-
-    Route::group(['middleware' => ['canHire']], function (){
+        Route::apiResource('/dashboard', DashboardController::class)->only('index');
         Route::post('/logoutAsEmployer', [AuthController::class, 'logoutAsEmployer']);
-    } );
 
-    Route::apiResource('/dashboard', DashboardController::class)->only('index');
+        Route::group(['middleware' => ['canHire:company']], function (){
+            Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['store', 'update', 'destroy']);
+        });
+
+        Route::group(['middleware' => ['canHire:hiring_manager'], 'prefix' => '/hm'], function (){
+            Route::get('/profile', [UserHiringManagerController::class, 'index']);
+            Route::get('/jobs/{job}/applicants', [EmployerJobController::class, 'getApplicants']);
+            Route::apiResource('/jobs', EmployerJobController::class);
+            Route::get('/jobs/{jobId}/response/{applyId}', [EmployerJobController::class, 'jobResponse']);
+            Route::get('/test', [AuthController::class, 'test']);
+        } );
+    });
+
+
+
+
 
     Route::group(['prefix' => '/me'], function() {
         Route::put('/', [UserController::class, 'update']);

@@ -45,7 +45,10 @@ class Job extends Model
 
     public function userAppliedJobs()
     {
-        return $this->belongsToMany(User::class, 'applied_jobs');
+        return $this->belongsToMany(User::class, 'applied_jobs')
+            ->withPivot('id')
+            ->withTimestamps()
+            ->using(AppliedJob::class);
     }
 
     public function userSavedJobs()
@@ -61,6 +64,11 @@ class Job extends Model
     public function questions()
     {
         return $this->hasMany(Question::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'applied_jobs')->withTimestamps()->withPivot('id');
     }
 
     //SCOPES

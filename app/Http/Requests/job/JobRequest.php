@@ -33,7 +33,7 @@ class JobRequest extends FormRequest
             'job_responsibilities'  => ['required'],
             'qualifications'        => ['required'],
 
-            'questions'               => ['nullable', 'array'],
+            'questions'               => ['nullable', 'array', 'min:1'],
             'questions.*.type'        => ['required_with:questions', 'numeric'],
             'questions.*.question'    => ['required_with:questions', 'string', 'min:2', 'max:255'],
             'questions.*.options'     => ['required_if:questions.*.type,2,3']

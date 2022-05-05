@@ -19,10 +19,40 @@ class canHire
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $userType = 'both')
+    public function handle(Request $request, Closure $next, $userType)
     {
 
-        $accessToken = HiringManagerToken::where('tokenable_id', $request->header('hiring_id'))
+/*    if($userType == 'hiring_manager'){
+        $hiringManager = HiringManager::where('company_id', auth()->user()->company->id)
+            ->where('id', $request->header('hiring_id'))
+            ->with(['hiringManagerToken' => function($q){
+                return $q->where('tokenable_type', HiringManager::class);
+            }])
+            ->first();
+    }elseif ($userType == 'company'){
+        $hiringManager= Company::where('id', $request->header('hiring_id'))
+        ->with('token')
+        ->first();
+    }*/
+
+/*
+        $hiringManager = HiringManager::where('company_id', auth()->user()->company->id)
+            ->where('id', $request->header('hiring_id'))
+            ->with('hiringManagerToken')
+            ->with(['hiringManagerToken' => function($q) use ($userType){
+                $q->when($userType == 'hiring_manager', function($q){
+                    return $q->where('tokenable_type', HiringManager::class);
+                })
+                ->when($userType == 'company', function($q){
+                    return $q->where('tokenable_type', Company::class);
+                })
+                ->when($userType == 'both', function($q){
+                    return $q->whereIn('tokenable_type', [Company::class, HiringManager::class]);
+                });
+            }])
+            ->get();*/
+
+        $hiringManager = HiringManagerToken::where('tokenable_id', $request->header('hiring_id'))
             ->when($userType == 'hiring_manager', function($q){
                 return $q->where('tokenable_type', HiringManager::class);
             })
@@ -31,11 +61,14 @@ class canHire
             })
             ->when($userType == 'both', function($q){
                 return $q->whereIn('tokenable_type', [Company::class, HiringManager::class]);
-            })
-            ->first();
+            })->first();
 
 
-        if(!$accessToken || !Hash::check(Crypt::decryptString($request->header('hiring_token')) ,$accessToken->token)){
+        if(!$hiringManager ||
+            !$hiringManager->token ||
+            !Hash::check(
+                Crypt::decryptString($request->header('hiring_token')), $hiringManager->token ))
+        {
             return response()->error('Unauthorized employer'  ,404);
         }
 
