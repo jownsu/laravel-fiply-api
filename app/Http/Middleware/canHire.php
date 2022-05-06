@@ -22,18 +22,27 @@ class canHire
     public function handle(Request $request, Closure $next, $userType)
     {
 
-/*    if($userType == 'hiring_manager'){
-        $hiringManager = HiringManager::where('company_id', auth()->user()->company->id)
+    $token = null;
+
+    if($userType == 'hiring_manager'){
+        $hiringManager = HiringManager::select('id')
+            ->where('company_id', auth()->user()->company->id)
             ->where('id', $request->header('hiring_id'))
             ->with(['hiringManagerToken' => function($q){
-                return $q->where('tokenable_type', HiringManager::class);
+                return $q->select('tokenable_id', 'token')
+                    ->where('tokenable_type', HiringManager::class);
             }])
             ->first();
+        $token = $hiringManager->hiringManagerToken->token;
     }elseif ($userType == 'company'){
-        $hiringManager= Company::where('id', $request->header('hiring_id'))
-        ->with('token')
+        $hiringManager= Company::select('id')
+        ->where('id', $request->header('hiring_id'))
+        ->with(['token'=> function($q){
+            $q->select('tokenable_id','token');
+        }])
         ->first();
-    }*/
+        $token = $hiringManager->token->token ?? null;
+    }
 
 /*
         $hiringManager = HiringManager::where('company_id', auth()->user()->company->id)
@@ -52,7 +61,7 @@ class canHire
             }])
             ->get();*/
 
-        $hiringManager = HiringManagerToken::where('tokenable_id', $request->header('hiring_id'))
+/*        $hiringManager = HiringManagerToken::where('tokenable_id', $request->header('hiring_id'))
             ->when($userType == 'hiring_manager', function($q){
                 return $q->where('tokenable_type', HiringManager::class);
             })
@@ -61,13 +70,13 @@ class canHire
             })
             ->when($userType == 'both', function($q){
                 return $q->whereIn('tokenable_type', [Company::class, HiringManager::class]);
-            })->first();
+            })->first();*/
 
 
         if(!$hiringManager ||
-            !$hiringManager->token ||
+            !$token ||
             !Hash::check(
-                Crypt::decryptString($request->header('hiring_token')), $hiringManager->token ))
+                Crypt::decryptString($request->header('hiring_token')), $token ))
         {
             return response()->error('Unauthorized employer'  ,404);
         }

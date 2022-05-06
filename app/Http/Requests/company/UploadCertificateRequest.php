@@ -25,7 +25,7 @@ class UploadCertificateRequest extends FormRequest
     {
         return [
             'certificate'       => ['required', 'string'],
-            'certificate_image' => ['required', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp,pdf,docx', 'max:2048'],
+            'certificate_image' => ['required', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp,pdf,docx', 'max:5000'],
         ];
     }
 }

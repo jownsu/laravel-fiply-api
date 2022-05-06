@@ -20,7 +20,7 @@ class CommentCollection extends JsonResource
             'commented_by'  => $this->user->profile ? $this->user->profile->fullname() : $this->user->company->name,
             'avatar'        => $this->user->profile ? $this->user->profile->avatar() : $this->user->company->avatar(),
             'content'       => $this->content,
-            'date'          => $this->updated_at->diffForHumans(),
+            'date'          => $this->updated_at->diffForHumans() ?? null,
         ];
     }
 }

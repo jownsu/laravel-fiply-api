@@ -29,7 +29,7 @@ class CompanySeeder extends Seeder
             ->has(
                 Company::factory()->count(1)
                     ->has(ApplicantPreference::factory()->count(1))
-                    ->has(HiringManager::factory()->count(5)
+                    ->has(HiringManager::factory()->count(2)
                         ->has(Job::factory()->count(5))
                     )
             )

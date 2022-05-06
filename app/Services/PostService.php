@@ -21,6 +21,9 @@ class PostService{
         $myId = auth()->id();
         $user = User::where('id', $userId)->isFollowing()->first();
 
+        if(!$user){
+            return false;
+        }
 
         $posts = Post::with([
             'user.profile' => function($q){

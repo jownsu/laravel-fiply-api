@@ -25,6 +25,10 @@ class PostController extends Controller
 
         $posts = (new PostService())->getUserPost($userid);
 
+        if(!$posts){
+            return response()->error('User not found');
+        }
+
         return response()->successPaginated($posts);
     }
 
