@@ -164,7 +164,9 @@ class User extends Authenticatable
 
     public function jobsApplied()
     {
-        return $this->belongsToMany(Job::class, 'applied_jobs');
+        return $this->belongsToMany(Job::class, 'applied_jobs')
+            ->withPivot('status', 'remarks', 'reject', 'meet_date')
+            ->withTimestamps();
     }
 
     public function jobsSaved()
@@ -200,6 +202,9 @@ class User extends Authenticatable
             $query->whereHas('profile', function($q){
                 return $q->where('firstname',  'LIKE','%' . \request('search') . '%')
                         ->orWhere('lastname',  'LIKE','%' . \request('search') . '%');
+            })
+            ->orWhereHas('company', function($q){
+                return $q->where('name', 'LIKE','%' . \request('search') . '%');
             });
         }
         return $query;

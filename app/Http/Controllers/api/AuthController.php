@@ -114,8 +114,14 @@ class AuthController extends ApiController
             'code'              => ['required']
         ]);
 
+        $company = auth()->user()->company;
+
+        if(!$company){
+            return response()->error('Unauthenticated', 401);
+        }
+
         $hiringManager = HiringManager::where('id', $request->hiring_manager_id)
-                ->where('company_id', auth()->user()->company->id)
+                ->where('company_id', $company->id)
                 ->first();
 
         if(!$hiringManager || !Hash::check($input['code'], $hiringManager->code)){

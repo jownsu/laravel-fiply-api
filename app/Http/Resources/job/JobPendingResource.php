@@ -4,7 +4,7 @@ namespace App\Http\Resources\job;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class  JobResource extends JsonResource
+class JobPendingResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,11 +14,17 @@ class  JobResource extends JsonResource
      */
     public function toArray($request)
     {
+        if($this->pivot->meet_date){
+            $time = strtotime($this->pivot->meet_date);
+
+            $dateStr = date('M d, Y',$time);
+            $timeStr = date('g:i A',$time);
+        }
+
         return [
             'id'                       => $this->id,
             'hiring_manager_id'        => $this->hiring_manager_id,
             'company_id'               => $this->hiringManager->company_id,
-            'user_id'                  => $this->hiringManager->company->user_id,
             'title'                    => $this->title,
             'employment_type'          => $this->employment_type,
             'position_level'           => $this->position_level,
@@ -29,10 +35,10 @@ class  JobResource extends JsonResource
             'company_avatar'           => $this->hiringManager->company->avatar(),
             'company_name'             => $this->hiringManager->company->name,
             'location'                 => $this->hiringManager->company->location,
+            'remarks'                  => $this->pivot->remarks,
+            'meet_date'                => $dateStr ?? null,
+            'meet_time'                => $timeStr ?? null,
             'posted_at'                => $this->created_at->diffForHumans(),
-            'questionnaire'            => $this->questions_count > 0 ? true : false,
-            'is_applied'               => $this->userAppliedJobs->first() ? true : false,
-            'is_saved'                 => $this->userSavedJobs->first() ? true : false
         ];
     }
 }

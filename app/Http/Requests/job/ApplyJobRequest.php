@@ -27,7 +27,7 @@ class ApplyJobRequest extends FormRequest
             'job_id'                => ['required'],
             'answers'               => ['nullable', 'array', 'min:1'],
             'answers.*.question_id' => ['required_with:answers'],
-            'answers.*.answer'      => ['required_with:answers', 'min:2', 'max:255'],
+            'answers.*.answer'      => ['required_with:answers', 'min:1', 'max:255'],
         ];
     }
 }

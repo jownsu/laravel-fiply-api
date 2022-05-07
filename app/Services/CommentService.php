@@ -24,7 +24,7 @@ class CommentService {
                         ->orderBy('id', 'asc')
                         ->paginate($per_page);
 
-        $comments->withPath("/post/{$post->id}/comments");
+        $comments->withPath("/posts/{$post->id}/comments");
 
         if(\request('per_page')){
             $comments->appends(['per_page' => \request('per_page')]);

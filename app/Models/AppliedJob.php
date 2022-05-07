@@ -11,10 +11,20 @@ class AppliedJob extends Pivot
     use HasFactory;
     protected $table = 'applied_jobs';
     protected $hidden = [''];
+    protected $casts = ['meet_date' => 'datetime'];
+
     public $incrementing = true;
 
-
-    protected $fillable = ['user_id', 'job_id', 'applied_job_id', 'id'];
+    protected $fillable = [
+        'id',
+        'user_id',
+        'job_id',
+        'applied_job_id',
+        'remarks',
+        'status',
+        'reject',
+        'meet_date'
+    ];
 
     public function jobResponses()
     {

@@ -21,7 +21,10 @@ class CreateAppliedJobsTable extends Migration
             $table->foreignId('job_id')->references('id')->on('jobs')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->dateTime("meet_date")->nullable();
             $table->boolean('status')->default(false);
+            $table->boolean('reject')->default(false);
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

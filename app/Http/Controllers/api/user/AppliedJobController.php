@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\user;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\job\JobPendingResource;
 use App\Services\JobService;
 use Illuminate\Http\Request;
 
@@ -15,9 +16,35 @@ class AppliedJobController extends Controller
      */
     public function index()
     {
-        $jobs = (new JobService())->getUserJob('applied');
+        $jobs = (new JobService())->getUserAppliedJob();
 
         return response()->successPaginated($jobs);
+    }
+
+    public function pendingJob()
+    {
+        $jobs = (new JobService())->getUserAppliedJob('pending');
+
+        return response()->successPaginated($jobs);
+    }
+
+    public function rejectedJob()
+    {
+        $jobs = (new JobService())->getUserAppliedJob('reject');
+        return response()->successPaginated($jobs);
+    }
+
+    public function showPendingJob($id)
+    {
+
+        $user = auth()->user();
+
+        $jobs = $user->jobsApplied()->wherePivot('status', true)->where('job_id', $id)->first();
+        if(!$jobs){
+            return response()->error('Pending Job not found');
+        }
+
+        return new JobPendingResource($jobs);
     }
 
     /**

@@ -14,6 +14,13 @@ class JobCollection extends JsonResource
      */
     public function toArray($request)
     {
+        if($this->pivot->meet_date){
+            $time = strtotime($this->pivot->meet_date);
+
+            $dateStr = date('M d, Y',$time);
+            $timeStr = date('g:i A',$time);
+        }
+
         return [
             'id'                => $this->id,
             'title'             => $this->title,
@@ -21,6 +28,8 @@ class JobCollection extends JsonResource
             'avatar'            => $this->hiringManager->company->avatar(),
             'company'           => $this->hiringManager->company->name,
             'location'          => $this->hiringManager->company->location,
+            'meet_date'         => $dateStr ?? null,
+            'meet_time'         => $timeStr ?? null,
             'posted_at'         => $this->created_at->diffForHumans(),
         ];
     }

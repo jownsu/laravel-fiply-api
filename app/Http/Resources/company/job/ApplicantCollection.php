@@ -20,7 +20,7 @@ class ApplicantCollection extends JsonResource
             'user_id'    => $this->id,
             'name'       => $this->profile->firstname . ' ' . $this->profile->lastname,
             'avatar'     => $this->profile->avatar(),
-            'applied_at' => $this->pivot->created_at->diffForHumans()
+            'applied_at' => $this->pivot->created_at ? $this->pivot->created_at->diffForHumans() : null
         ];
     }
 }

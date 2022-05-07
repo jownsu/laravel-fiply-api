@@ -120,4 +120,46 @@ class JobController extends Controller
 
         return  response()->success(new ApplicantResource($job));
     }
+
+    public function jobRemark(Request $request, $jobId, $applyId)
+    {
+
+        $input = $request->validate([
+            'remarks'   => ['required', 'min:2', 'max:255'],
+            'meet_date' => ['nullable', 'date'],
+        ]);
+
+        $job = AppliedJob::
+            where('job_id', $jobId)
+            ->where('id', $applyId)
+            ->first();
+
+        if(!$job){
+            return response()->error('Object not found');
+        }
+
+        $input['status'] = true;
+        $job->update($input);
+
+        return response()->success($job);
+    }
+
+    public function rejectJob($jobId, $applyId)
+    {
+        $job = AppliedJob::
+        where('job_id', $jobId)
+            ->where('id', $applyId)
+            ->first();
+
+        if(!$job){
+            return response()->error('Object not found');
+        }
+
+        $input['reject'] = true;
+        $input['status'] = false;
+        $job->update($input);
+
+        return response()->success($job);
+    }
+
 }

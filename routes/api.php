@@ -110,6 +110,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
             Route::get('/jobs/{job}/applicants', [EmployerJobController::class, 'getApplicants']);
             Route::apiResource('/jobs', EmployerJobController::class);
             Route::get('/jobs/{jobId}/response/{applyId}', [EmployerJobController::class, 'jobResponse']);
+            Route::post('/jobs/{jobId}/response/{applyId}', [EmployerJobController::class, 'jobRemark']);
+            Route::post('/jobs/{jobId}/response/{applyId}/reject', [EmployerJobController::class, 'rejectJob']);
             Route::get('/test', [AuthController::class, 'test']);
         } );
     });
@@ -123,6 +125,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::put('/setAudience', [UserController::class, 'setAudience']);
         Route::apiResource('/savedPosts', UserSavedPostController::class)->only('index');
         Route::apiResource('/appliedJobs', UserAppliedJobController::class)->only('index');
+        Route::get('/appliedPendingJobs', [UserAppliedJobController::class, 'pendingJob']);
+        Route::get('/rejectedJobs', [UserAppliedJobController::class, 'rejectedJob']);
+        Route::get('/appliedPendingJobs/{id}', [UserAppliedJobController::class, 'showPendingJob']);
         Route::apiResource('/savedJobs', UserSavedJobController::class)->only('index');
         Route::get('/followerRequests', [FollowController::class, 'followerRequests']);
         Route::get('/followPendings', [FollowController::class, 'followPendings']);

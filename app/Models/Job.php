@@ -68,7 +68,7 @@ class Job extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'applied_jobs')->withTimestamps()->withPivot('id');
+        return $this->belongsToMany(User::class, 'applied_jobs')->withTimestamps()->withPivot('id', 'status');
     }
 
     //SCOPES
@@ -85,5 +85,13 @@ class Job extends Model
         }]);
     }
 
+    public function scopeWithSearch($query)
+    {
+        if(!is_null(\request('search'))){
+            $query->where('title', 'LIKE','%' . \request('search') . '%');
+        }
+
+        return $query;
+    }
 
 }

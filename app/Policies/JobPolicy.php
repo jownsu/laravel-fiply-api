@@ -51,6 +51,10 @@ class JobPolicy
         return ( ( $account_level['account_level'] == User::SEMI_VERIFIED || $account_level['account_level']  == User::VERIFIED) )
             ? Response::allow()
             : Response::deny('Account must be semi-verified');
+
+/*        return ( ( $account_level['account_level'] == User::VERIFIED) )
+            ? Response::allow()
+            : Response::deny('Account must be Verified');*/
     }
 
     /**

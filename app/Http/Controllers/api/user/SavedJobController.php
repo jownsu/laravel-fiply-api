@@ -15,7 +15,7 @@ class SavedJobController extends Controller
      */
     public function index()
     {
-        $jobs = (new JobService())->getUserJob('saved');
+        $jobs = (new JobService())->getUserSavedJob();
 
         return response()->successPaginated($jobs);
     }
