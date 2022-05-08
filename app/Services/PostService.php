@@ -123,8 +123,11 @@ class PostService{
             'user.company' => function($q){
                 $q->select(['user_id', 'avatar', 'name']);
             }
-
             ])
+            ->where('is_public', true)
+            ->orWhereHas('user.followers', function($q) use($userId){
+                return $q->where('user_id', $userId)->where('accepted', true);
+            })
             ->withCount([
                 'userUpVotes AS total_upVotes',
                 'userUpVotes AS is_upVoted' => function($q) use($userId) {

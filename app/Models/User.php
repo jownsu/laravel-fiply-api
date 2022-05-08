@@ -181,7 +181,8 @@ class User extends Authenticatable
 
     public function followers()
     {
-        return $this->belongsToMany(User::class, 'follows', 'follow_id', 'user_id');
+        return $this->belongsToMany(User::class, 'follows', 'follow_id', 'user_id')
+            ->withPivot('accepted');
     }
 
     public function followPendings()
