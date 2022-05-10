@@ -101,8 +101,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/dashboard', DashboardController::class)->only('index');
         Route::post('/logoutAsEmployer', [AuthController::class, 'logoutAsEmployer']);
 
-        Route::group(['middleware' => ['canHire:company']], function (){
-            Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['store', 'update', 'destroy']);
+        Route::group(['middleware' => ['canHire:company'], 'prefix' => '/ea'], function (){
+            Route::apiResource('/hiringManagers', HiringManagerController::class)->except('index', 'show');
         });
 
         Route::group(['middleware' => ['canHire:hiring_manager'], 'prefix' => '/hm'], function (){
@@ -114,6 +114,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
             Route::post('/jobs/{jobId}/response/{applyId}/reject', [EmployerJobController::class, 'rejectJob']);
             Route::get('/test', [AuthController::class, 'test']);
         } );
+        Route::group(['prefix' => '/me'], function() {
+            Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['index', 'show']);
+        });
     });
 
 
@@ -151,7 +154,6 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::get('/following', [FollowController::class, 'following']);
         Route::get('/followers', [FollowController::class, 'followers']);
 
-        Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['index']);
     });
 });
 

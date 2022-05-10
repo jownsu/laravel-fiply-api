@@ -18,9 +18,10 @@ class HiringManagerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
-        $userId = $id == 'me' ? auth()->id() : $id;
+        //$userId = $id == 'me' ? auth()->id() : $id;
+        $userId = auth()->id();
 
         $user = User::where('id', $userId)
             ->with([
@@ -69,8 +70,10 @@ class HiringManagerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(HiringManager $hiringManager)
     {
+        $this->authorize('view', $hiringManager);
+        return response()->success(new HiringManagerCollection($hiringManager));
     }
 
     /**

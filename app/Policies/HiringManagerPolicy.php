@@ -31,7 +31,9 @@ class HiringManagerPolicy
      */
     public function view(User $user, HiringManager $hiringManager)
     {
-        //
+        return $user->id === $hiringManager->company->user_id
+            ? Response::allow()
+            : Response::deny('The user do not own this Hiring Manager');
     }
 
     /**

@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
 
                 //Throw custome error if the hiring token is invalid
                 if($e instanceof DecryptException){
-                    return response()->error('Unauthorized Hiring Managerr');
+                    return response()->error('Unauthorized Hiring Manager');
                 }
 
             }

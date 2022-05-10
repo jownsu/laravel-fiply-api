@@ -20,7 +20,7 @@ class Company
         $user = auth()->user();
 
         if(!$user->company){
-            return response()->error('Unauthorized employer1'  ,404);
+            return response()->error('Unauthorized company'  ,404);
         }
         return $next($request);
     }
