@@ -92,6 +92,11 @@ class HiringManagerController extends Controller
             Storage::disk('avatar')->delete($hiringManager->avatar);
             $input['avatar'] = $request->avatar->store('', 'avatar');
         }
+
+        if($request->has('code')){
+            $input['code'] = bcrypt($request->code);
+        }
+
         $hiringManager->update($input);
 
         return response()->success(new HiringManagerCollection($hiringManager));
