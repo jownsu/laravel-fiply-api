@@ -28,6 +28,7 @@ class JobCollection extends JsonResource
             'avatar'            => $this->hiringManager->company->avatar(),
             'company'           => $this->hiringManager->company->name,
             'location'          => $this->hiringManager->company->location,
+            'remarks'           => $this->pivot->remarks,
             'meet_date'         => $dateStr ?? null,
             'meet_time'         => $timeStr ?? null,
             'posted_at'         => $this->created_at->diffForHumans(),

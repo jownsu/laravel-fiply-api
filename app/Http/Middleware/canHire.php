@@ -21,18 +21,22 @@ class canHire
      */
     public function handle(Request $request, Closure $next, $userType)
     {
-
+    $user = auth()->user();
     $token = null;
 
     if($userType == 'hiring_manager'){
         $hiringManager = HiringManager::select('id')
-            ->where('company_id', auth()->user()->company->id)
+            ->where('company_id', $user->company->id)
             ->where('id', $request->header('hiring_id'))
             ->with(['hiringManagerToken' => function($q){
                 return $q->select('tokenable_id', 'token')
                     ->where('tokenable_type', HiringManager::class);
             }])
             ->first();
+
+        if(!$hiringManager){
+            response()->error('Unauthorized employer'  ,401);
+        }
         $token = $hiringManager->hiringManagerToken->token;
     }elseif ($userType == 'company'){
         $hiringManager= Company::select('id')
@@ -41,6 +45,9 @@ class canHire
             $q->select('tokenable_id','token');
         }])
         ->first();
+        if(!$hiringManager){
+            response()->error('Unauthorized employer'  ,401);
+        }
         $token = $hiringManager->token->token ?? null;
     }
 
@@ -78,7 +85,7 @@ class canHire
             !Hash::check(
                 Crypt::decryptString($request->header('hiring_token')), $token ))
         {
-            return response()->error('Unauthorized employer'  ,404);
+            return response()->error('Unauthorized employer'  ,401);
         }
 
         return $next($request);

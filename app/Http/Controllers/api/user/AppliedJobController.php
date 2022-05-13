@@ -23,14 +23,20 @@ class AppliedJobController extends Controller
 
     public function pendingJob()
     {
-        $jobs = (new JobService())->getUserAppliedJob('pending');
+        $jobs = (new JobService())->getUserPendingJob();
 
         return response()->successPaginated($jobs);
     }
 
     public function rejectedJob()
     {
-        $jobs = (new JobService())->getUserAppliedJob('reject');
+        $jobs = (new JobService())->getUserRejectedJob();
+        return response()->successPaginated($jobs);
+    }
+
+    public function passedJobs()
+    {
+        $jobs = (new JobService())->getUserPassedAppliedJob();
         return response()->successPaginated($jobs);
     }
 
@@ -39,7 +45,12 @@ class AppliedJobController extends Controller
 
         $user = auth()->user();
 
-        $jobs = $user->jobsApplied()->wherePivot('status', true)->where('job_id', $id)->first();
+        $jobs = $user->jobsApplied()
+                ->wherePivot('status', true)
+                ->wherePivot('reject', false)
+                ->wherePivot('result', false)
+                ->where('job_id', $id)
+                ->first();
         if(!$jobs){
             return response()->error('Pending Job not found');
         }

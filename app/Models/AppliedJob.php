@@ -23,6 +23,7 @@ class AppliedJob extends Pivot
         'remarks',
         'status',
         'reject',
+        'result',
         'meet_date'
     ];
 

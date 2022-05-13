@@ -4,8 +4,12 @@ namespace App\Services;
 
 use App\Http\Requests\job\JobRequest;
 use App\Http\Resources\company\job\ApplicantCollection;
+use App\Http\Resources\company\job\ApplicantInterviewCollection;
+use App\Http\Resources\company\job\InterviewJobCollection;
 use App\Http\Resources\job\JobCollection;
 use App\Http\Resources\company\job\JobCollection as CompanyJobCollection;
+use App\Http\Resources\job\PassedJobCollection;
+use App\Http\Resources\job\RejectedJobCollection;
 use App\Http\Resources\user\JobCollection as UserJobCollection;
 use App\Http\Resources\job\JobResource;
 use App\Models\AppliedJob;
@@ -82,7 +86,7 @@ class JobService{
                 $q->select('id', 'firstname', 'lastname', 'avatar');
             }])
             ->withCount(['users' => function ($q){
-                $q->where('status', false)->where('reject', false);
+                $q->where('status', false)->where('reject', false)->where('result', false);
             }])
             ->where('hiring_manager_id', \request()->header('hiring_id'))
             ->latest()
@@ -98,13 +102,40 @@ class JobService{
         return CompanyJobCollection::collection($jobs)->response()->getData(true);
     }
 
+    public function getInterviewJobs(){
+        $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
+
+        $user = HiringManager::where('id',  \request()->header('hiring_id'))->first();
+
+        $jobs = $user->jobs()
+            ->withCount(['users' => function($q){
+                $q->where('status', true)
+                    ->where('reject', false)
+                    ->where('result', false);
+            }])
+        ->whereHas('users', function($q){
+            $q->where('status', true)
+                ->where('reject', false)
+                ->where('result', false);
+        })
+            ->latest()
+            ->orderBy('id', 'asc')
+            ->paginate($per_page);
+
+
+        return InterviewJobCollection::collection($jobs)->response()->getData(true);
+    }
+
+
     public function getApplicants($job)
     {
+
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
         $applicants = $job->userAppliedJobs()
             ->wherePivot('status', false)
             ->wherePivot('reject', false)
+            ->wherePivot('result', false)
             ->with(['profile' => function($q){
                 $q->select('id', 'user_id', 'firstname', 'lastname', 'avatar');
             }])
@@ -118,19 +149,75 @@ class JobService{
             $applicants->appends(['per_page' => \request('per_page')]);
         }
 
-
         return ApplicantCollection::collection($applicants)->response()->getData(true);
     }
 
-    public function getUserAppliedJob($type = 'applied')
+    public function getApplicantInterviews($job)
+    {
+
+        $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
+
+        $applicants = $job->userAppliedJobs()
+            ->wherePivot('status', true)
+            ->wherePivot('reject', false)
+            ->wherePivot('result', false)
+            ->with(['profile' => function($q){
+                $q->select('id', 'user_id', 'firstname', 'lastname', 'avatar');
+            }])
+            ->latest()
+            ->orderBy('id', 'asc')
+            ->paginate($per_page);
+
+        $applicants->withPath("/jobs/{$job->id}/applicantsInterview");
+
+        if(\request('per_page')){
+            $applicants->appends(['per_page' => \request('per_page')]);
+        }
+
+        return ApplicantInterviewCollection::collection($applicants)->response()->getData(true);
+    }
+
+    public function getUserAppliedJob()
     {
         $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
         $user = auth()->user();
 
         $jobs = $user->jobsApplied()
-            ->wherePivot('status', $type == 'pending')
-            ->wherePivot('reject', $type == 'reject')
+            ->wherePivot('status', false)
+            ->wherePivot('reject', false)
+            ->wherePivot('result', false)
+            ->with([
+                'hiringManager' => function ($q) {
+                    $q->select('id', 'company_id');
+                },
+                'hiringManager.company' => function ($q) {
+                    $q->select('id', 'name', 'location', 'avatar');
+                },
+            ])
+            ->latest()
+            ->orderBy('id', 'asc')
+            ->paginate($per_page);
+        $jobs->withPath("me/appliedJobs");
+
+        if (\request('per_page')) {
+            $jobs->appends(['per_page' => \request('per_page')]);
+        }
+
+
+        return UserJobCollection::collection($jobs)->response()->getData(true);
+    }
+
+    public function getUserPendingJob()
+    {
+        $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
+
+        $user = auth()->user();
+
+        $jobs = $user->jobsApplied()
+            ->wherePivot('status', true)
+            ->wherePivot('reject', false)
+            ->wherePivot('result', false)
             ->with([
                 'hiringManager'=> function($q){
                     $q->select('id', 'company_id');
@@ -144,12 +231,70 @@ class JobService{
             ->paginate($per_page);
         $jobs->withPath("me/appliedPendingJobs");
 
-            if(\request('per_page')){
-                $jobs->appends(['per_page' => \request('per_page')]);
-            }
+        if(\request('per_page')){
+            $jobs->appends(['per_page' => \request('per_page')]);
+        }
 
 
         return UserJobCollection::collection($jobs)->response()->getData(true);
+    }
+
+    public function getUserRejectedJob()
+    {
+        $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
+
+        $user = auth()->user();
+
+        $jobs = $user->jobsApplied()
+            ->wherePivot('status', false)
+            ->wherePivot('reject', true)
+            ->wherePivot('result', false)
+            ->with([
+                'hiringManager'=> function($q){
+                    $q->select('id', 'company_id', 'firstname', 'lastname', 'avatar');
+                },
+                'hiringManager.company' => function($q){
+                    $q->select('id', 'name', 'location', 'avatar');
+                },
+            ])
+            ->latest()
+            ->orderBy('id', 'asc')
+            ->paginate($per_page);
+        $jobs->withPath("me/rejectedJobs");
+
+        if(\request('per_page')){
+            $jobs->appends(['per_page' => \request('per_page')]);
+        }
+
+
+        return RejectedJobCollection::collection($jobs)->response()->getData(true);
+    }
+    public function getUserPassedAppliedJob()
+    {
+        $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
+
+        $user = auth()->user();
+
+        $jobs = $user->jobsApplied()
+            ->wherePivot('result', true)
+            ->with([
+                'hiringManager'=> function($q){
+                    $q->select('id', 'company_id', 'firstname', 'lastname', 'avatar');
+                },
+                'hiringManager.company' => function($q){
+                    $q->select('id', 'name', 'location', 'avatar');
+                },
+            ])
+            ->latest()
+            ->orderBy('id', 'asc')
+            ->paginate($per_page);
+        $jobs->withPath("me/passedJobs");
+
+        if(\request('per_page')){
+            $jobs->appends(['per_page' => \request('per_page')]);
+        }
+
+        return PassedJobCollection::collection($jobs)->response()->getData(true);
     }
 
     public function getUserSavedJob()

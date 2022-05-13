@@ -33,6 +33,15 @@
     </style>
 </head>
 <body>
+    <pre>
+      Thank you for signing up on Fiply.
+      Please note that:
+      * There are three (3) types of user.(Basic, Semi-verified and Fully Verified)
+      * In order to get verified you must follow the steps upon registering your account.
+      * Verification steps can be skip and your account will be set only as a basic user.
+      * After setting up your account, you can go back to the menu if you wish to continue verifying your account.
+      * In order to secure the legitamacy of your account and to determine that you are not just a poser account, the Fiply admin will evaluate the data gathered before your request to be fully verified.
+    </pre>
 <div class="container">
     <img
         width="250"

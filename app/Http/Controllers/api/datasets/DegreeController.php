@@ -38,9 +38,9 @@ class DegreeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Degree $degree)
     {
-        //
+        return response()->success( new DegreeCollection($degree->degreeCategory));
     }
 
     /**

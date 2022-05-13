@@ -1,0 +1,17 @@
+INSERT INTO `degree_categories` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'Agriculture & Natural Resources', NULL, NULL),
+(2, 'Arts', NULL, NULL),
+(3, 'Biology & Life Science', NULL, NULL),
+(4, 'Business', NULL, NULL),
+(5, 'Communications & Journalism', NULL, NULL),
+(6, 'Computers & Mathematics', NULL, NULL),
+(7, 'Education', NULL, NULL),
+(8, 'Engineering', NULL, NULL),
+(9, 'Health', NULL, NULL),
+(10, 'Humanities & Liberal Arts', NULL, NULL),
+(11, 'Industrial Arts & Consumer Services', NULL, NULL),
+(12, 'Interdisciplinary', NULL, NULL),
+(13, 'Law & Public Policy', NULL, NULL),
+(14, 'Physical Sciences', NULL, NULL),
+(15, 'Psychology & Social Work', NULL, NULL),
+(16, 'Social Science', NULL, NULL);

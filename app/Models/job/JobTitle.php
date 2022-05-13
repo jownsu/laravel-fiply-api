@@ -25,4 +25,9 @@ class JobTitle extends Model
 
         return $query;
     }
+
+    public function jobCategories()
+    {
+        return $this->belongsTo(JobCategory::class);
+    }
 }

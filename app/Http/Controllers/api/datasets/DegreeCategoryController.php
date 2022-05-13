@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\api\datasets;
 
-
-use App\Http\Controllers\api\ApiController;
-use App\Http\Resources\JobTitleCollection;
-use App\Models\job\JobTitle;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\DegreeCategoryCollection;
+use App\Models\DegreeCategory;
 use Illuminate\Http\Request;
 
-class JobTitleController extends ApiController
+class DegreeCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +16,9 @@ class JobTitleController extends ApiController
      */
     public function index()
     {
-        $jobTitles = JobTitle::query()->searchLimit();
+        $degreeCategories = DegreeCategory::query()->searchLimit();
 
-        return response()->success(JobTitleCollection::collection($jobTitles->get()));
+        return response()->success(DegreeCategoryCollection::collection($degreeCategories->get()));
     }
 
     /**
@@ -39,9 +38,9 @@ class JobTitleController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(JobTitle $jobTitle)
+    public function show($id)
     {
-        return $jobTitle->jobCategory;
+        //
     }
 
     /**

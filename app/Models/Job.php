@@ -46,7 +46,7 @@ class Job extends Model
     public function userAppliedJobs()
     {
         return $this->belongsToMany(User::class, 'applied_jobs')
-            ->withPivot('id')
+            ->withPivot('id', 'meet_date', 'status', 'reject', 'result', 'remarks')
             ->withTimestamps()
             ->using(AppliedJob::class);
     }
@@ -68,7 +68,10 @@ class Job extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'applied_jobs')->withTimestamps()->withPivot('id', 'status');
+        return $this->belongsToMany(User::class, 'applied_jobs')
+            ->withTimestamps()
+            ->withPivot('id', 'status', 'reject', 'result', 'remarks')
+            ->using(AppliedJob::class);
     }
 
     //SCOPES

@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             LocationProvinceSeeder::class,
             LocationCitySeeder::class,
             EmploymentTypeSeeder::class,
+            DegreeCategorySeeder::class,
             DegreeSeeder::class,
             PositionLevelSeeder::class,
             UserSeeder::class,

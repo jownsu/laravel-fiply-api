@@ -56,6 +56,22 @@ class JobController extends Controller
         return response()->successPaginated($applicants);
     }
 
+    public function getApplicantsInteview(Job $job)
+    {
+        $this->authorize('view', $job);
+
+        $applicants = (new JobService())->getApplicantInterviews($job);
+
+        return response()->successPaginated($applicants);
+    }
+
+    public function getInterviews()
+    {
+        $jobs = (new JobService())->getInterviewJobs();
+        return response()->successPaginated($jobs);
+    }
+
+
     /**
      * Update the specified resource in storage.
      *
@@ -89,7 +105,7 @@ class JobController extends Controller
 
     public function jobResponse($jobId, $applyId)
     {
-        $job = AppliedJob::select('id', 'user_id', 'job_id')
+        $job = AppliedJob::select('id', 'user_id', 'job_id', 'remarks', 'meet_date')
             ->where('job_id', $jobId)
             ->where('id', $applyId)
             ->with([
@@ -139,17 +155,21 @@ class JobController extends Controller
         }
 
         $input['status'] = true;
+        $input['result'] = false;
         $job->update($input);
 
         return response()->success($job);
     }
 
-    public function rejectJob($jobId, $applyId)
+    public function rejectJob(Request $request, $jobId, $applyId)
     {
-        $job = AppliedJob::
-        where('job_id', $jobId)
-            ->where('id', $applyId)
-            ->first();
+        $input = $request->validate([
+            'remarks'   => ['nullable', 'min:2', 'max:255'],
+        ]);
+
+        $job = AppliedJob::where('job_id', $jobId)
+                ->where('id', $applyId)
+                ->first();
 
         if(!$job){
             return response()->error('Object not found');
@@ -157,6 +177,31 @@ class JobController extends Controller
 
         $input['reject'] = true;
         $input['status'] = false;
+        $input['result'] = false;
+        $job->update($input);
+
+        return response()->success($job);
+    }
+
+    public function hire(Request $request, $jobId, $applyId)
+    {
+        $input = $request->validate([
+            'remarks'   => ['nullable', 'min:2', 'max:255'],
+        ]);
+
+        $job = AppliedJob::where('job_id', $jobId)
+                ->where('id', $applyId)
+                ->first();
+
+
+        if(!$job){
+            return response()->error('Object not found');
+        }
+
+        $input['reject'] = false;
+        $input['status'] = false;
+        $input['result'] = true;
+        $input['meet_date'] = null;
         $job->update($input);
 
         return response()->success($job);

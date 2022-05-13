@@ -17,6 +17,13 @@ class ApplicantResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        if($this->meet_date){
+            $time = strtotime($this->meet_date);
+
+            $dateStr = date('M d, Y',$time);
+            $timeStr = date('g:i A',$time);
+        }
         return [
             'id'                        => $this->id,
             'user_id'                   => $this->user_id,
@@ -27,6 +34,9 @@ class ApplicantResource extends JsonResource
             'experiences'               => ExperienceCollection::collection($this->user->experiences),
             'educational_backgrounds'   => EducationalBackgroundCollection::collection($this->user->educationalBackgrounds),
             'job_responses'             => JobResponseCollection::collection($this->jobResponses),
+            'remarks'                   => $this->remarks ?? null,
+            'meet_date'                 => $dateStr ?? null,
+            'meet_time'                 => $timeStr ?? null,
         ];
     }
 }

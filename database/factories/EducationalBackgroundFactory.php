@@ -17,11 +17,13 @@ class EducationalBackgroundFactory extends Factory
      */
     public function definition()
     {
+        $degree = Degree::inRandomOrder()->first();
+
         return [
             'user_id'           => User::factory(),
             'university'        => University::inRandomOrder()->first()->name,
-            'degree'            => Degree::inRandomOrder()->first()->name,
-            'field_of_study'    => JobCategory::inRandomOrder()->first()->name,
+            'degree'            => $degree->name,
+            'field_of_study'    => $degree->degreeCategory->name,
             'starting_date'     => $this->faker->date(),
             'completion_date'   => $this->faker->date(),
         ];

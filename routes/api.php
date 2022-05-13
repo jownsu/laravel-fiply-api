@@ -45,8 +45,9 @@ Route::post('/verify', [AuthController::class, 'sendVerification']);
 
 Route::apiResource('/locations', LocationController::class)->only(['index']);
 Route::apiResource('/universities', UniversityController::class)->only(['index']);
-Route::apiResource('/degrees', DegreeController::class)->only(['index']);
-Route::apiResource('/jobTitles', JobTitleController::class)->only(['index']);
+Route::apiResource('/degrees', DegreeController::class)->only(['index', 'show']);
+Route::apiResource('/degreeCategories', DegreeController::class)->only(['index']);
+Route::apiResource('/jobTitles', JobTitleController::class)->only(['index', 'show']);
 Route::apiResource('/jobCategories', JobCategoryController::class)->only(['index']);
 Route::apiResource('/employmentTypes', EmploymentTypeController::class)->only(['index']);
 Route::apiResource('/positionLevels', PositionLevelController::class)->only(['index']);
@@ -107,12 +108,16 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
         Route::group(['middleware' => ['canHire:hiring_manager'], 'prefix' => '/hm'], function (){
             Route::get('/profile', [UserHiringManagerController::class, 'index']);
+            Route::get('/jobs/interviews', [EmployerJobController::class, 'getInterviews']);
             Route::get('/jobs/{job}/applicants', [EmployerJobController::class, 'getApplicants']);
+            Route::get('/jobs/{job}/applicantsInterview', [EmployerJobController::class, 'getApplicantsInteview']);
             Route::apiResource('/jobs', EmployerJobController::class);
+
             Route::get('/jobs/{jobId}/response/{applyId}', [EmployerJobController::class, 'jobResponse']);
             Route::post('/jobs/{jobId}/response/{applyId}', [EmployerJobController::class, 'jobRemark']);
             Route::post('/jobs/{jobId}/response/{applyId}/reject', [EmployerJobController::class, 'rejectJob']);
-            Route::get('/test', [AuthController::class, 'test']);
+            Route::post('/jobs/{jobId}/response/{applyId}/hire', [EmployerJobController::class, 'hire']);
+            //Route::get('/test', [AuthController::class, 'test']);
         } );
         Route::group(['prefix' => '/me'], function() {
             Route::apiResource('/hiringManagers', HiringManagerController::class)->only(['index', 'show']);
@@ -130,6 +135,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/appliedJobs', UserAppliedJobController::class)->only('index');
         Route::get('/appliedPendingJobs', [UserAppliedJobController::class, 'pendingJob']);
         Route::get('/rejectedJobs', [UserAppliedJobController::class, 'rejectedJob']);
+        Route::get('/passedJobs', [UserAppliedJobController::class, 'passedJobs']);
         Route::get('/appliedPendingJobs/{id}', [UserAppliedJobController::class, 'showPendingJob']);
         Route::apiResource('/savedJobs', UserSavedJobController::class)->only('index');
         Route::get('/followerRequests', [FollowController::class, 'followerRequests']);
@@ -160,5 +166,5 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 //if route does not exists
 Route::fallback(function(){
     return response()->json([
-        'message' => 'Page Not Found. If error persists, contact fiply@gmail.com'], 404);
+        'message' => 'Page Not Found. If error persists, contact carja@fiply.tech'], 404);
 });

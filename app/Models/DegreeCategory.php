@@ -5,13 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Degree extends Model
+class DegreeCategory extends Model
 {
     use HasFactory;
-
-    public function degreeCategory(){
-        return $this->belongsTo(DegreeCategory::class);
-    }
 
     public function scopeSearchLimit($query)
     {
