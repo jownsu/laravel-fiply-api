@@ -26,7 +26,12 @@ class CompanyCertificateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+
+        $response = CompanyCertificate::create($input);
+        return response()->success($response);
     }
 
     /**
@@ -47,9 +52,14 @@ class CompanyCertificateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, CompanyCertificate $companyCertificate)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+
+        $response = $companyCertificate->update($input);
+        return response()->success($response);
     }
 
     /**
@@ -58,8 +68,11 @@ class CompanyCertificateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(CompanyCertificate $companyCertificate)
     {
-        //
+      if($companyCertificate->delete()){
+          return response()->success('Deleted');
+      }
+      return response()->error('There is an error while deleting');
     }
 }

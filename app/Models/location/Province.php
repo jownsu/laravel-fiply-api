@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Province extends Model
 {
     use HasFactory;
-
+    protected $fillable = ['name'];
     protected $keyType = 'string';
     protected $table = 'location_provinces';
 

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Degree extends Model
 {
+    protected $fillable = ['name', 'degree_category_id'];
     use HasFactory;
 
     public function degreeCategory(){

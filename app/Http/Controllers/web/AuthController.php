@@ -51,6 +51,10 @@ class AuthController extends Controller
                 'account_level_str' =>  $account_level['account_level_str'],
             ], $moreInfo);
 
+            if($user->is_admin){
+                $data = array_merge($data, ['is_admin' => $user->is_admin]);
+            }
+
             return response()->json($data, 200);
         }
 

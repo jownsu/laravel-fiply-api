@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\web\AdminController;
 use App\Http\Controllers\api\{AppliedJobController,
     CommentController,
     CommunityController,
@@ -10,6 +11,7 @@ use App\Http\Controllers\api\{AppliedJobController,
     company\HiringManagerController,
     company\hiringManager\HiringManagerController as UserHiringManagerController,
     datasets\CompanyCertificateController,
+    datasets\DegreeCategoryController,
     datasets\JobCategoryController,
     JobController,
     company\JobController as EmployerJobController,
@@ -46,7 +48,7 @@ Route::post('/verify', [AuthController::class, 'sendVerification']);
 Route::apiResource('/locations', LocationController::class)->only(['index']);
 Route::apiResource('/universities', UniversityController::class)->only(['index']);
 Route::apiResource('/degrees', DegreeController::class)->only(['index', 'show']);
-Route::apiResource('/degreeCategories', DegreeController::class)->only(['index']);
+Route::apiResource('/degreeCategories', DegreeCategoryController::class)->only(['index']);
 Route::apiResource('/jobTitles', JobTitleController::class)->only(['index', 'show']);
 Route::apiResource('/jobCategories', JobCategoryController::class)->only(['index']);
 Route::apiResource('/employmentTypes', EmploymentTypeController::class)->only(['index']);
@@ -60,6 +62,29 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/token/logout', [AuthController::class, 'logout']);
     Route::post('/loginAsHiringManager', [AuthController::class, 'loginAsHiringManager']);
     Route::post('/loginAsEmployerAdmin', [AuthController::class, 'loginAsEmployerAdmin']);
+
+    Route::group(['middleware' => ['admin']], function (){
+        Route::apiResource('/universities', UniversityController::class);
+        Route::apiResource('/employmentTypes', EmploymentTypeController::class);
+        Route::apiResource('/positionLevels', PositionLevelController::class);
+        Route::apiResource('/validIds', ValidIdController::class);
+        Route::apiResource('/companyCertificates', CompanyCertificateController::class);
+
+        Route::apiResource('/jobTitles', JobTitleController::class);
+        Route::apiResource('/jobCategories', JobCategoryController::class);
+
+        Route::apiResource('/degrees', DegreeController::class);
+        Route::apiResource('/degreeCategories', DegreeCategoryController::class);
+
+        Route::get('/jobSeekers', [AdminController::class, 'getJobSeekers']);
+        Route::get('/jobSeekers/{id}', [AdminController::class, 'getJobSeeker']);
+        Route::get('/companies', [AdminController::class, 'getCompanies']);
+        Route::get('/companies/{id}', [AdminController::class, 'getCompany']);
+        Route::get('/companiesRequests', [AdminController::class, 'getCompaniesRequests']);
+        Route::get('/jobSeekerRequests', [AdminController::class, 'getJobSeekerRequests']);
+        Route::post('/verifyJobSeeker', [AdminController::class, 'verifyJobSeeker']);
+        Route::post('/verifyCompany', [AdminController::class, 'verifyCompany']);
+    });
 
     Route::apiResource('/posts', PostController::class)->except('show');
     Route::put('/posts/{post}/setAudience', [PostController::class, 'setAudience']);
@@ -98,7 +123,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::apiResource('/users', CommunityController::class)->only(['index']);
 
     Route::group(['middleware' => ['company']], function (){
-        Route::get('/test', [AuthController::class, 'test']);
+        //Route::get('/test', [AuthController::class, 'test']);
         Route::apiResource('/dashboard', DashboardController::class)->only('index');
         Route::post('/logoutAsEmployer', [AuthController::class, 'logoutAsEmployer']);
 

@@ -5,8 +5,10 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\job\ApplyJobRequest;
 use App\Http\Resources\vote\UserCollection;
+use App\Models\AppliedJob;
 use App\Models\Job;
 use App\Services\JobService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AppliedJobController extends Controller

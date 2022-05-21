@@ -30,7 +30,13 @@ class UniversityController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+
+        $response = University::create($input);
+
+        return response()->success($response);
     }
 
     /**
@@ -51,9 +57,15 @@ class UniversityController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, University $university)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+
+        $response = $university->update($input);
+
+        return response()->success($response);
     }
 
     /**
@@ -62,8 +74,11 @@ class UniversityController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(University $university)
     {
-        //
+        if($university->delete()){
+            return response()->success('Deleted');
+        }
+        return response()->error('There is an error while deleting');
     }
 }

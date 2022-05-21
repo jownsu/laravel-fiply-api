@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmploymentType extends Model
 {
+    protected $fillable = ['name'];
     use HasFactory;
 
     public function scopeSearchLimit($query)

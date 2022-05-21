@@ -32,7 +32,11 @@ class LocationController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+
+
     }
 
     /**

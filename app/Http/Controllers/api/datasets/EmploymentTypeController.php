@@ -29,7 +29,12 @@ class EmploymentTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+
+        $response = EmploymentType::create($input);
+        return response()->success($response);
     }
 
     /**
@@ -50,9 +55,15 @@ class EmploymentTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, EmploymentType $employmentType)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+
+        $response = $employmentType->update($input);
+
+        return response()->success($response);
     }
 
     /**
@@ -61,8 +72,11 @@ class EmploymentTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(EmploymentType $employmentType)
     {
-        //
+        if($employmentType->delete()){
+            return response()->success('Deleted');
+        }
+        return response()->error('There is an error while deleting');
     }
 }

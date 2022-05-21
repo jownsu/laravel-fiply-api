@@ -26,7 +26,11 @@ class ValidIdController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+        $response = ValidId::create($input);
+        return response()->success($response);
     }
 
     /**
@@ -47,9 +51,14 @@ class ValidIdController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, ValidId $validId)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+
+        $response = $validId->update($input);
+        return response()->success($response);
     }
 
     /**
@@ -58,8 +67,11 @@ class ValidIdController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ValidId $validId)
     {
-        //
+        if($validId->delete()){
+            return response()->success('Deleted');
+        }
+        return response()->error('There is an error while deleting');
     }
 }

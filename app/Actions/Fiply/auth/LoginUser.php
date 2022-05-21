@@ -41,6 +41,10 @@ class LoginUser{
             'token'             =>  $token,
         ], $moreInfo);
 
+        if($user->is_admin){
+            $data = array_merge($data, ['is_admin' => $user->is_admin]);
+        }
+
         return $data;
     }
 }

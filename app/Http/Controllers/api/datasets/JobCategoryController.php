@@ -29,7 +29,12 @@ class JobCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+
+        $response = JobCategory::create($input);
+        return response()->success($response);
     }
 
     /**
@@ -50,9 +55,14 @@ class JobCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, JobCategory $jobCategory)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+
+        $response = $jobCategory->update($input);
+        return response()->success($response);
     }
 
     /**
@@ -61,8 +71,11 @@ class JobCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(JobCategory $jobCategory)
     {
-        //
+        if($jobCategory->delete()){
+            return response()->success('Deleted');
+        }
+        return response()->error('There is an error while deleting');
     }
 }

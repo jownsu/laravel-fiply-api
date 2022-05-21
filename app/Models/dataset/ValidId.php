@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ValidId extends Model
 {
+    protected $fillable = ['name'];
     use HasFactory;
 }

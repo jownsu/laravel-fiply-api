@@ -29,7 +29,12 @@ class DegreeCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+
+        $response = DegreeCategory::create($input);
+        return response()->success($response);
     }
 
     /**
@@ -50,9 +55,14 @@ class DegreeCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, DegreeCategory $degreeCategory)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2']
+        ]);
+
+        $response = $degreeCategory->update($input);
+        return response()->success($response);
     }
 
     /**
@@ -61,8 +71,11 @@ class DegreeCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DegreeCategory $degreeCategory)
     {
-        //
+        if($degreeCategory->delete()){
+            return response()->success('Deleted');
+        }
+        return response()->error('There is an error while deleting');
     }
 }

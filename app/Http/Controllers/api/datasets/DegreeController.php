@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\datasets;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DegreeCollection;
 use App\Models\Degree;
+use App\Models\DegreeCategory;
 use Illuminate\Http\Request;
 
 class DegreeController extends Controller
@@ -29,7 +30,16 @@ class DegreeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2'],
+            'degree_category_id' => ['required']
+        ]);
+
+        $category = DegreeCategory::findOrFail($input['degree_category_id']);
+
+        $response = $category->degrees()->create(['name' => $input['name']]);
+
+        return response()->success($response);
     }
 
     /**
@@ -50,9 +60,14 @@ class DegreeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Degree $degree)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2'],
+        ]);
+
+        $response = $degree->update($input);
+        return response()->success($response);
     }
 
     /**
@@ -61,8 +76,11 @@ class DegreeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Degree $degree)
     {
-        //
+        if($degree->delete()){
+            return response()->success('Deleted');
+        }
+        return response()->error('There is an error while deleting');
     }
 }

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class JobTitle extends Model
 {
+    protected $fillable = ['name'];
+
     use HasFactory;
 
     public function jobCategory(){

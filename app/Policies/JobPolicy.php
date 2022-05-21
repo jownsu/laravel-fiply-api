@@ -2,8 +2,10 @@
 
 namespace App\Policies;
 
+use App\Models\AppliedJob;
 use App\Models\Job;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
@@ -48,13 +50,22 @@ class JobPolicy
 
         $account_level = $user->account_level();
 
-        return ( ( $account_level['account_level'] == User::SEMI_VERIFIED || $account_level['account_level']  == User::VERIFIED) )
-            ? Response::allow()
-            : Response::deny('Account must be semi-verified');
+        $userId = auth()->id();
 
-/*        return ( ( $account_level['account_level'] == User::VERIFIED) )
-            ? Response::allow()
-            : Response::deny('Account must be Verified');*/
+        $applyCount = AppliedJob::where('user_id', $userId)->whereDate('created_at', Carbon::today())->count();
+
+        if($account_level['account_level']  == User::VERIFIED) {
+            return Response::allow();
+        }
+
+        if($account_level['account_level'] == User::SEMI_VERIFIED){
+            return $applyCount >= 3
+                ? Response::deny('3 Apply Job per day is the limit for Semi Verified Users')
+                : Response::allow();
+        }
+
+        return Response::deny('Account must be semi verified');
+
     }
 
     /**

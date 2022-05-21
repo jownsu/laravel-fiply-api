@@ -89,11 +89,6 @@ class User extends Authenticatable
             }
         }
 
-
-
-
-
-
         switch ($account_lvl)
         {
             case self::SEMI_VERIFIED:
@@ -165,6 +160,7 @@ class User extends Authenticatable
     public function jobsApplied()
     {
         return $this->belongsToMany(Job::class, 'applied_jobs')
+            ->using(AppliedJob::class)
             ->withPivot('status', 'remarks', 'reject', 'meet_date')
             ->withTimestamps();
     }
@@ -206,6 +202,27 @@ class User extends Authenticatable
             })
             ->orWhereHas('company', function($q){
                 return $q->where('name', 'LIKE','%' . \request('search') . '%');
+            });
+        }
+        return $query;
+    }
+
+    public function scopeWithJobSeekerSearch($query)
+    {
+        if(!is_null(\request('search'))){
+            $query->whereHas('profile', function($q){
+                return $q->where('firstname',  'LIKE','%' . \request('search') . '%')
+                        ->orWhere('lastname',  'LIKE','%' . \request('search') . '%');
+            });
+        }
+        return $query;
+    }
+
+    public function scopeWithCompanySearch($query)
+    {
+        if(!is_null(\request('search'))){
+            $query->whereHas('company', function($q){
+                return $q->where('name',  'LIKE','%' . \request('search') . '%');
             });
         }
         return $query;

@@ -7,7 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class DegreeCategory extends Model
 {
+    protected $fillable = ['name'];
     use HasFactory;
+
+    public function degrees()
+    {
+        return $this->hasMany(Degree::class);
+    }
 
     public function scopeSearchLimit($query)
     {

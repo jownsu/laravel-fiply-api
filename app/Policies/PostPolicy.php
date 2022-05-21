@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Post;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
@@ -44,9 +45,22 @@ class PostPolicy
     {
         $account_level = $user->account_level();
 
-        return ( $account_level['account_level'] == User::SEMI_VERIFIED || $account_level['account_level']  == User::VERIFIED)
-            ? Response::allow()
-            : Response::deny('Account must be semi-verified');
+        $posts = $user->loadCount(['posts' => function($q){
+            return $q->whereDate('created_at', Carbon::today());
+        }]);
+
+        if($account_level['account_level']  == User::VERIFIED) {
+            return Response::allow();
+        }
+
+        if($account_level['account_level'] == User::SEMI_VERIFIED){
+            return $posts->posts_count >= 3
+                 ? Response::deny('3 Posts per day is the limit for Semi Verified Users')
+                 : Response::allow();
+        }
+
+        return Response::deny('Account must be semi verified');
+
     }
 
     /**

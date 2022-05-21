@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\datasets;
 
 use App\Http\Controllers\api\ApiController;
 use App\Http\Resources\JobTitleCollection;
+use App\Models\job\JobCategory;
 use App\Models\job\JobTitle;
 use Illuminate\Http\Request;
 
@@ -30,7 +31,16 @@ class JobTitleController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2'],
+            'job_category_id' => ['required']
+        ]);
+
+        $category = JobCategory::findOrFail($input['job_category_id']);
+
+        $response = $category->jobTitles()->create(['name' => $input['name']]);
+
+        return response()->success($response);
     }
 
     /**
@@ -51,9 +61,14 @@ class JobTitleController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, JobTitle $jobTitle)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required', 'min:2'],
+        ]);
+
+        $response = $jobTitle->update($input);
+        return response()->success($response);
     }
 
     /**
@@ -62,8 +77,11 @@ class JobTitleController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(JobTitle $jobTitle)
     {
-        //
+        if($jobTitle->delete()){
+            return response()->success('Deleted');
+        }
+        return response()->error('There is an error while deleting');
     }
 }
