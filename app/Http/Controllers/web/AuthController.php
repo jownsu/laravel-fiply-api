@@ -63,6 +63,34 @@ class AuthController extends Controller
 
     }
 
+    public function loginAsAdmin(Request $request)
+    {
+        $request->validate(
+            [
+                'email'    => 'required|string',
+                'password' => 'required|string',
+            ]
+        );
+
+        if (Auth::guard()->attempt([
+            'email' => $request->email,
+            'password' => $request->password,
+            'is_admin' => true
+        ])) {
+            $user = Auth::user();
+
+            $request->session()->regenerate();
+
+            return response()->json([
+                'id'        => $user->id,
+                'email'     => $user->email,
+                'ís_admin'  => $user->is_admin
+            ], 200);
+        }
+
+        return response()->error(['error' => 'Invalid credentials']);
+    }
+
     public function logout(Request $request)
     {
         Auth::guard()->logout();

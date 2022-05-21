@@ -42,6 +42,7 @@ use Illuminate\Support\Facades\Route;
 
 //PUBLIC ROUTES
 Route::post('/token/login', [ AuthController::class,'login']);
+Route::post('/token/loginAsAdmin', [ AuthController::class,'loginAsAdmin']);
 Route::post('/token/register', [ AuthController::class, 'register']);
 Route::post('/verify', [AuthController::class, 'sendVerification']);
 

@@ -45,6 +45,29 @@ class AuthController extends ApiController
         return response()->success($user, 201);
     }
 
+    public function loginAsAdmin(LoginRequest $request){
+        $input = $request->validated();
+        $user = User::where('email', $input['email'])->with('company')->first();
+
+        if(!$user || !Hash::check($input['password'] ,$user->password)){
+            return response()->error('Incorrect Email/Password');
+        }
+
+        if(!$user->is_admin){
+            return response()->error('Not admin');
+        }
+
+
+        $token = $user->createToken('FiplyToken')->plainTextToken;
+
+        return response()->success([
+            'id'        => $user->id,
+            'email'     => $user->email,
+            'token'     => $token,
+            'ís_admin'  => $user->is_admin
+        ], 201);
+    }
+
     public function sendVerification(VerificationRequest $request, Verify $action)
     {
         $input = $request->validated();
