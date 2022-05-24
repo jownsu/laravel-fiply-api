@@ -14,6 +14,41 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    public function adminDashboard()
+    {
+        $jobseekers_count = User::whereHas('profile')->count();
+        $company_count = User::whereHas('company')->count();
+        $company_request_count = User::whereHas('company.companyDocument', function($q){
+            $q->where('status', false)
+                ->where('valid_id', '!=', '')
+                ->where('valid_id_image_front', '!=', '')
+                ->where('valid_id_image_back', '!=', '')
+                ->where('certificate', '!=', '')
+                ->where('certificate_image', '!=', '')
+                ->whereNotNull('valid_id')
+                ->whereNotNull('valid_id_image_front')
+                ->whereNotNull('valid_id_image_back')
+                ->whereNotNull('certificate')
+                ->whereNotNull('certificate_image');
+        })->count();
+        $jobseeker_request_count = User::whereHas('document', function($q){
+            $q->where('status', false)
+                ->where('valid_id', '!=', '')
+                ->where('valid_id_image_front', '!=', '')
+                ->where('valid_id_image_back', '!=', '')
+                ->whereNotNull('valid_id')
+                ->whereNotNull('valid_id_image_front')
+                ->whereNotNull('valid_id_image_back');
+        })->count();
+
+        return response()->success([
+            'jobseekers_count'        => $jobseekers_count,
+            'company_count'           => $company_count,
+            'jobseeker_request_count' => $jobseeker_request_count,
+            'company_request_count'   => $company_request_count,
+        ]);
+    }
+
     public function getJobSeekers()
     {
         $users = (new CommunityService())->getJobSeekers();

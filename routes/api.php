@@ -85,6 +85,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::get('/jobSeekerRequests', [AdminController::class, 'getJobSeekerRequests']);
         Route::post('/verifyJobSeeker', [AdminController::class, 'verifyJobSeeker']);
         Route::post('/verifyCompany', [AdminController::class, 'verifyCompany']);
+        Route::get('/adminDashboard', [AdminController::class, 'adminDashboard']);
     });
 
     Route::apiResource('/posts', PostController::class)->except('show');
