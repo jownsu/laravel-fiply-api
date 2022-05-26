@@ -65,17 +65,17 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/loginAsEmployerAdmin', [AuthController::class, 'loginAsEmployerAdmin']);
 
     Route::group(['middleware' => ['admin']], function (){
-        Route::apiResource('/universities', UniversityController::class);
-        Route::apiResource('/employmentTypes', EmploymentTypeController::class);
-        Route::apiResource('/positionLevels', PositionLevelController::class);
-        Route::apiResource('/validIds', ValidIdController::class);
-        Route::apiResource('/companyCertificates', CompanyCertificateController::class);
+        Route::apiResource('/universities', UniversityController::class)->except('index');
+        Route::apiResource('/employmentTypes', EmploymentTypeController::class)->except('index');
+        Route::apiResource('/positionLevels', PositionLevelController::class)->except('index');
+        Route::apiResource('/validIds', ValidIdController::class)->except('index');
+        Route::apiResource('/companyCertificates', CompanyCertificateController::class)->except('index');
 
-        Route::apiResource('/jobTitles', JobTitleController::class);
-        Route::apiResource('/jobCategories', JobCategoryController::class);
+        Route::apiResource('/jobTitles', JobTitleController::class)->except('index');
+        Route::apiResource('/jobCategories', JobCategoryController::class)->except('index');
 
-        Route::apiResource('/degrees', DegreeController::class);
-        Route::apiResource('/degreeCategories', DegreeCategoryController::class);
+        Route::apiResource('/degrees', DegreeController::class)->except(['index', 'show']);
+        Route::apiResource('/degreeCategories', DegreeCategoryController::class)->except('index');
 
         Route::get('/jobSeekers', [AdminController::class, 'getJobSeekers']);
         Route::get('/jobSeekers/{id}', [AdminController::class, 'getJobSeeker']);

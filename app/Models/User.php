@@ -38,6 +38,7 @@ class User extends Authenticatable
         'pivot'
     ];
 
+    const BASIC_USER = 0;
     const SEMI_VERIFIED = 1;
     const VERIFIED = 2;
 

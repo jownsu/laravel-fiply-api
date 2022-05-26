@@ -54,12 +54,18 @@ class PostPolicy
         }
 
         if($account_level['account_level'] == User::SEMI_VERIFIED){
-            return $posts->posts_count >= 3
-                 ? Response::deny('3 Posts per day is the limit for Semi Verified Users')
+            return $posts->posts_count >= 15
+                 ? Response::deny('15 Posts per day is the limit for Semi Verified Users')
                  : Response::allow();
         }
 
-        return Response::deny('Account must be semi verified');
+        if($account_level['account_level'] == User::BASIC_USER){
+            return $posts->posts_count >= 3
+                 ? Response::deny('3 Posts per day is the limit for Basic Users')
+                 : Response::allow();
+        }
+
+        return Response::deny('Some error');
 
     }
 
