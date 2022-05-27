@@ -19,21 +19,24 @@ class UpVoteController extends Controller
 
     public function index(Post $post)
     {
-        $post->load([
-            'UserUpVotes.profile' => function($q){
-                $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
-            },
-            'UserUpVotes.company' => function($q){
-                $q->select(['user_id', 'avatar', 'name']);
-            },
-        ]
-        );
+        $per_page = is_numeric(\request('per_page')) ? \request('per_page') : 10;
 
-        return response()->json([
-            'post_id' => $post->id,
-            'data' => UserCollection::collection($post->userUpVotes)
-        ]);
+        $upvotes = $post->userUpVotes()
+                    ->with([
+                        'profile' => function($q){
+                            $q->select(['user_id', 'avatar', 'firstname', 'lastname']);
+                        },
+                        'company' => function($q){
+                            $q->select(['user_id', 'avatar', 'name']);
+                    }])
+                    ->paginate($per_page);
 
+        if(\request('per_page')){
+            $upvotes->appends(['per_page' => \request('per_page')]);
+        }
+
+
+        return response()->successPaginated(UserCollection::collection($upvotes)->response()->getData(true));
 
     }
 

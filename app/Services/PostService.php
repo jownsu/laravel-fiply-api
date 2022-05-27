@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\post\PostRequest;
+use App\Http\Requests\post\PostUpdateRequest;
 use App\Http\Resources\post\PostCollection;
 use App\Http\Resources\post\PostResource;
 use App\Models\Post;
@@ -39,6 +40,7 @@ class PostService{
                     $q->where('user_id', $myId);
                 }
             ])
+            ->withCount('comments')
             ->orderByUpVoted()
             ->where('user_id', $userId)
             ->when(!boolval($user->is_following) && !$user->id == $myId, function($q){
@@ -134,6 +136,7 @@ class PostService{
                     $q->where('user_id', $userId);
                 }
             ])
+            ->withCount('comments')
             ->latest()
             ->orderBy('id', 'asc')
             ->paginate($per_page);
@@ -161,7 +164,7 @@ class PostService{
 
     }
 
-    public function updatePost(PostRequest $request, Post $post)
+    public function updatePost(PostUpdateRequest $request, Post $post)
     {
         $input = $request->validated();
         if($request->hasFile('image')){

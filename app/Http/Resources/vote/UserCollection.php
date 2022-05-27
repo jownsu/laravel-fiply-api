@@ -16,7 +16,7 @@ class UserCollection extends JsonResource
     {
         return [
             'id'       => $this->id,
-            'fullname' => $this->profile ? $this->profile->fullname() : $this->company->name,
+            'name'     => $this->profile ? $this->profile->fullname() : $this->company->name,
             'avatar'   => $this->profile ? $this->profile->avatar() : $this->company->avatar()
         ];
     }
