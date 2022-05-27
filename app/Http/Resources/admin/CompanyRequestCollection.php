@@ -21,6 +21,7 @@ class CompanyRequestCollection extends JsonResource
             'email'                  => $this->email,
             'name'                   => $this->company->name,
             'avatar'                 => $this->company->avatar(),
+            'valid_id'               => $this->company->companyDocument->valid_id,
             'valid_id_image_front'   => $this->company->companyDocument->valid_id_image_front(),
             'valid_id_image_back'    => $this->company->companyDocument->valid_id_image_back(),
             'certificate'            => $this->company->companyDocument->certificate,

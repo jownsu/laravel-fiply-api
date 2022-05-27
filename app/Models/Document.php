@@ -42,8 +42,8 @@ class Document extends Model
 
     public function valid_id_image_front()
     {
-        return !empty($this->attributes['valid_id_image_front']) && file_exists(public_path('files'  . DIRECTORY_SEPARATOR . self::VALID_ID_PATH . DIRECTORY_SEPARATOR . $this->attributes['valid_id_image_front']))
-            ? url('files' . DIRECTORY_SEPARATOR . self::VALID_ID_PATH . DIRECTORY_SEPARATOR . $this->attributes['valid_id_image_front'])
+        return !empty($this->attributes['valid_id_image_front']) && Storage::disk('id')->exists($this->attributes['valid_id_image_front'])
+            ? Storage::disk('id')->url($this->attributes['valid_id_image_front'])
             : null;
     }
 
@@ -54,8 +54,8 @@ class Document extends Model
 
     public function valid_id_image_back()
     {
-        return !empty($this->attributes['valid_id_image_back']) && file_exists(public_path('files'  . DIRECTORY_SEPARATOR . self::VALID_ID_PATH . DIRECTORY_SEPARATOR . $this->attributes['valid_id_image_back']))
-            ? url('files' . DIRECTORY_SEPARATOR . self::VALID_ID_PATH . DIRECTORY_SEPARATOR . $this->attributes['valid_id_image_back'])
+        return !empty($this->attributes['valid_id_image_back']) && Storage::disk('id')->exists($this->attributes['valid_id_image_back'])
+            ? Storage::disk('id')->url($this->attributes['valid_id_image_back'])
             : null;
     }
 

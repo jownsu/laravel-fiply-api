@@ -75,7 +75,7 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/public/files/companyCertificate'),
             'visibility' => 'public',
-            'url' => env('APP_URL') . '/companyId',
+            'url' => env('APP_URL') . '/companyCertificate',
         ],
         'placeholder' => [
             'driver' => 'local',
