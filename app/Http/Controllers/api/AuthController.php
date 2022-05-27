@@ -64,7 +64,7 @@ class AuthController extends ApiController
             'id'        => $user->id,
             'email'     => $user->email,
             'token'     => $token,
-            'ís_admin'  => $user->is_admin
+            'is_admin'  => $user->is_admin
         ], 201);
     }
 
