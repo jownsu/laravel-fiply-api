@@ -15,6 +15,7 @@ use App\Http\Controllers\api\{AppliedJobController,
     datasets\JobCategoryController,
     JobController,
     company\JobController as EmployerJobController,
+    NotificationController,
     PostController,
     QuestionController,
     SavedJobController,
@@ -84,7 +85,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::get('/companiesRequests', [AdminController::class, 'getCompaniesRequests']);
         Route::get('/jobSeekerRequests', [AdminController::class, 'getJobSeekerRequests']);
         Route::post('/verifyJobSeeker', [AdminController::class, 'verifyJobSeeker']);
+        Route::post('/rejectJobSeeker', [AdminController::class, 'rejectJobSeeker']);
         Route::post('/verifyCompany', [AdminController::class, 'verifyCompany']);
+        Route::post('/rejectCompany', [AdminController::class, 'rejectCompany']);
         Route::get('/adminDashboard', [AdminController::class, 'adminDashboard']);
     });
 
@@ -167,6 +170,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/savedJobs', UserSavedJobController::class)->only('index');
         Route::get('/followerRequests', [FollowController::class, 'followerRequests']);
         Route::get('/followPendings', [FollowController::class, 'followPendings']);
+
+        Route::apiResource('/notifications', NotificationController::class)->only(['index', 'destroy']);
 
         Route::apiResource('/experiences', ExperienceController::class)->only(['store', 'update', 'destroy']);
         Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only(['store', 'update', 'destroy']);
