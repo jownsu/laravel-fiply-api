@@ -6,6 +6,7 @@ use App\Actions\Fiply\Auth\CreateUser;
 use App\Actions\Fiply\Auth\HiringManagerOTP;
 use App\Actions\Fiply\Auth\LoginUser;
 use App\Actions\Fiply\Auth\Verify;
+use App\Http\Requests\auth\ChangePasswordRequest;
 use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\auth\RegisterRequest;
 use App\Http\Requests\auth\VerificationRequest;
@@ -229,6 +230,20 @@ class AuthController extends ApiController
             ->first();
 
         return $token->delete();
+    }
+
+    public function changePassword(ChangePasswordRequest $request){
+        $user = auth()->user();
+
+        if(!Hash::check($request->current_password ,$user->password)){
+            return response()->error("Wrong Password");
+        }
+
+        $user->password = bcrypt($request->new_password);
+
+        $user->save();
+
+        return response()->success($user);
     }
 
     public function test(Request $request)

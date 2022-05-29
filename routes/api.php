@@ -177,6 +177,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/educationalBackgrounds', EducationalBackgroundController::class)->only(['store', 'update', 'destroy']);
         Route::apiResource('/jobPreferences', JobPreferenceController::class)->only(['store', 'update']);
         Route::apiResource('/applicantPreferences', ApplicantPreferenceController::class)->only(['store', 'update']);
+
+        Route::put('/changePassword', [AuthController::class, 'changePassword']);
     });
 
     Route::group(['prefix' => '/{user}'], function() {
