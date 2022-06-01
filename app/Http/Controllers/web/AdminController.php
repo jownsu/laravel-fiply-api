@@ -165,6 +165,9 @@ class AdminController extends Controller
                 ->whereNotNull('valid_id_image_back')
                 ->whereNotNull('certificate')
                 ->whereNotNull('certificate_image')
+                ->with(['company' => function($q){
+                    $q->select('id', 'user_id');
+                }])
                 ->first();
 
         if(!$doc){
@@ -172,7 +175,7 @@ class AdminController extends Controller
         }
 
         Notification::create([
-            'user_id' => $doc->user_id,
+            'user_id' => $doc->company->user_id,
             'title'   => $input['title'] ?? 'Your are now verified',
             'message' => $input['message'] ?? 'Your valid ID and certificate are accepted, you are now fully verified',
         ]);
