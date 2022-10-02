@@ -128,7 +128,6 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::apiResource('/users', CommunityController::class)->only(['index']);
 
     Route::group(['middleware' => ['company']], function (){
-        //Route::get('/test', [AuthController::class, 'test']);
         Route::apiResource('/dashboard', DashboardController::class)->only('index');
         Route::post('/logoutAsEmployer', [AuthController::class, 'logoutAsEmployer']);
 
